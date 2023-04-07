@@ -1,0 +1,27 @@
+.dark{
+    padding: 12px 20px;
+    background-color: var(--PRIMARY);
+    color: var(--WHITE);
+    font-size: var(--BodyR);
+    border-radius: 8px;
+    border: none;
+    box-shadow: 4px 4px 12px var(--PRIMARY);
+
+}
+.clear{
+    padding: 12px 20px;
+    background-color: var(--WHITE);
+    color: var(--BLACK);
+    font-size: var(--BodyR);
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    box-shadow: 4px 4px 12px var(--BLACK);
+
+
+
+}
+.icon{
+    margin-right: 8px;
+}

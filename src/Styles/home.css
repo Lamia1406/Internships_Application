@@ -1,0 +1,40 @@
+#welcome{
+    padding: 64px 0;
+    font-size: var(--H2);
+    color: var(--BLACK);
+}
+#notifications{
+    padding: 64px 0;
+    text-align: center;
+}
+.h3{
+    color: var(--DARKBLUE);
+    font-size: var(--H3);
+    margin-bottom: 24px;
+}
+.notif{
+    color: var(--DARKGREY);
+    font-size: var(--BodyL);
+    margin-bottom: 24px;
+}
+
+#status{
+    padding: 64px 0;
+}
+
+/*footer */
+
+@media only screen and (width <= 990px) {
+    #welcome{
+        font-size: var(--H4);
+        margin-top: 60px;
+    }
+    .h3{
+        font-size: var(--H4);
+    }
+    #status{
+        padding: 64px 0;
+    }
+    
+    
+}
