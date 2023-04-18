@@ -1,10 +1,15 @@
-#welcome{
+.page{
+    padding: 0 32px;
+}
+
+.section{
     padding: 64px 0;
-    font-size: var(--H2);
+}
+#welcome{
+    font-size: var(--H4);
     color: var(--BLACK);
 }
 #notifications{
-    padding: 64px 0;
     text-align: center;
 }
 .h3{
@@ -17,24 +22,27 @@
     font-size: var(--BodyL);
     margin-bottom: 24px;
 }
+.btn1{
+    width: max-content;
+    margin: 0 auto;
 
-#status{
-    padding: 64px 0;
+}
+.progressDiv{
+    width: 50%;
+}
+.btn2{
+    width: max-content;
 }
 
-/*footer */
-
 @media only screen and (width <= 990px) {
+    
     #welcome{
-        font-size: var(--H4);
-        margin-top: 60px;
+        font-size: var(--H6);
     }
     .h3{
         font-size: var(--H4);
+    } 
+    .progressDiv{
+        width: 100%;
     }
-    #status{
-        padding: 64px 0;
-    }
-    
-    
 }

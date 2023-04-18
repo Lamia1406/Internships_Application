@@ -1,15 +1,10 @@
-.progress-div{
+.progressDiv{
     border-radius: 40px;
     border: solid 1px var(--BLACK);
     padding: 12px;
-    width: 50%;
     margin: 24px 0;
 }
-.progress-bar{
+.progressBar{
     background-color: var(--PRIMARY);
-}
-@media only screen and (width <= 990px) {
-    .progress-div{
-        width: 100%;
-    }
+    width: 50%;
 }

@@ -1,0 +1,22 @@
+
+.FAQ{
+    border: none ;
+    border-bottom: solid 1px var(--GREY);
+    margin: 32px 0;
+   
+}
+.btn {
+    padding-right: 0;
+    display: flex;
+  align-items: flex-start;
+  }
+.q{
+    padding-right: 8px;
+    font-size: var(--BodyL);
+    color: var(--BLACK);
+  }
+.a{
+    padding-right: 8px;
+    font-size: var(--BodyR);
+    color: var(--DARKGREY);
+  }
