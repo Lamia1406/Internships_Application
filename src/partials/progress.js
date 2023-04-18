@@ -2,14 +2,14 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import '../Styles/progress.css';
+import progressbarClass from'../Styles/partials/progress.module.css';
 function ProgressBar()
 {
   return ( 
     <div>
-       <div className='progress-div'>
+       <div className={progressbarClass.progressDiv}>
        <div className='progress'>
-        <div className='progress-bar' role='progressbar' style={{width:'50%'}}> </div>
+        <div className={progressbarClass.progressBar} role='progressbar'> </div>
         </div>
        </div>
 

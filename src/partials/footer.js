@@ -6,31 +6,31 @@ import mail from '../Images/mail.png';
 import facebook from '../Images/facebook.png'; 
 import twitter from '../Images/twitter.png';
 import ntic from '../Images/ntic.png'; 
-import '../Styles/footer.css';
+import footerClass from '../Styles/partials/footer.module.css';
 
 function Footer (){
     return(
-        <div className='row'>
-     <div className='slogan col-lg-5'>
-            <img src={logo}/>
+        <div className={`row ${footerClass.footer}`}>
+     <div className={`${footerClass.slogan} col-lg-5`}>
+            <img src={logo} alt='logo'/>
             <p> Effortlessly apply for your dream internship</p>
-            <div className='socials'>
-            <img src={facebook}/>
-            <img src={twitter}/>
-            <img src={ntic}/>
+            <div className={footerClass.socials}>
+            <img src={facebook} alt='facebook logo'/>
+            <img src={twitter} alt='twitter logo'/>
+            <img src={ntic} alt='ntic logo'/>
               </div>
               </div> 
-              <div className='col-lg-2 product'>
-                <p className='bodyl'>Product</p>
-                <p className='bodys'>About</p>
-                <p className='bodys'>FAQ</p>
+              <div className={`col-lg-2 ${footerClass.footerInfo}`}>
+                <p className={footerClass.bodyl}>Product</p>
+                <p className={footerClass.bodys}>About</p>
+                <p className={footerClass.bodys}>FAQ</p>
                 </div>
-              <div className='col-lg-5 -us'>
-                <p className='bodyl'>Contact</p>
-                <p className='bodys'><img src={pin}  className='contact'/>Université Constantine 2 Abdelhamid Mehri – Nouvelle ville Ali Mendjeli</p>
-                <p className='bodys'><img src={mail} className='contact'/>info@connectu.com</p>
-                <p className='bodys'><img src={phone} className='contact'/>+213123456789</p>
-                <p className='bodys'><img src={fax} className='contact'/>+213123456780</p>
+              <div className={`col-lg-5 ${footerClass.footerInfo}`}>
+                <p className={footerClass.bodyl}>Contact</p>
+                <p className={footerClass.bodys}><img src={pin}  className={footerClass.contact} alt='icon'/>Université Constantine 2 Abdelhamid Mehri – Nouvelle ville Ali Mendjeli</p>
+                <p className={footerClass.bodys}><img src={mail} className={footerClass.contact} alt='icon'/>info@connectu.com</p>
+                <p className={footerClass.bodys}><img src={phone} className={footerClass.contact} alt='icon'/>+213123456789</p>
+                <p className={footerClass.bodys}><img src={fax} className={footerClass.contact} alt='icon'/>+213123456780</p>
                 </div>
 
      </div>

@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import NavBar from '../partials/navbar';
-import Footer from '../partials/footer';
 import ProgressBar from '../partials/progress';
 import Button from '../partials/button';
 
 
-import '../Styles/home.css';
-
+import HomeClass from '../Styles/home.module.css'
 function Home()
 {
     const [notif,clearNotif]=useState(true);
@@ -17,29 +14,36 @@ function Home()
         clearNotif(false);
     }
   return ( 
-    <div>
-        <NavBar/>
-      <div className='container-fluid p-0'>
-        <div id='welcome'>
+    <div className={`${HomeClass.page} container-fluid`}>
+        <div className= {HomeClass.section}>
+        <h2 id={HomeClass.welcome}>
             Welcome, Lamia
+        </h2>
         </div>
         {notif && (
-            <div id='notifications' >
-            <h3 className='h3'> Recent notifications</h3>
-            <p className='notif'> Your marks are available</p>
-            <p className='notif'> Great news! Your application for the internship has been accepted</p>
-            <Button content="Clear" className="dark" onClick={clearNotifications}/>
+            <div className={HomeClass.section} >
+           <div id={HomeClass.notifications}>
+           <h3 className={HomeClass.h3}> Recent notifications</h3>
+            <p className={HomeClass.notif}> Your marks are available</p>
+            <p className={HomeClass.notif}> Great news! Your application for the internship has been accepted</p>
+            <div className={HomeClass.btn1}>
+            <Button content="Clear" color="dark" onClick={clearNotifications} iconClassName="icon"/>
+
+              </div>
+            </div>
     </div>
         )}
-         <div id='status'>
-            <h3 className='h3'> Application status</h3>
+         <div className={HomeClass.section}>
+            <h3 className={HomeClass.h3}> Application status</h3>
+            <div className={HomeClass.progressDiv}>
             <ProgressBar/>
-            <Button content="View Application" className="dark"/>
+            </div>
+            <div className={HomeClass.btn2}>
+            <Button content="View Application" color={"dark"}/>
+            </div>
     </div>
-    <Footer/>
     
 
-      </div>
 
     </div>
   );
