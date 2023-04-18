@@ -16,7 +16,6 @@
   --DARKGREY:  #4B5169;
   --GREY: #DCDFEA;
   --WHITE: #FFFFFF;
-
 }
 *{
 	font-family: Verdana, Tahoma, sans-serif;
@@ -24,7 +23,7 @@
 	margin: 0;
   box-sizing: border-box;
 }
-#root{
-  margin: 0 12%;
- 
+
+@media  only screen and (max-width:990px){
+  
 }
