@@ -1,0 +1,101 @@
+.page{
+    padding: 0 32px;
+}
+
+.section{
+    padding: 64px 0;
+}
+#welcome{
+    font-size: var(--H4);
+    color: var(--BLACK);
+}
+#notifications{
+    text-align: center;
+}
+.h3{
+    color: var(--DARKBLUE);
+    font-size: var(--H3);
+    margin-bottom: 24px;
+}
+.notif{
+    color: var(--DARKGREY);
+    font-size: var(--BodyL);
+    margin-bottom: 24px;
+}
+.btn1{
+    width: max-content;
+    margin: 0 auto;
+
+}
+.progressDiv{
+    width: 50%;
+}
+.btn2{
+    width: max-content;
+}
+.pieChartTitle{
+    margin: 0 auto;
+    margin-bottom: 32px;
+    width: fit-content;
+    color: var(--BLACK);
+    font-size: var(--H6);
+}
+.pieChart{
+    width: 300px;
+    margin: 0 auto;
+}
+.pieChartPercentage{
+    color: var(--PRIMARY);
+    font-size: var(--BodyR);
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 32px;
+}
+.pieChartPercentage2{
+    color: #7F00FF;
+    font-size: var(--BodyR);
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 32px;
+}
+.accountsBtns{
+    position: sticky;
+    padding: 64px 0;
+    padding-top: 32px;
+    bottom: 0;
+    margin: auto;
+    background-color: white;
+    
+}
+.accountsBtns div{
+    margin: auto;
+    width: max-content;
+}
+
+
+
+@media only screen and (width <= 990px) {
+    
+    #welcome{
+        font-size: var(--H6);
+    }
+    .h3{
+        font-size: var(--H4);
+    } 
+    .progressDiv{
+        width: 100%;
+    }
+    .pieChartTitle{
+        margin-top: 32px;
+    }
+    .accountsBtns{
+        position: sticky;
+        padding:32px 0;
+        bottom: 64px;
+        
+    }
+    .accountsBtns div{
+        margin: 8px auto;
+        width: max-content;
+    }
+}

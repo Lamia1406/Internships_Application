@@ -1,0 +1,229 @@
+.page{
+    padding: 0 32px;
+}
+.main{
+    margin: 0 16px;
+}
+.section{
+    padding: 64px 0;
+}
+.pageTitle{
+    color: var(--PRIMARY);
+    font-size: var(--H2);
+}
+.formHeader{
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    margin: 40px 0;
+}
+.formHeader p{
+    color: var(--DARKGREY);
+    font-size: var(--BodyR);
+    margin: auto 0;
+
+}
+.cancelBtn{
+    padding: 12px 20px;
+    background-color: var(--WHITE);
+    color: var(--PRIMARY);
+    font-size: var(--BodyR);
+    border-radius: 8px;
+    border: 1px solid var(--PRIMARY);
+    width: 100%;
+}
+.form{
+    border: 1px solid var(--BLACK);
+    margin: 0 32px;
+    border-radius: 32px;
+    padding: 32px;
+}
+.formContent{
+    width: 68%;
+    margin: 0 auto;
+}
+.inputDiv{
+    display: flex;
+    justify-content: space-between;
+    margin: 60px 0;
+}
+.field{
+    width: 60%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: baseline;
+}
+.radio{
+    width: 60%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
+    font-size: var(--BodyL);
+    color: var(--BLACK);
+}
+.formContent p{
+    font-size: var(--BodyL);
+    color: var(--BLACK);
+    width: fit-content;
+    margin: auto 0;
+    padding: 0;
+}
+.formTabs{
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--GREY);
+    border-radius: 32px;
+}
+.tabBtn{
+    border: none;
+    color: var(--BLACK);
+    font-size: var(--H6);
+    background-color: transparent;
+    padding: 16px;
+    border-radius: 32px;
+}
+.active{
+    background-color: var(--DARKBLUE);
+    color: white;
+}
+.navigationBtn{
+    width: 120px;
+    margin: 0 auto;
+}
+.mobileNavigation{
+    display: none;
+}
+.calendarDiv {
+    border: 1px solid var(--DARKGREY);
+    padding: 16px;
+    border-radius: 32px ;
+    width: max-content;
+    text-align: center;
+  }
+ .calendar {
+    width: 100%;
+    border: 0;
+    margin: 0;
+ } 
+  .calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+  }
+  
+  .calendar button:enabled:hover {
+    cursor: pointer;
+    background-color: var(--DARKGREY);
+    color: var(--WHITE);
+  }
+  .chosenDateBtn{
+    background-color: var(--PRIMARY);
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 16px;
+    color: var(--WHITE);
+  }
+  .wrongDateNotif{
+    color: red;
+  }
+  .calendarBtn{
+    position: absolute;
+   left: 72%;
+
+  }
+  .inputDiv hr{
+   color: var(--BLACK);
+    width: 80%;
+    margin: 0 auto;
+  }
+
+
+  
+
+    
+
+@media only screen and (max-width:990px) {
+    .main{
+        margin: 0;
+    }
+    .pageTitle{
+        font-size: var(--H4);
+        text-align: center;
+    }
+    .form{
+        margin: 0;
+        padding: 16px;
+    }
+    .formHeader{
+        padding: 0;
+    }
+    .formContent{
+        width: 100%;
+        margin:0 auto;
+    }
+    .formTabs{
+        display: none;
+    }
+    .inputDiv{
+        display: block;
+        margin: 32px 0;
+    }
+    .field{
+        width: 100%;
+        padding: 0;
+        display: block;
+    }
+    .radio{
+        width: 100%;
+    
+    }
+    .formContent p{
+        margin: 16px auto;
+        padding: 0;
+    }
+   
+    /*
+    */
+    .calendarDiv {
+        padding: 0 16px;
+      }
+     
+      
+      
+      
+      .wrongDateNotif{
+        margin: 8px 0;
+      }
+      .calendarBtn{
+        position: relative;
+        left: 84%;
+        bottom: 40px;
+        padding: 0;
+
+      }
+      .navigationBtn{
+        display: none;
+
+    }
+     .mobileNavigation{
+        display: flex;
+        justify-content: space-between;
+     }
+     .active{
+        border: none;
+        font-size: var(--BodyL);
+        padding: 16px;
+        border-radius: 32px;
+        width: 240px;
+    }
+    .arrows{
+        border: none;
+        background-color: transparent;
+    }
+      
+   
+}

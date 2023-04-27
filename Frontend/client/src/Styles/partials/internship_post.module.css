@@ -1,0 +1,63 @@
+.companyName{
+    font-size: var(--BodyS);
+    color: var(--PRIMARY);
+    margin-bottom: 16px;
+}
+.title{
+    font-size: var(--H3);
+    color: var(--BLACK);
+    margin-bottom: 16px;
+}
+.description{
+    font-size: var(--BodyR);
+    color: var(--DARKGREY);
+    margin-bottom: 16px;
+}
+.published{
+    font-size: var(--BodyS);
+    color: var(--BLACK);
+    text-align: right;
+    margin-bottom: 28px;
+}
+.posts{
+    margin: 32px 0 ;
+    display: flex;
+    align-items: center;
+}
+.postImg{
+    width: 500px;
+}
+.apply{
+    width: fit-content;
+}
+.col-lg-6{
+    padding: 0;
+}
+.manageWebmaster{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+@media only screen and (max-width:990px)
+{
+    .companyName{
+        margin: 16px 0;
+    }
+    .title{
+        font-size: var(--H5);
+    }
+    .postImg{
+        width: 265px;
+    }
+    
+    .postImgDiv{
+       text-align: center;
+    }
+    .apply{
+        margin-bottom: 64px;
+    }
+    .manageWebmaster{
+        width: 100%;
+    }
+    
+}

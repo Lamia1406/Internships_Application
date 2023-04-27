@@ -1,0 +1,33 @@
+.testimonial{
+    display: flex;
+    align-items: center;
+}
+.h3{
+    margin-bottom: 16px;
+    color: var(--BLACK);
+    font-size: var(--H3);
+
+}
+.bodys{
+    font-size: var(--BodyS);
+    color:#8a8aea;
+    margin-bottom: 16px;
+
+}
+
+.testimonialPic{
+    text-align: center;
+}
+.p{
+    font-size: var(--P);
+    color: var(--DARKGREY);
+}
+@media only screen and (max-width:990px){
+    .testimonialPic img{
+        height: 120px;
+    }
+    .testimonialPic{
+        text-align: center;
+        margin-bottom: 32px;
+    }
+}
