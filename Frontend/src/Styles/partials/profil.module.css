@@ -1,0 +1,134 @@
+
+
+
+.close{
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+   
+}
+.body{
+    padding: 64px;
+}
+.avatar{
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 32px;
+}
+.avatar img{
+    border-radius: 50%;
+    background-size: contain;
+    width: 120px;
+    height: 120px;
+
+}
+.name{
+    font-size: var(--H4);
+    text-align: center;
+    color: var(--BLACK);
+    margin-bottom: 64px;
+}
+.records{
+    margin-bottom: 32px;
+    text-align: center;
+}
+.recordsTitle{
+    margin-bottom: 16px;
+    font-size: var(--H6);
+    color: var(--DARKBLUE);
+}
+.recordsDetails{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid var(--GREY);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.recordsDetails div h6{
+    color: var(--BLACK);
+    font-size: var(--BodyS);
+}
+
+.accepted{
+    color: #42FF00;
+    font-size: var(--BodyL);
+}
+.pending{
+    font-size: var(--BodyL);
+    color: #FFC700;
+}
+.rejected{
+    color: #FF2E2E;
+    font-size: var(--BodyL);
+
+}
+.information{
+    border: 1px solid var(--GREY);
+    border-radius: 8px;
+    padding:0 16px;
+}
+.profilDetails{
+    display: flex;
+    align-items: flex-start;
+    margin: 32px 0;
+}
+.title{
+    width: 44%;
+    color: var(--BLACK);
+    font-size: var(--BodyR);
+}
+.description{
+    font-size: var(--BodyR);
+    color: var(--DARKGREY);
+}
+.description ul{ 
+    padding: 0;
+    color: var(--PRIMARY);
+    text-decoration: underline;
+}
+.inputDiv{
+    width: 40%;
+    margin: 0 auto;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+}
+.inputDiv div{
+    width: 120px;
+}
+
+@media only screen and (max-width:990px){
+    
+.main{
+    width:90vw; 
+    margin-top: 16px;
+}
+.body{
+    padding: 32px;
+}
+
+
+.name{
+    font-size: var(--H6);
+}
+.recordsTitle{
+    font-size: var(--BodyL);
+}
+.recordsDetails{
+    padding: 8px;
+}
+.title{
+    width: 48%;
+}
+.description{
+    width: 52%;
+    overflow-wrap: break-word;
+}
+.inputDiv{
+    width: 100%;
+    justify-content: space-evenly;
+}
+}
