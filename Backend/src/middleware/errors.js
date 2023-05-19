@@ -17,6 +17,7 @@ const errorHandler =(err,req,res,next)=>{
     if(err.name == "ValidationError"){
         const message = Object.values(err.errors).map(value =>
             value.message)
+            console.log(`message ${message}`)
         error = new ErrorResponse(message, StatusCodes.BAD_REQUEST)
     }
     res.status(error.statusCode || 500).send(

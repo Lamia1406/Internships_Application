@@ -29,6 +29,8 @@
     width: 68%;
     font-size: var(--BodyR);
     color: var(--DARKGREY);
+    text-align: center;
+
 }
 .inputDiv{
     display: flex;
@@ -39,6 +41,24 @@
 }
 .navigationBtn{
     width: 120px;
+}
+.select{
+    color: var(--DARKGREY);
+    font-size: var(--BodyR);
+    padding: 12px 20px;
+    background-color: var(--WHITE);
+    border: 1px solid var(--DARKGREY);
+    width: 100%;
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-bottom: 16px;
+}
+.addFaculty{
+    width: fit-content;
+    margin: 0 auto;
+}
+option {
+    color: var(--BLACK);
 }
 @media only screen and (max-width:990px){
     

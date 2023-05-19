@@ -11,15 +11,15 @@ function OneDepartment(props){
         <td>{props.faculty}</td>
         <td>{props.univ}</td>
         <td>{props.address}</td>
-        {/* <td><div  className={oneDepartmentClass.responsible}>
+        <td><div  className={oneDepartmentClass.responsible}>
         <p>{props.depResponsible}</p>
         <div className={oneDepartmentClass.profil}>
-        <Button content="Profil" color="white"  dataBsToggle="modal" dataBsTarget={`#responsible${props.id}`} /></div></div></td> */}
-        {/* <Profil  profil="responsible" name={props.depResponsible}  email={props.email}
+        <Button content="Profil" color="white"  dataBsToggle="modal"  dataBsTarget={`#responsible${props.id}`} /></div></div></td>
+        <Profil  profil="responsible" name={props.depResponsible} image={props.image} email={props.email}
     phone= {props.phone}
     fax={props.fax}
 
-    modalId= {`responsible${props.id}`} footer= {`responsible${props.id}edit`}/> */}
+    modalId= {`responsible${props.id}`} footer= {`responsible${props.id}edit`}/>
       </tr>
       
     )

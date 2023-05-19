@@ -16,13 +16,17 @@
  margin: 0 auto;
 
 }
+.form{
+        width: 80%;
+        margin: 32px auto;
+        border-radius: 16px;
+        box-shadow: -4px 4px 12px var(--GREY);
+
+}
 .formTitle{
-    background-color: var(--DARKGREY);
-    color: var(--WHITE);
+    color: var(--DARKBLUE);
     font-size: var(--H4);
     padding: 16px;
-    border-radius: 8px;
-
 }
 .formTitle p{
     width: fit-content;
@@ -30,14 +34,12 @@
 
 }
 .formContent{
-    padding: 64px 0;
+    padding: 16px 0;
+    border-radius: 16px;
 
 }
 .details{
-    margin:  0;
-
-  
-    
+    margin:  0;   
 }
 .field{
     display: flex;
@@ -46,21 +48,18 @@
     color: var(--BLACK);
     font-size: var(--BodyL);
     margin: 32px 0;
-
 }
 .label{
-    width: 30%;
-
+    width: 35%;
 }
 .content{
-    width: 70%;
-    padding: 8px;
-    border-bottom: 1px solid var(--DARKGREY);
-
+    margin-left: 16px;
+    width: 65%;
+    border-bottom: 1px solid var(--DARKGREY); 
 }
 .divider{
     border: 1px dashed var(--DARKGREY);
-    margin: 64px 10%;
+    margin: 32px auto;
 
 }
 .space{
@@ -89,6 +88,27 @@
     margin: 0 auto;
 
 }
+.alert{
+  width: 50%;
+ text-align: center;
+}
+.reason{
+    padding: 16px 0;
+}
+.choose{
+    background-color: #e1e0e0;
+    text-align: center;
+    padding: 16px;
+    border-radius: 16px;
+}
+.choose div{
+    margin: 16px auto;
+    width: fit-content;
+}
+.choose .letter{
+    font-size: var(--BodyR);
+}
+
 @media only screen and (max-width:990px)
 {
     

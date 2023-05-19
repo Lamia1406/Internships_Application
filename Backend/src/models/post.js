@@ -6,11 +6,12 @@ const postSchema = new mongoose.Schema(
             type: ObjectId,
             ref: "Company",
             trim: true,
-            required: [true,"please enter the company name"],
+            required: [true,"please enter a supervisor for this offer"],
             maxLength: 50,
         },
         image: {
-            type:String
+            type:String,
+            default:""
         },
         
         title: {
@@ -22,10 +23,14 @@ const postSchema = new mongoose.Schema(
        
         description: {
             required: [true,"please write a description for this internship"],
-            minLength: 50,
             maxLength: 2000,
             type: String,
         },   
+        isOffer:{
+            type:Boolean,
+            default: true,
+            required:true
+        }
     },
     {timestamps: true}
 );

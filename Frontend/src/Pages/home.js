@@ -11,6 +11,7 @@ import CreateDepartmentResponsibleAccount from '../partials/createDepartmentResp
 import CreateSupervisorAccount from '../partials/createSupervisorAccount';
 import CreateStudentAccount from '../partials/createStudentAccount';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
 
 ChartJS.register(
@@ -18,16 +19,33 @@ ChartJS.register(
 )
 function Home()
 {
-  const [user,setUser]=useState("")
-  useEffect(() => {
-    axios.get('http://localhost:4000/v1/user/profil')
-      .then(response => {
-        setUser(response.data.user);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  let allNotificationsURL;
+  const user = jwtDecode(localStorage.getItem("token")) 
+  if(user.userType == "department responsible"){
+    allNotificationsURL = `http://localhost:4000/notification/allNotifications/responsible/${user._id}`
+ } 
+  if(user.userType == "student"){
+    allNotificationsURL = `http://localhost:4000/notification/allNotifications/student/${user._id}`
+ } 
+ const [notifications,setNotifications]=useState([])
+ const fetchNotifications = async () => {
+   const res = await axios.get(`${allNotificationsURL}`);
+   if(res.data.status){
+     setNotifications(res.data.notifications.filter((n)=>{
+      const notificationDate = new Date(n.date);
+      const today = new Date();
+      return (
+        notificationDate.getFullYear() === today.getFullYear() &&
+        notificationDate.getMonth() === today.getMonth() &&
+        notificationDate.getDate() === today.getDate()
+      );
+    }))
+   
+   }
+ }
+ useEffect(()=>{
+   fetchNotifications();
+ },[]);
     const [notif,clearNotif]=useState(true);
     const clearNotifications=()=>
     {
@@ -67,8 +85,20 @@ function Home()
             <div className={HomeClass.section} >
            <div id={HomeClass.notifications}>
            <h3 className={HomeClass.h3}> Recent notifications</h3>
-            <p className={HomeClass.notif}> Your marks are available</p>
-            <p className={HomeClass.notif}> Great news! Your application for the internship has been accepted</p>
+            {
+              notifications.length == 0  && (
+                <p className={HomeClass.notif}> No recent notifications</p>
+              )
+            }
+            {
+              notifications.length != 0 && (
+                notifications.map( n =>{
+                 return <p className={HomeClass.notif}>{n.message}</p>
+                }
+
+                )
+              )
+            }
             <div className={HomeClass.btn1}>
             <Button content="Clear" color="dark" onClick={clearNotifications} iconClassName="icon"/>
 
@@ -82,11 +112,11 @@ function Home()
           <h3 className={HomeClass.h3}> Application status</h3>
          {user.enrolled == "yes" && (
            <>
-           <div className={HomeClass.progressDiv}>
-           <ProgressBar/>
-           </div>
+           You're enrolled in an internship
            <div className={HomeClass.btn2}>
+           <NavLink to="/yourApp">
            <Button content="View Application" color={"dark"}/>
+           </NavLink>
            </div></>
          )}
          {user.enrolled == "no" && (
@@ -98,6 +128,13 @@ function Home()
 
                               </div>
                        </NavLink>
+          </>
+                        
+         )}
+         {user.enrolled == "pending" && (
+          <>
+          <h3 className={HomeClass.notif}>Your sent applications are being reviewed in the moment</h3>
+                       
           </>
                         
          )}

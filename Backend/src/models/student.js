@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken"
+import { ObjectId } from "mongodb";
 const studentSchema = new mongoose.Schema(
     {   
         full_name: {
@@ -25,14 +25,8 @@ const studentSchema = new mongoose.Schema(
             ]
         },
         password: {
-            type: String,
-            trim: true,
-            required: [true,"Please add a Password"],
-            minlength: [6,"password must have at least six(6) characters"],
-            match:[
-                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and a special character"
-            ]
+            type:String,
+            required:[true,"please enter your password"]
         },
         level_of_study: {
             required: [true,"Please choose your level of study"],
@@ -45,38 +39,49 @@ const studentSchema = new mongoose.Schema(
         },
         social_security_number: {
             type: Number,
+            required: [true,"Please enter your social security number"],
+
         },
         phone: {
             type: Number,
+            required: [true,"Please enter your phone number"],
+
         },
         department: {
-            type: String,
+            type: ObjectId,
+            ref:"Department",
             required: [true,"Please Choose your department"],
         },
         userType: {
             type: String,
             default: 'student'
         },
+        image: {
+            type:String,
+            default: ""
+
+        },
              
     },
     {timestamps: true}
 );
 
-studentSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-});
+
 studentSchema.methods.comparePassword = async function (inputPassword){
-return await bcrypt.compare(inputPassword,this.password)
+    if(inputPassword == this.password){
+        return true
+    }
+    else {
+       return false
+    }
 }
 studentSchema.methods.jwtGenerateToken = function(){
-    return jwt.sign({id: this.id, userType:this.userType, full_name:this.full_name}, "azertyuiop",{
-        expiresIn: 3600
+    const payload = this.toObject();
+    return jwt.sign(payload,"azertyuiop",{
+        expiresIn: 3600*24*7
     })
 }
+
 const Student = mongoose.model("Student", studentSchema);
 
 export default Student;

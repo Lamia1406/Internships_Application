@@ -7,6 +7,8 @@ import axios from "axios";
 import { useState,useEffect } from 'react';
 import departmentsClass from '../Styles/departments.module.css';
 import CreateDepartmentResponsibleAccount from '../partials/createDepartmentResponsibleAccount';
+import CreateFaculty from '../partials/createFaculty';
+import CreateUniversity from '../partials/createUniversity';
 function Departments(){  
   const getAllDepartmentsUrl = 'http://localhost:4000/v1/university/allResponsibles';
   const [responsibles, setResponsibles] = useState([]);
@@ -34,16 +36,16 @@ function Departments(){
           
           <div className={`${departmentsClass.results}`}>
             <div>
-              {/* Results({departments.length}) */}
+              Results({responsibles.length})
             </div>
             <div className={`dropdown  ${departmentsClass.sortBy}`}>
   <button className={`dropdown-toggle ${departmentsClass.sortBtn}`} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
    Sort by 
   </button>
   <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    {/* <li className={departmentsClass.category}><button classname={`dropdown-item`} onClick={()=>setDepartments(departments)}>Any</button></li> */}
+    <li className={departmentsClass.category}><button classname={`dropdown-item`} onClick={()=>setResponsibles(responsibles)}>Any</button></li>
     <li className='dropdown-divider'></li>
-    <li className={departmentsClass.category}><button classname={`dropdown-item `} >Faculty</button></li>
+    <li className={departmentsClass.category}><button classname={`dropdown-item `}  onClick={() => setResponsibles([...responsibles].sort((a, b) => a.department.faculty.localeCompare(b.department.faculty)))} >Faculty</button></li>
     <li className={departmentsClass.category}><button classname={`dropdown-item `} >University</button></li>
     <li className={departmentsClass.category}><button classname={`dropdown-item `} >Address</button></li>
   </ul>
@@ -61,6 +63,25 @@ function Departments(){
       <th scope="col">Department Responsible</th>
     </tr>
   </thead>
+  <tbody>
+  {responsibles.map((r) => (
+            <OneDepartment 
+            depname={r.dep_name} 
+            faculty ={r.faculty.name}
+            univ ={r.faculty.university.full_name}
+            address ={r.faculty.address}
+            depResponsible ={r.full_name}
+            email={r.email}
+            phone={r.phone}
+            image =  {r.image}
+   fax={r.fax}
+   id={r._id}/>
+  
+        ))}
+  {responsibles.map((r) => (
+           console.log(r)
+        ))}
+  </tbody>
   {/* <tbody>
     {
  responsibles.forEach(responsible => {
@@ -68,10 +89,7 @@ function Departments(){
  })
 
     
-    //   depname={responsible.department.name} 
     // 
-    // email={responsible.email}
-    // depResponsible={responsible.full_name} 
     // phone={responsible.phone}
     // fax={responsible.fax}
     // id={responsible._id}/>
@@ -97,6 +115,8 @@ function Departments(){
         <Button content="Create Department Responsible Account" color="dark" dataBsToggle="modal" dataBsTarget="#depResponsible"/>
       </div>
       <CreateDepartmentResponsibleAccount modalId="depResponsible"/>
+      <CreateFaculty modalId="faculty"/>
+      <CreateUniversity modalId = "university"/>
 
 </div></>
         )

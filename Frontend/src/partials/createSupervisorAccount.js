@@ -3,36 +3,60 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Input from './input';
 import Button from '../partials/button'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 function CreateSupervisorAccount(props)
 {
+    const handleImage = (e) =>{
+        const file = e.target.files[0];
+        setFileToBase(file);
+        console.log(file)
+     }   
+     const setFileToBase = (file)=>{
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = ()=>{
+            setImage(reader.result)
+        }
+     }
+    const getAllCompanies = "http://localhost:4000/v1/post/allCompanies"
+
     const createSupervisorsURL="http://localhost:4000/v1/user/create_supervisor";
     const [full_name,setFullName]=useState("");
     const [email,setEmail]=useState("");
     const [company,setCompany]=useState("")
-    const [address,setCompanyAddress]=useState("")
+    const [companies,setCompanies]=useState([])
     const [password,setPassword]=useState("");
+    const [image,setImage] = useState("");
+    const fetchCompanies = async () => {
+        const res = await axios.get(`${getAllCompanies}`);
+        if(res.data){
+            console.log(res.data)
+          setCompanies(res.data.companies)
+        }
+      }
+      useEffect(()=>{
+        fetchCompanies();
+      },[]);
     const submitForm = async(event) =>{
         event.preventDefault();
         const payload = {
             full_name,
             email,
             company,
-            address,
             password,
+            image
         }
         try{
             const res = await axios.post(`${createSupervisorsURL}`, payload);
           
             if (res.data.status=== true){
                 setCompany("");
-                setCompanyAddress("");
                 setEmail("");
                 setFullName("");
                 setPassword("");                
-                toast.success("Supervisor Created Successfully")
+                toast.success("Supervisor Account Created Successfully")
                 window.location.replace("/supervisors")
 
                 
@@ -51,6 +75,12 @@ return (
         <div className={createAccount.body}>
            <div className={createAccount.information}>
            <div className={` ${createAccount.profilDetails}`}>
+            <div className={`${createAccount.title}`}> Profil Picture</div>
+            <div className={`${createAccount.description}`}>
+            <Input placeholder="fill this input" type="file" onChange={handleImage}/>
+            </div>
+            </div>
+           <div className={` ${createAccount.profilDetails}`}>
             <div className={`${createAccount.title}`}>Full Name</div>
             <div className={`${createAccount.description}`}>
                 <Input placeholder="fill this input" type="text" onChange={(e)=> setFullName(e.target.value)} />
@@ -62,16 +92,22 @@ return (
                 <Input placeholder="fill this input" type="email" onChange={(e)=> setEmail(e.target.value)} />
             </div>
             </div>
-           <div className={` ${createAccount.profilDetails}`}>
+            <div className={` ${createAccount.profilDetails}`}>
             <div className={`${createAccount.title}`}>Company</div>
             <div className={`${createAccount.description}`}>
-                <Input placeholder="fill this input" type="text" onChange={(e)=> setCompany(e.target.value)} />
-            </div>
-            </div>
-           <div className={` ${createAccount.profilDetails}`}>
-            <div className={`${createAccount.title}`}>Company Address</div>
-            <div className={`${createAccount.description}`}>
-                <Input placeholder="fill this input" type="text" onChange={(e)=> setCompanyAddress(e.target.value)} />
+            <select className={createAccount.select} onChange={(e)=> setCompany(e.target.value)} value={company} >
+      <option disabled  value="" > Select Your Company</option>
+      {companies.map((c) => (
+          <option key={c._id} value={c._id}>
+            {c.company_name}
+          </option>
+       
+        ))}
+      </select> 
+      <p> Or </p> 
+     <div className={createAccount.addFaculty} >
+         <Button content="Add Company" color="white"  dataBsToggle="modal" dataBsTarget="#company"/>
+          </div>
             </div>
             </div>
            <div className={` ${createAccount.profilDetails}`}>

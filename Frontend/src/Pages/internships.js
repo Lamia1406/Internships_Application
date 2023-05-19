@@ -3,15 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import internshipsClass from '../Styles/internships.module.css';
 import Button from '../partials/button';
-import Post1 from '../Images/post1.png';
-import Post2 from '../Images/post2.png';
-import Post3 from '../Images/post3.png';
-import Post4 from '../Images/post4.png';
-import Post5 from '../Images/post5.png';
+
 import CreateCompany from '../partials/createCompany';
 import {useState} from 'react'
-import ArrowR from '../Images/right-arrow.png';
-import ArrowL from '../Images/left-arrow.png';
+
 import Sort from '../Images/sort.png';
 import Search from "../Images/search.png"
 import { Pagination } from 'antd';
@@ -20,30 +15,40 @@ import Input from '../partials/input.js';
 import { Helmet } from 'react-helmet';
 import CreateNewPost from '../partials/createNewPost';
 import axios from 'axios'
+import jwtDecode from 'jwt-decode';
+import {  NavLink, useNavigate } from 'react-router-dom';
 function Internships()
-{       
-  const getAllPosts = 'http://localhost:4000/v1/post/allPosts';
-    const [posts, setPosts] = useState([]);
+{      
+const user = jwtDecode(localStorage.getItem("token"))
+const navigate=useNavigate 
+ 
+const [pageNumber, setPageNumber] = useState(1);
+const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber}`;
+  const [posts, setPosts] = useState([]);
+    const [count, setCount] = useState("");
     const fetchPosts = async () => {
       const res = await axios.get(`${getAllPosts}`);
       if(res.data.status == true){
-        setStudents(res.data)
+        setPosts(res.data.posts)
+        setCount(res.data.count)
+        
       }
-  
+      // const [applications, setApplications] = useState([])
+      // const internshipsOfResponsibleURL = `http://localhost:4000/v1/internship/allInternships/${user._id}`
+      // const fetchApplications = async () => {
+      //   const res = await axios.get(`${internshipsOfResponsibleURL}`);
+      //   if(res.data){
+      //     setApplications(res.data)
+      //   }
+      // }
+      
+
     }
     useEffect(()=>{
-      fetchStudents();
-    },[]);
-        const [user,setUser]=useState("")
-        useEffect(() => {
-          axios.get('http://localhost:4000/v1/user/profil')
-            .then(response => {
-              setUser(response.data.user);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }, []);
+      //fetchApplications();
+      fetchPosts()
+    },[pageNumber]);
+       
   return ( 
      <>
         <Helmet>
@@ -84,46 +89,241 @@ function Internships()
          </div>       
   )
   }
+
  
      </div>
+     {user.userType == "webmaster" && (
+        <div className={internshipsClass.newPost}>
+        <Button content="Create New Post" color="dark" dataBsToggle="modal" dataBsTarget="#post"/>
+      </div>
+   )}
 { (user.userType == "student" || user.userType == "webmaster") && (
         <div className={internshipsClass.section} >
-        <Internship company="Google" image={Post1} title="Software Engineering Intern
-" description="We are seeking a motivated software engineering intern to work on the development of our cutting-edge software products. The ideal candidate will have a strong foundation in software engineering principles and experience with one or more programming languages such as Python, Java, or C++. You will work closely with our team of experienced software engineers to develop new features, fix bugs, and ensure the high quality of our software products.
+          {posts.map((p) => (
+              <Internship company={p.company.company_name} image={p.image} title={p.title} id={p._id}
+ description={p.description} published={`Last Updated at : ${new Date(p.updatedAt).toLocaleDateString("en-GB").split('/').reverse().join('/')}`}
+ user={user.userType} 
+ />
+        ))}
 
-" published="Published at: March 10, 2023
-" />
-        <Internship company="Microsoft" image={Post2} title="Marketing Intern
-" description="Our marketing team is seeking a talented and creative marketing intern to help with a variety of marketing initiatives. In this role, you will work closely with our marketing team to help execute marketing campaigns, develop content, and conduct market research. The ideal candidate will have excellent communication skills, a strong attention to detail, and a passion for marketing.
-" published="Published at: February 28, 2023
-" />
-        <Internship company="Oracle" image={Post3} title="Data Science Intern
-" description="We are looking for a data science intern to join our team and help us build innovative data-driven solutions. The ideal candidate will have experience with data analysis, machine learning, and programming in languages such as Python or R. You will work closely with our team of data scientists to analyze data, develop models, and create data visualizations. 
-" published="Published at: January 15, 2023
-" />
-        <Internship company="Facebook" image={Post4} title="Graphic Design Intern
-" description="Our creative team is seeking a talented graphic design intern to help with a variety of design projects. In this role, you will work closely with our team of designers to develop graphics, logos, and marketing materials for our brand. The ideal candidate will have experience with Adobe Creative Suite, excellent design skills, and a strong attention to detail. 
-" published="Published at: April 1, 2023
-" />
-        <Internship company="Linkedin" image={Post5} title="Human Resources Intern
-" description="We are seeking a human resources intern to assist with a variety of HR initiatives, including recruitment, onboarding, and employee relations. The ideal candidate will have excellent communication skills, strong organizational skills, and a passion for human resources. You will work closely with our HR team to help create a positive and productive work environment. 
-" published="Published at: March 20, 2023
-" />
-<ul className="pagination justify-content-center">
-    <li className="page-item"><button className="page-link" ><img src={ArrowL} alt='arrow icon'/></button></li>
-    <li className="page-item"><button className="page-link" >1</button></li>
-    <li className="page-item active"><button className="page-link" >2</button></li>
-    <li className="page-item"><button className="page-link" >3</button></li>
-    <li className="page-item disabled"><span className="page-link" >...</span></li>
-    <li className="page-item"><button className="page-link" >12</button></li>
-    <li className="page-item"><button className="page-link"><img src={ArrowR} alt='arrow icon'/></button></li>
-  </ul>
+       
+<Pagination current={pageNumber} total={count} pageSize={5} onChange={(prev) =>{setPageNumber(prev)}} />
      </div>
-)}
-   {user.userType == "student" && (
-         <div className={`${internshipsClass.section} row ${internshipsClass.newCompany}`}>
-         <div className='col-lg-6'>
-         <p> Did you contact an unlisted establishment? If yes, please apply here </p>
+)} 
+{/* {user.userType == 'department responsible' && (                     
+             <div>
+                   <div className={App.formTitle}> 
+              <p>Student Information</p>
+              </div>
+              <div className={App.formContent}>
+                <div className={`row row-cols-lg-2 ${App.details} gx-5`}>
+                <div className={`col ${App.field}`}>
+                          <p className={App.label}>
+                              Full Name :
+                          </p>
+                          <p className={App.content}>
+                          {app.student.full_name}
+                          </p>
+                    </div>
+                    <div className={`col ${App.field}`}>
+                          <p className={App.label}>
+                              Student Card :
+                          </p>
+                          <p className={App.content}>
+                               {app.student.student_card_number}
+                          </p>
+                    </div>
+                    <div className={`col ${App.field}`}>
+                          <p className={App.label}>
+                              Social Security Number:
+                          </p>
+                          <p className={App.content}>
+                          {app.student.social_security_number}
+
+                          </p>
+                    </div>
+                    <div className={`col ${App.field}`}>
+                          <p className={App.label}>
+                              Preparing Diploma of:
+                          </p>
+                          <p className={App.content}>
+                          {app.student.level_of_study}
+                          </p>
+                    </div>
+                  
+                </div>
+             </div>
+                  </div>
+                  
+                  
+            )} */}
+          {/* {
+            application.map(
+                  app =>{
+                        return <div className={App.form}>
+                        <div className={App.formTitle}>
+                           <p>Internship Details</p>
+                           </div>
+                           <div className={App.formContent}>
+                              <div className={`row  row-cols-lg-2 row-cols-1 ${App.details} gx-5`}>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                           Theme :
+                                        </p>
+                                        <p className={App.content}>
+                                        {app.post.title}
+              
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                            Company :
+                                        </p>
+                                        <p className={App.content}>
+                                        {app.post.company.company_name}
+              
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                           Starting Date :
+                                        </p>
+                                        <p className={App.content}>
+                                              {changDateFormat(app.startingDate)}
+                                             
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                            Ending Date :
+                                        </p>
+                                        <p className={App.content}>
+                                        {changDateFormat(app.endingDate)}
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                           Duration :
+                                        </p>
+                                        <p className={App.content}>
+                                             {(new Date(app.endingDate) - new Date(app.startingDate)) / (1000 * 60 * 60 * 24) } Days
+                                        </p>
+                                  </div>
+                              </div>
+                              
+                           </div>
+                        </div>
+                  }
+            )
+          }
+         {
+            application.map(
+                  app =>{
+                        return  <div className={App.form}>
+                        <div className={App.formTitle}> 
+                        <p>Supervised by</p>
+                        </div>
+                        <div className={App.formContent}>
+            
+                              <div className={`row row-cols-lg-2 ${App.details} gx-5`}>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                          Email :
+                                        </p>
+                                        <p className={App.content}>
+                                        {app.student.department.email}
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                            Phone Number :
+                                        </p>
+                                        <p className={App.content}>
+                                       (+213) 0{app.student.department.phone}
+                                        </p>
+                                  </div>
+                              </div>
+                              
+                              <hr className={App.divider}/>
+                              <div className={`row row-cols-lg-2 gx-5 ${App.details}`}>
+                              <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                          Internship Supervisor :
+                                        </p>
+                                        <p className={App.content}>
+                                              {app.supervisor.full_name}
+                                        </p>
+                                  </div>
+                                  <div className={`col ${App.field}`}>
+                                        <p className={App.label}>
+                                            Email :
+                                        </p>
+                                        <p className={App.content}>
+                                        {app.supervisor.email}
+              
+                                        </p>
+                                  </div>
+                              </div>
+                              <div className={App.modificationBtns}>
+                              <div>
+                                    <Button content="Delete" color="clear"/>
+                                  </div>
+                                  <div>
+                                  <Button content="Modify" color="black"/>
+                                  </div>
+                              </div>
+                           </div>
+                        
+                        </div>
+                  }
+                 )
+         } */}
+  {/* </div>
+   
+      </>  
+            :
+            <>
+                  <div className={`${App.section}`}>
+                    <p className={App.mainTitle}> Your Application</p>
+                  </div>
+                  <div className={`${App.section}`}>
+                        <h3 className={App.h3}>You're not enrolled to any application</h3>
+                        <div className={App.btn1}>
+                        <Button content="Apply" color="black"/>
+
+                              </div>
+                  </div>
+            </>
+        } */}
+    
+        {user.userType == "student" && (
+          <div className={`${internshipsClass.section} row ${internshipsClass.newCompany}`}>
+          <div className='col-lg-6'>
+        <p> Did you contact an unlisted establishment? If yes, please apply here </p>
          </div>
-         <div className={`col-lg-2 ${internshipsClass.apply}`} >
-         <Button color="dark" content="A
+       <NavLink to='/applyForInternship' className={`col_lg-2 ${internshipsClass.apply}`}>
+       <div  >
+          <Button color="dark" content="Apply" />
+  </div>
+       </NavLink>
+          </div>
+    )}
+  
+    
+   
+
+    </div>
+    <CreateNewPost modalId="post" />
+    </>
+  );
+
+  
+   
+   
+
+
+
+
+   
+}
+export default Internships;

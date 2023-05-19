@@ -9,6 +9,7 @@ import ntic from '../Images/ntic.png';
 import footerClass from '../Styles/partials/footer.module.css';
 import { useState,useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 function Footer (){
   const [user,setUser]=useState("")
   useEffect(() => {
@@ -29,9 +30,11 @@ function Footer (){
                <img src={logo} alt='logo'/>
                <p> Effortlessly apply for your dream internship</p>
                <div className={footerClass.socials}>
-               <img src={facebook} alt='facebook logo'/>
-               <img src={twitter} alt='twitter logo'/>
-               <img src={ntic} alt='ntic logo'/>
+              <Link to =""> <img src={facebook} alt='facebook logo'/></Link>
+              <Link to =""> <img src={twitter} alt='twitter logo'/></Link>
+              <Link to =""> <img src={ntic} alt='ntic logo'/></Link>
+               
+               
                  </div>
                  </div> 
                  <div className={`col-lg-2 ${footerClass.footerInfo}`}>

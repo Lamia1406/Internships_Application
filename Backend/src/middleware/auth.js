@@ -4,6 +4,7 @@ import ErrorResponse from "../utils/errorResponse.js";
 import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import Webmaster from "../models/webmaster.js";
+import Supervisor from "../models/supervisor.js";
 
 const isAuthenticated = async (req, res, next) => {
     const { token } = req.cookies;
@@ -26,6 +27,9 @@ const isAuthenticated = async (req, res, next) => {
        
       else if (decoded.userType === "webmaster") {
         user = await Webmaster.findById(decoded.id);
+      }
+      else if (decoded.userType === "supervisor") {
+        user = await Supervisor.findById(decoded.id);
       }
       req.user = user;
       next();

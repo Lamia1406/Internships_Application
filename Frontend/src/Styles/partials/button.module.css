@@ -24,9 +24,14 @@
     background-color: var(--WHITE);
     border:1px solid #646F73 ;
 }
+.grey{
+    color: var(--WHITE);
+    background-color: #889295;
+    border:none ;
+}
 .dark{   
     background-color: var(--PRIMARY);
-    color: var(--WHITE);
+    color: var(--BLACK);
     border:1px solid var(--PRIMARY) ;
     box-shadow: 4px 4px 4px var(--PRIMARY);
 }

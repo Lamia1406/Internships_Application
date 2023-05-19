@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
 import OneStudent from '../partials/oneStudent';
 import studentsClass from '../Styles/students.module.css';
+import UniversityTable from '../partials/DatabaseTables/universityTable';
 import Account from '../Images/account.png'
 import Accepted from '../Images/accepted.png';
 import Pending from '../Images/pending.png';
@@ -13,7 +14,9 @@ import Input from '../partials/input';
 import { Helmet } from 'react-helmet';
 import axios from 'axios'
 import CreateStudentAccount from '../partials/createStudentAccount';
-function Students()
+import CreateUniversity from '../partials/CreateDatabase/createUniversity';
+import FacultyTable from '../partials/DatabaseTables/FacultyTable';
+function Database()
   {
     const getAllStudentsUrl = 'http://localhost:4000/v1/user/allStudents';
     const [students, setStudents] = useState([]);
@@ -22,9 +25,6 @@ function Students()
       if(res.data){
         setStudents(res.data.students)
       }
-     
-      
-  
     }
     useEffect(()=>{
       fetchStudents();
@@ -34,14 +34,18 @@ function Students()
     return (
      <>
       <Helmet>
-      <title>ConnectU | Students</title>
-      <meta name='description' content='Students'/>
+      <title>ConnectU | Database</title>
+      <meta name='description' content='Database'/>
      </Helmet>
         <div className={`${studentsClass.page} container-fluid`}>
           <div className={studentsClass.section}>
-            <h2 className={studentsClass.h2}>Students</h2>
+            <h2 className={studentsClass.h2}>Database</h2>
           </div>
-          <div className={`${studentsClass.section} `}>
+          <div  className={`${studentsClass.section}`}>
+         <UniversityTable table="Universities" header="university" collapse="uni"/>
+         <FacultyTable table="Faculties" header="faculty" collapse="fac"/>
+          </div>
+          {/* <div className={`${studentsClass.section} `}>
            <div className={` row ${studentsClass.accountStatistics}`}>
             <div className={`col-lg-4 ${studentsClass.accounts}`}>
                 <div className={`${studentsClass.accountsTitle}`}> Total Accounts </div>
@@ -117,12 +121,13 @@ function Students()
   {
    Object.values(students).map(student => (
     <OneStudent name={student.full_name} 
-    faculty={student.faculty}  //we'll go back later
-    dep= {student.department} 
+    faculty={student.department.faculty.name}  //we'll go back later
+    dep= {student.department.dep_name} 
     phone={`${student.phone}`}
     email={student.email}
     level={student.level_of_study} 
-    depResponsible={student.responsible_name}  //we'll go back later
+    image = {student.image}
+    //depResponsible={student.responsible_name}  //we'll go back later
     enrolled = {student.enrolled}
     card={`${student.student_card_number}`}
     id={student._id}
@@ -139,9 +144,9 @@ function Students()
 <div className={studentsClass.newStudent}>
         <Button content="Create Student Account" color="dark" dataBsToggle="modal" dataBsTarget="#student"/>
       </div>
-      <CreateStudentAccount modalId="student" />
+      <CreateStudentAccount modalId="student" /> */}
 </div>
 </>
     )
 }
-export default Students 
+export default Database 

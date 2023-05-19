@@ -10,8 +10,8 @@ import Button from './button';
 import CreateCompany from './createCompany';
 function CreateNewPost(props)
 {
-    const getAllCompanies = "http://localhost:4000/v1/post/allCompanies"
-    const createPostURL="http://localhost:4000/v1/post/createPost";
+    const getAllCompanies = "http://localhost:4000/post/allCompanies"
+    const createPostURL="http://localhost:4000/post/createPost";
     const [title,setTitle]=useState("");
     const [company,setCompany]=useState("");
     const [description,setDescription]=useState("");
@@ -51,8 +51,8 @@ function CreateNewPost(props)
             }
         }
         catch (err) {
-            toast.error(err.response.data.error)
-            console.log(err.response.data.error)
+            toast.error(err.response.data.message)
+            console.log(err.response.data.message)
         }
     };
 
@@ -93,8 +93,8 @@ return (
            <div className={` ${createPostClass.profilDetails}`}>
             <div className={`${createPostClass.title}`}>Company</div>
             <div className={`${createPostClass.description}`}>
-            <select className={createPostClass.select} onChange={(e)=> setCompany(e.target.value)} value={company}>
-      <option disabled  value="company" > Select Company</option>
+            <select className={createPostClass.select} onChange={(e)=> setCompany(e.target.value)} value={company} defaultValue='company'>
+      <option disabled  value="" > Select Company</option>
       {companies.map((c) => (
           <option key={c._id} value={c._id}>
             {c.company_name}
@@ -106,10 +106,8 @@ return (
                 
       
       </select> 
-      <p> Or </p> 
-     <div className={createPostClass.addCompany} >
-         <Button content="Add Company" color="white"  dataBsToggle="modal" dataBsTarget="#company"/>
-          </div>
+      
+     
             </div>
             </div>
         

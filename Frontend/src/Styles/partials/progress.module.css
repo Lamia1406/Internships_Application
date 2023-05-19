@@ -4,7 +4,7 @@
     padding: 12px;
     margin: 24px 0;
 }
-.progressBar{
-    background-color: var(--PRIMARY);
-    width: 50%;
+.justApplied{
+    background-color: #FFD966 ;
+    width: 1%;
 }

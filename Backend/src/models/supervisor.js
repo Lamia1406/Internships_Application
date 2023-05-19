@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+const {ObjectId} = mongoose.Schema;
+
 const supervisorSchema = new mongoose.Schema(
     {   
    
@@ -24,44 +26,38 @@ const supervisorSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            trim: true,
             required: [true,"Please add a Password"],
-            minlength: [6,"password must have at least six(6) characters"],
-            match:[
-                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and a special character"
-            ]
         },
         company: {
-            type: String,
-            required: true
-        },
-        address: {
-            type: String,
+            type: ObjectId,
+            ref:"Company",
             required: true
         },
         userType: {
             type: String,
             default: 'supervisor'
         },
+        image: {
+            type:String,
+            default:""
+        },
              
     },
     {timestamps: true}
 );
-
-supervisorSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-});
 supervisorSchema.methods.comparePassword = async function (inputPassword){
-    return await bcrypt.compare(inputPassword,this.password)
+    
+    if(inputPassword == this.password){
+        return true
+    }
+    else {
+       return false
+    }
 }
 supervisorSchema.methods.jwtGenerateToken = function(){
-    return jwt.sign({id: this.id, userType:this.userType, full_name:this.full_name}, "azertyuiop",{
-        expiresIn: 3600
+    const payload = this.toObject();
+    return jwt.sign(payload,"azertyuiop",{
+        expiresIn: 3600*24*7
     })
 }
 const Supervisor = mongoose.model("Supervisor", supervisorSchema);

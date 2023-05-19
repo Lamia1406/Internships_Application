@@ -8,8 +8,21 @@ import Button from '../partials/button';
  import { useState,useEffect } from 'react';
 function CreateStudentAccount(props)
 {
-
+    const handleImage = (e) =>{
+        const file = e.target.files[0];
+        setFileToBase(file);
+        console.log(file)
+     }   
+     const setFileToBase = (file)=>{
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = ()=>{
+            setImage(reader.result)
+        }
+    }
+    
     const createStudentUrl="http://localhost:4000/v1/user/signup";
+    const getAllDepartments = "http://localhost:4000/v1/university/allResponsibles"
     const [full_name,setFullName]=useState("");
     const [email,setEmail]=useState("");
     const [phone,setPhone]=useState("");
@@ -17,7 +30,19 @@ function CreateStudentAccount(props)
     const [level_of_study,setLevelOfStudy]=useState("");
     const [student_card_number,setCardNumber]=useState("");
     const [social_security_number,setSecurityNumber]=useState("");
+    const [departments,setDepartments]=useState([])
     const [password,setPassword]=useState("");
+    const [image,setImage] = useState("")
+    
+    const fetchDepartments = async () => {
+        const res = await axios.get(`${getAllDepartments}`);
+        if(res.data){
+          setDepartments(res.data.responsibles)
+        }
+      }
+      useEffect(()=>{
+        fetchDepartments();
+      },[]);
     const submitForm = async(event) =>{
         event.preventDefault();
         const payload = {
@@ -28,7 +53,8 @@ function CreateStudentAccount(props)
             social_security_number,
             password,
             department,
-            phone
+            phone,
+            image
         }
         try{
             const res = await axios.post(`${createStudentUrl}`, payload);
@@ -40,7 +66,8 @@ function CreateStudentAccount(props)
                 setFullName("");
                 setLevelOfStudy("");
                 setPassword("");
-                setPhone("");                
+                setPhone("");   
+                setImage("")             
                 toast.success("Student Created Successfully")
                 window.location.replace("/students")
 
@@ -48,8 +75,8 @@ function CreateStudentAccount(props)
             }
         }
         catch (err) {
-           toast.error(err.response.data.message)
-           console.log(err.response.data.message)
+           toast.error(err.response.data.error)
+           console.log(err.response.data.error)
         }
     };
 return (
@@ -59,6 +86,12 @@ return (
         <button type="button" className={`btn-close ${createStudentClass.close}`} data-bs-dismiss="modal" aria-label="Close"></button>
         <div className={createStudentClass.body}>
            <div className={createStudentClass.information}>
+           <div className={` ${createStudentClass.profilDetails}`}>
+            <div className={`${createStudentClass.title}`}> Profil Picture</div>
+            <div className={`${createStudentClass.description}`}>
+            <Input placeholder="fill this input" type="file" onChange={handleImage}/>
+            </div>
+            </div>
            <div className={` ${createStudentClass.profilDetails}`}>
             <div className={`${createStudentClass.title}`}>Full Name</div>
             <div className={`${createStudentClass.description}`}>
@@ -92,12 +125,15 @@ return (
            <div className={` ${createStudentClass.profilDetails}`}>
             <div className={`${createStudentClass.title}`}>Department</div>
             <div className={`${createStudentClass.description}`}>
-            <select className={createStudentClass.select} onChange={(e)=> setDepartment(e.target.value)} defaultValue="department">
-      <option disabled value="department" > Department</option>
-      <option className={createStudentClass.category} value="Technologies des Logiciels et Systèmes d'Information"> Technologies des Logiciels et Systèmes d'Information</option>
-      <option className={createStudentClass.category} value="Informatique Fondamentale et ses Applications"> Informatique Fondamentale et ses Applications</option>
-      
-      </select>
+            <select className={createStudentClass.select} onChange={(e)=> setDepartment(e.target.value)} value={department} >
+      <option disabled  value="" > Select Your Department</option>
+      {departments.map((d) => (
+          <option key={d._id} value={d._id}>
+            {d.dep_name}
+          </option>
+       
+        ))}      
+      </select> 
             </div>
             </div>
            <div className={` ${createStudentClass.profilDetails}`}>

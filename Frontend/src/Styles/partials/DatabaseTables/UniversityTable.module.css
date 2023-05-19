@@ -1,0 +1,74 @@
+
+.FAQ{
+   
+    border: solid 1px var(--GREY);
+    margin: 32px;
+    border-radius: 8px !important;
+ 
+}
+.btn{
+  padding: 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: var(--BodyL);
+  color: var(--BLACK);
+  border: none;
+  width: 100%;
+  background-color: var(--GREY);
+}
+.btn div{
+  margin: auto;
+}
+  table thead th
+  {
+   padding:  32px 0!important;
+   border-top:none ;
+   color: var(--DARKGREY);
+   font-size: var(--BodyR);
+   text-align: center;
+   vertical-align: middle;
+
+ }
+
+
+ table tbody td {
+   font-size: var(--BodyR);
+   border-top: 1px solid var(--GREY) !important;
+   padding:8px 8 !important;
+   text-align: center;
+   vertical-align: middle;
+ }
+ table tbody td div{
+  display: flex;
+  justify-content: space-around;
+   margin: 0 auto;
+   width: 24%;
+ }
+ table tbody td div div {
+  width: 92px;
+ }
+
+
+ 
+ 
+  tbody tr:hover {
+    cursor: pointer;
+   background-color: rgb(3, 10, 35,0.075);
+ }
+.newUniversity{
+ width: fit-content;
+ margin: 16px;
+ margin-bottom: 0;
+}
+
+ @media only screen and (max-width:990px){
+   table thead th{
+     padding:32px  !important;
+     width: fit-content;
+    }
+
+.database{
+ overflow-x: auto;
+ max-width: 100%;
+}
+ }

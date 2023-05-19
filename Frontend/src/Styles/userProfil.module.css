@@ -90,9 +90,11 @@
     margin-top: 32px;
     display: flex;
     justify-content: space-between;
+   
 }
 .inputDiv div{
     width: 120px;
+    margin: auto;
 }
 
 

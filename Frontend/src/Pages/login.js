@@ -12,11 +12,9 @@ import { Helmet } from "react-helmet";
 import {toast} from 'react-toastify'
 import { NavLink } from "react-router-dom";
 function Login({history}){
-  const getUserTypeUrl = 'http://localhost:4000/v1/user/login';
- var  [isLoggedIn,logIn] = useState(false);
+  const getUserTypeUrl = 'http://localhost:4000/user/login';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userType, setUserType] = useState('');
     const submitForm = async(event) =>{
       event.preventDefault();
       const payload = {
@@ -30,9 +28,8 @@ function Login({history}){
               setEmail("");
               setPassword("");
               window.location.replace("/")
-              if(typeof window !== "undefined"){
-                localStorage.setItem("token",JSON.stringify(res));
-              }
+                localStorage.setItem("token",JSON.stringify(res.data.token));
+              
              
           }
       }

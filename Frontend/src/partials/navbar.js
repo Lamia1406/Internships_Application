@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min'
 import logo from '../Images/logo.png';
-import User from '../Images/User.jpg'
+import User from '../Images/userBig.png'
 import facebook from '../Images/facebook.png'; 
 import twitter from '../Images/twitter.png';
 import ntic from '../Images/ntic.png'; 
@@ -10,11 +10,13 @@ import { NavLink ,Link} from 'react-router-dom';
 import NavbarClass from '../Styles/partials/navbar.module.css';
 import { useState } from 'react';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import { toast } from 'react-toastify';
 function NavBar()
 {    
+  const user = jwtDecode(localStorage.getItem("token"))
   const logout = ()=>{
-      axios.get("http://localhost:4000/v1/user/logout").then(
+      axios.get("http://localhost:4000/user/logout").then(
         result => {
           toast.success("Sign Out Suuccessful")
           localStorage.removeItem("token");
@@ -27,16 +29,7 @@ function NavBar()
         }
       )
   }
-  const [user,setUser]=useState("")
-        useEffect(() => {
-          axios.get('http://localhost:4000/v1/user/profil')
-            .then(response => {
-              setUser(response.data.user);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }, []);
+
   const isCurrentPage = ({ isActive }) => {
     return isActive ? `${NavbarClass.active} ${NavbarClass.links}` : `${NavbarClass.links}`;
   };   
@@ -48,7 +41,7 @@ function NavBar()
           <img src={logo} alt='ConnectU logo'/>
         </Link>
         <div className={NavbarClass.avatar}>
-          <img src={User} alt='User pic' />
+          {user.image ? <img src={user.image} alt='User pic' /> : <img src={User} alt='User pic' />}
           </div>
            <button className={`navbar-toggler ${NavbarClass.menuList}` }type='button'
             data-bs-toggle='collapse'
@@ -67,16 +60,18 @@ function NavBar()
                Home
              </NavLink>
            </li>
-           <li className={NavbarClass.navItem}>
-          <NavLink to="/internships" className={isCurrentPage}>
-          Internships
-          </NavLink>
-        </li>
+          {(user.userType == "webmaster" || user.userType == "student") &&(
+             <li className={NavbarClass.navItem}>
+             <NavLink to="/internships" className={isCurrentPage}>
+             Internships
+             </NavLink>
+           </li>
+          )}
         {user.userType == "webmaster" && (
           <>
              <li className={NavbarClass.navItem}>
-          <NavLink to="/students" className={isCurrentPage}>
-          Students
+          <NavLink to="/database" className={isCurrentPage}>
+          Database
           </NavLink>
         </li>
              <li className={NavbarClass.navItem}>
@@ -93,21 +88,49 @@ function NavBar()
         </li>
         </>
         )}
+        {
+          user.userType== "department responsible" && (
+            <li className={NavbarClass.navItem}>
+          <NavLink to="/requests" className={isCurrentPage}>
+          Internships
+          </NavLink>
+        </li>
+          )
+        }
+        {
+          user.userType== "supervisor" && (
+            <li className={NavbarClass.navItem}>
+          <NavLink to="/requestsForSupervisor" className={isCurrentPage}>
+          Internships
+          </NavLink>
+        </li>
+          )
+        }
         {(user.userType == "department responsible" || user.userType =="supervisor") && (
           <>
+            
             <li className={NavbarClass.navItem}>
           
-          <NavLink to="/internships" className={isCurrentPage}>
+          <NavLink to="/studentProgress" className={isCurrentPage}>
           Student Progress
           </NavLink>
         </li>
           </>
         )}
+        
         <li className={NavbarClass.navItem}>
             <NavLink to = "/notifications" className={isCurrentPage}>
                 Notifications
             </NavLink>
             </li>
+            {user.userType=="student" && (
+           <li className={NavbarClass.navItem}>
+             <NavLink to ="/yourapp" className={isCurrentPage}>
+               Your application
+             </NavLink>
+           </li>
+           
+            )}
             <li className={`${NavbarClass.navItem} ${NavbarClass.settings}`} >
                      <NavLink  to= "/userProfil"className={isCurrentPage}>
                        Profile
@@ -127,14 +150,7 @@ function NavBar()
              <img src={ntic} alt='ntic logo'/>
                </div>
                </li>  
- {user.userType=="student" && (
-           <li className={NavbarClass.navItem}>
-             <NavLink to ="/yourapp" className={isCurrentPage}>
-               Your application
-             </NavLink>
-           </li>
-           
-            )}
+ 
             {user.userType != "webmaster" && (
                             <li className={NavbarClass.navItem}>
                             <NavLink to="product" className={isCurrentPage} >
@@ -148,7 +164,7 @@ function NavBar()
  </ul>
  <div className={`${NavbarClass.userSettings} dropdown`}>
                <div className={`${NavbarClass.dropdownPic} dropdown-toggle`}  role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   <img src={User}alt='user pic' />
+                  {user.image ?  <img src={user.image}alt='user pic' /> :  <img src={User}alt='user pic' />}
                </div>
                <ul className={`${NavbarClass.settingsMenu} dropdown-menu dropdown-menu-end`}>
                  <li><NavLink to="/userProfil" className={`${NavbarClass.links} ${NavbarClass.dropdownItem}`}>Profile</NavLink></li>

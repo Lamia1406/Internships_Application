@@ -3,6 +3,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
+import CreateCompany from '../partials/createCompany';
 import OneSupervisor from '../partials/oneSupervisor';
 import supervisorsClass from '../Styles/internshipSupervisors.module.css';
 import CreateSupervisorAccount from '../partials/createSupervisorAccount';
@@ -64,8 +65,9 @@ function Supervisors(){
       Object.values(supervisors).map(supervisor => (
         <OneSupervisor name={supervisor.full_name} 
         email={supervisor.email} 
-        company= {supervisor.company}
-        address={supervisor.address} 
+        company= {supervisor.company.company_name}
+        address={supervisor.company.address} 
+        id={supervisor._id}
         />
       ))
     }
@@ -79,7 +81,7 @@ function Supervisors(){
         <Button content="Create Internship Supervisor Account" color="dark" dataBsToggle="modal" dataBsTarget="#supervisor"/>
       </div>
       <CreateSupervisorAccount modalId="supervisor"/>
-
+      <CreateCompany modalId="company" drop="supervisor"/>
 </div></>
         )
 }

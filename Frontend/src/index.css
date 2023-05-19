@@ -10,11 +10,11 @@
   --BodyS: 0.75rem;
   --P: 1rem;
 
-  --PRIMARY: #0F3FEB;
-  --BLACK: #030A23;
-  --DARKBLUE: #0B1E63;
-  --DARKGREY:  #4B5169;
-  --GREY: #DCDFEA;
+  --PRIMARY: #F9A620        ;
+  --BLACK: #1d1305;
+  --DARKBLUE: #4c3309;
+  --DARKGREY:  #373634;
+  --GREY: #bec9d1;
   --WHITE: #FFFFFF;
 }
 *{

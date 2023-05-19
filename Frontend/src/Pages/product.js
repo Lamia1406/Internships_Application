@@ -20,9 +20,10 @@ import Testimonial from '../partials/testimonial';
 import FAQ from '../partials/FAQ';
 import TextArea from '../partials/textarea';
 import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 function Product()
 {
-   
+
   return ( 
   <>
     <Helmet>

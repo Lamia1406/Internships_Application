@@ -1,0 +1,85 @@
+
+.close{
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+   
+}
+.body{
+    padding: 64px;
+}
+.information{
+    border: 1px solid var(--GREY);
+    border-radius: 8px;
+    padding:0 16px;
+}
+.profilDetails{
+    display: flex;
+    align-items: center;
+    margin: 32px 0;
+}
+.title{
+    width: 32%;
+    color: var(--BLACK);
+    font-size: var(--BodyR);
+    margin-right: 4px;
+}
+.description{
+    width: 68%;
+    font-size: var(--BodyR);
+    color: var(--DARKGREY);
+    text-align: center;
+}
+.inputDiv{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    margin: 0 auto;
+    margin-top: 32px;
+}
+.navigationBtn{
+    width: 120px;
+}
+.createSupervisor{
+    margin: 0 auto;
+    width: fit-content;
+}
+.select{
+    color: var(--DARKGREY);
+    font-size: var(--BodyR);
+    padding: 12px 20px;
+    background-color: var(--WHITE);
+    border: 1px solid var(--DARKGREY);
+    width: 100%;
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-bottom: 16px;
+}
+.addUniversity{
+    width: fit-content;
+    margin: 0 auto;
+}
+
+
+option {
+    color: var(--BLACK);
+}
+@media only screen and (max-width:990px){
+    
+    
+    .body{
+        padding: 32px;
+    }
+    .inputDiv{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    
+    
+  
+    
+   
+   
+    }

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const universitySchema = new mongoose.Schema(
     {   
-        name: {
+        full_name: {
             type: String,
             trim: true,
             required: [true,"please enter the university  name"],

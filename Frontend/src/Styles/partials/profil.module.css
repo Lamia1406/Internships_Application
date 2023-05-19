@@ -90,15 +90,12 @@
     text-decoration: underline;
 }
 .inputDiv{
-    width: 40%;
+    width: fit-content;
     margin: 0 auto;
     margin-top: 32px;
-    display: flex;
-    justify-content: space-between;
+
 }
-.inputDiv div{
-    width: 120px;
-}
+
 
 @media only screen and (max-width:990px){
     
@@ -127,8 +124,5 @@
     width: 52%;
     overflow-wrap: break-word;
 }
-.inputDiv{
-    width: 100%;
-    justify-content: space-evenly;
-}
+
 }

@@ -21,8 +21,10 @@ function OneStudent(props){
         <td ><div className={oneStudent.profil}>
         <Button content="Profil" color="white" dataBsToggle="modal" dataBsTarget={`#student${props.id}`} /></div></td>
         <Profil  profil="student" name={props.name}  email={props.email}
+        image = {props.image}
     phone= {props.phone}
     card= {props.card}
+    id={props.id}
     security= {props.security}
     modalId= {`student${props.id}`} footer= {`student${props.id}edit`}/>
         {/* <EditProfil  profil="student"

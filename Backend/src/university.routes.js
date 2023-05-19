@@ -1,100 +1,94 @@
-import express from "express"
-import { StatusCodes } from "http-status-codes";
 import University from "./models/university.js";
+import express from 'express'
 import ErrorResponse from "./utils/errorResponse.js";
-import Faculty from "./models/faculty.js";
-import Department from "./models/department.js";
-import Responsible from "./models/responsible.js";
+import Faculty from './models/faculty.js'
+import Department from './models/department.js'
+import { StatusCodes } from "http-status-codes";
 const router = express.Router();
-const type = {
-    student : "student",
-    depResponsible : "department responsible",
-    supervisor : "internship supervisor",
-    not_found : "not found"
-}
-const status = {
-    success: true,
-    failure: false
-}
-router.post("/createUniversity",async(req,res,next)=>{
-    const {name} = req.body;
-    const nameExist = await University.findOne({name});
-    if (nameExist){
+router.post("/createUniversity",async(req,res,next)=>{   
+    const {full_name} = req.body;
+    const universityExist = await University.findOne({full_name});
+    if (universityExist){
         return next (new ErrorResponse("University Already Exists", StatusCodes.BAD_REQUEST))
-    };
-        try{
-            
-            const university = await University.create(req.body);
-            res.status(StatusCodes.CREATED).send(
-                {
-                    status:status.success,
-                    message: "Successfully Created"
-                }
-                )
+    }; 
+    try{
+        const university = await University.create(req.body);
+        res.status(StatusCodes.CREATED).send(
+            {
+                status:true,
+                message: "Successfully Created"
             }
-            catch(err){
-              next(err)
-                } 
-    })
-       router.post("/createFaculty",async(req,res,next)=>{
-        try{
-            const company = await Faculty.create(req.body);
-            res.status(StatusCodes.CREATED).send(
-                {
-                    status:status.success,
-                    message: "Successfully Created"
-                }
-                )
-            }
-            catch(err){
-              next(err)
-                } 
-    })
-
-
-    router.post("/createDepartment",async(req,res,next)=>{
-        try{
-            const company = await Department.create(req.body);
-            res.status(StatusCodes.CREATED).send(
-                {
-                    status:status.success,
-                    message: "Successfully Created"
-                }
-                )
-            }
-            catch(err){
-              next(err)
-                } 
-    })
-router.get("/allResponsibles",async (req,res)=>{
-        try{
-            const responsibles =await Responsible.find().populate({
-                path: "department",
-                populate :{
-                    path:"faculty",
-                    populate: {
-                        path: "university",
-                        model: "University",
-                      }
-                }
-            })
-            res.status(StatusCodes.OK).send(
-                {
-                    status:status.success,
-                    responsibles
-                }
-                )
+            )
         }
         catch(err){
-            err.message
-             }
-         })
-router.get("/allFaculties",async (req,res)=>{
+          next(err)
+            } 
+})
+
+
+router.post("/createFaculty",async(req,res,next)=>{
+    const {name} = req.body;
+    const facultyExist = await Faculty.findOne({name});
+    if (facultyExist){
+        return next (new ErrorResponse("Faculty Already Exists", StatusCodes.BAD_REQUEST))
+    }; 
+    try{
+        const faculty = await Faculty.create(req.body);
+        res.status(StatusCodes.CREATED).send(
+            {
+                status:true,
+                message: "Successfully Created"
+            }
+            )
+        }
+        catch(err){
+          next(err)
+            } 
+})
+
+router.post("/createDepartment",async(req,res,next)=>{
+    const {full_name} = req.body;
+    const departmentExist = await Department.findOne({full_name});
+    if (departmentExist){
+        return next (new ErrorResponse("Department Already Exists", StatusCodes.BAD_REQUEST))
+    }; 
+    try{
+        const company = await Department.create(req.body);
+        res.status(StatusCodes.CREATED).send(
+            {
+                status:true,
+                message: "Successfully Created"
+            }
+            )
+        }
+        catch(err){
+          next(err)
+            } 
+})
+
+
+//get requests 
+router.get("/allUniversities",async (req,res)=>{
+    try{
+        const universities = await University.find();
+        res.status(StatusCodes.OK).send(
+            {
+                status:true,
+                universities
+            }
+            )
+    }
+    catch(err){
+        err.message
+         }
+     })
+
+     router.get("/allFaculties",async (req,res)=>{
         try{
             const faculties = await Faculty.find().populate('university');
             res.status(StatusCodes.OK).send(
                 {
-                    status:status.success,
+                    status:true,
                     faculties
                 }
                 )
@@ -103,19 +97,24 @@ router.get("/allFaculties",async (req,res)=>{
             err.message
              }
          })
-router.get("/allUniversities",async (req,res)=>{
-        try{
-            const universities = await University.find();
-            res.status(StatusCodes.OK).send(
-                {
-                    status:status.success,
-                    universities
-                }
-                )
-        }
-        catch(err){
-            err.message
-             }
-         })
 
-export default router;
+router.get("/allDepartments",async (req,res)=>{
+            try{
+                const departments = await Department.find().populate({
+                    path: "faculty",
+                    populate :{
+                        path: "university"
+                    }
+                });
+                res.status(StatusCodes.OK).send(
+                    {
+                        status:true,
+                        departments
+                    }
+                    )
+            }
+            catch(err){
+                err.message
+                 }
+             })
+export default router

@@ -1,10 +1,27 @@
-import User from '../Images/User.jpg'
+import User from '../Images/userBig.png'
 import modalClass from '../Styles/partials/profil.module.css'
 import React  from 'react'
 import Button from '../partials/button';
 import EditProfil from './editProfil';
+import axios from 'axios'
+import {toast} from 'react-toastify'
 function Profil(props){
+  const deleteStudentURL= `http://localhost:4000/v1/user/deleteStudent/${props.id}`
+  const deleteStudent = async(event) =>{
+    event.preventDefault();
+          axios.delete(deleteStudentURL).then(
+          res => {
+            console.log(res)
+            toast.success("Student Deleted Successfully" )
+            window.location.reload();
+          }
+         ).catch(err=>{
+          toast.error(err)
+          console.log(err.data)
+         })
 
+    
+};
   return(
 
     
@@ -14,7 +31,9 @@ function Profil(props){
     <button type="button" className={`${modalClass.close} btn-close`} data-bs-dismiss="modal" aria-label="Close"></button>
     <div className={modalClass.body}>
       <div className={modalClass.avatar}>
-          <img src={User} alt='User pic' />
+          {
+            props.image ? <img src={props.image} alt='User pic' /> : <img src={User} alt='User pic' />
+          }
           </div>
           <div className={modalClass.name}>
                {props.name}
@@ -92,8 +111,7 @@ function Profil(props){
     
        
          <div className={modalClass.inputDiv} >
-                <div><Button content="Modify" color="dark" dataBsToggle="modal" dataBsTarget={props.footer}/></div>
-                <div><Button content="Delete" color="dark"/></div>
+                <Button content="Delete" color="dark" onClick={deleteStudent}/>
                 
       </div>
       </div>

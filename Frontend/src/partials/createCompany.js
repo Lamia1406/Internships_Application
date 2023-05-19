@@ -5,7 +5,7 @@ import Input from './input';
 import Button from './button';
  import {toast} from 'react-toastify';
  import axios from 'axios';
- import { useState,useEffect } from 'react';
+ import { useState } from 'react';
 function CreateCompany(props)
 {
     const createCompanyURL="http://localhost:4000/v1/post/createCompany";
@@ -65,7 +65,7 @@ return (
                 <Button content="Validate" onClick={submitForm}   />
             </div>
             <div className={createCompanyClass.navigationBtn}>
-                <Button content="Cancel" color="white" dataBsToggle="modal" dataBsTarget="#post"/>
+                <Button content="Cancel" color="white" dataBsToggle="modal" dataBsTarget={`#${props.drop}`}/>
             </div>
       </div>
           </div>

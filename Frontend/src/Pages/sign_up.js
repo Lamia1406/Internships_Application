@@ -2,17 +2,18 @@ import signupClass from "../Styles/signup.module.css"
 import logo from '../Images/logo.png'
 import Input from "../partials/input";
 import  Button from "../partials/button";
-import Google from "../Images/google2.png";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Helmet } from "react-helmet";
 import {NavLink} from 'react-router-dom'
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 
 import axios from 'axios'
 import { toast } from "react-toastify";
 function Signup(){
-    const createStudentUrl="http://localhost:4000/v1/user/signup";
+    const createStudentUrl="http://localhost:4000/user/createStudent";
+    const getAllDepartments = "http://localhost:4000/university/allDepartments"
+    const [departments,setDepartments]=useState([])
     const [full_name,setFullName]=useState("");
     const [email,setEmail]=useState("");
     const [phone,setPhone]=useState("");
@@ -20,7 +21,15 @@ function Signup(){
     const [level_of_study,setLevelOfStudy]=useState("");
     const [student_card_number,setCardNumber]=useState("");
     const [social_security_number,setSecurityNumber]=useState("");
-    const [password,setPassword]=useState("");
+    const fetchDepartments = async () => {
+        const res = await axios.get(`${getAllDepartments}`);
+        if(res.data){
+          setDepartments(res.data.departments)
+        }
+      }
+      useEffect(()=>{
+        fetchDepartments();
+      },[]);
     const submitForm = async(event) =>{
         event.preventDefault();
         const payload = {
@@ -29,7 +38,6 @@ function Signup(){
             level_of_study,
             student_card_number,
             social_security_number,
-            password,
             department,
             phone
         }
@@ -43,15 +51,14 @@ function Signup(){
                 setEmail("");
                 setFullName("");
                 setLevelOfStudy("");
-                setPassword("");
                 setPhone("");
                 window.location.replace("/login")
 
             }
         }
         catch (err) {
-           toast.error(err.response.data.message)
-           console.log(err.response.data.message)
+           toast.error(err.response.data.error)
+           console.log(err.response.data.error)
         }
     };
    
@@ -90,16 +97,17 @@ function Signup(){
                             <div className={`col ${signupClass.signup}`}>
                                 <Input placeholder="Social Security Number" type="number" onChange={(e)=> setSecurityNumber(e.target.value)}  value={social_security_number}/>
                           </div>
-                          <div className={`col ${signupClass.signup}`}>
-                                <Input placeholder="Password" type="password" onChange={(e)=> setPassword(e.target.value)} value={password}/>
-                          </div>
                             <div className={`col`}>
-      <select className={signupClass.select} onChange={(e)=> setDepartment(e.target.value)} defaultValue="department">
-      <option disabled value="department" > Department</option>
-      <option className={signupClass.category} value="Technologies des Logiciels et Systèmes d'Information"> Technologies des Logiciels et Systèmes d'Information</option>
-      <option className={signupClass.category} value="Informatique Fondamentale et ses Applications"> Informatique Fondamentale et ses Applications</option>
-      
-      </select>
+                            <select className={signupClass.select} onChange={(e)=> setDepartment(e.target.value)} value={department} >
+      <option disabled  value="" > Select Your Department</option>
+      {departments.map((d) => (
+          <option key={d._id} value={d._id}>
+            {d.full_name}
+          </option>
+       
+        ))}      
+        
+      </select> 
        
    
                           </div>
