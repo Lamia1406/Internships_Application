@@ -24,6 +24,16 @@
     background-color: var(--WHITE);
     border:1px solid #646F73 ;
 }
+.rejectionDark{
+    color: var(--WHITE);
+    background-color:#db1223 ;
+    border:1px solid #646F73 ;
+}
+.rejectionClear{
+    color: #db1223;
+    background-color:var(--WHITE) ;
+    border:1px solid #646F73 ;
+}
 .grey{
     color: var(--WHITE);
     background-color: #889295;
@@ -56,4 +66,10 @@
 }
 .icon{
     margin-right: 8px;  
+}
+.blackColor{
+    background-color: var(--WHITE);
+    color: var(--BLACK);
+    border:1px solid var(--BLACK);
+    box-shadow: 4px 4px 4px var(--BLACK);
 }

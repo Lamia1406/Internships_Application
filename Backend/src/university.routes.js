@@ -32,6 +32,9 @@ router.post("/createFaculty",async(req,res,next)=>{
     if (facultyExist){
         return next (new ErrorResponse("Faculty Already Exists", StatusCodes.BAD_REQUEST))
     }; 
+    if (req.body.university == "") {
+        return next (new ErrorResponse("Please choose a university", StatusCodes.BAD_REQUEST))
+      }
     try{
         const faculty = await Faculty.create(req.body);
         res.status(StatusCodes.CREATED).send(
@@ -52,6 +55,9 @@ router.post("/createDepartment",async(req,res,next)=>{
     if (departmentExist){
         return next (new ErrorResponse("Department Already Exists", StatusCodes.BAD_REQUEST))
     }; 
+    if (req.body.faculty == "") {
+        return next (new ErrorResponse("Please choose a faculty", StatusCodes.BAD_REQUEST))
+      }
     try{
         const company = await Department.create(req.body);
         res.status(StatusCodes.CREATED).send(

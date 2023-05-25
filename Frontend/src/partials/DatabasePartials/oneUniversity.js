@@ -18,10 +18,10 @@ function OneUniversity(props){
           <td colSpan={2}>   
             <div>
             <div>
-            <Button content="Modify" color="black" dataBsToggle="modal" dataBsTarget={`#student${props.id}`} />
+            <Button content="Modify" color="black" dataBsToggle="modal"  />
               </div>     
             <div>
-            <Button content="Delete" color="clear" dataBsToggle="modal" dataBsTarget={`#student${props.id}`} />
+            <Button content="Delete" color="clear" dataBsToggle="modal" />
               </div>
               </div>      
             </td>

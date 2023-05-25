@@ -6,6 +6,10 @@
     padding: 64px 0;
     padding-bottom: 32px;
 }
+.internships{
+    text-align: center;
+    margin: 0 auto;
+}
 .h3{
     color: var(--PRIMARY);
     font-size: var(--H3);

@@ -3,6 +3,7 @@ const {ObjectId} = mongoose.Schema;
 const newEstablishmentSchema = new mongoose.Schema(
     {   
         student: {
+            immutable:[true,"You can't update this field"],
             type: ObjectId,
             ref: "Student",
             trim: true,
@@ -44,6 +45,10 @@ const newEstablishmentSchema = new mongoose.Schema(
         cv: {
             type:String,
             default:""
+        },
+        rejectionMessage: {
+            type: String,
+            default : ""
         },
     },
     {timestamps: true}

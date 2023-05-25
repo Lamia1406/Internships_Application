@@ -105,15 +105,12 @@ option {
     margin: 4px;
     background-color: white;
   }
-
-  
   .calendar button:enabled:hover {
     cursor: pointer;
     background-color: var(--DARKGREY);
     color: var(--WHITE);
     border-radius: 8px;
   }
-  
   .calendar div {
     background-color: white;
   }

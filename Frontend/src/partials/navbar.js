@@ -77,7 +77,7 @@ function NavBar()
              <li className={NavbarClass.navItem}>
           
           <NavLink to="/departments" className={isCurrentPage}>
-          Departments
+          Department Responsibles
           </NavLink>
         </li>
              <li className={NavbarClass.navItem}>
@@ -118,11 +118,15 @@ function NavBar()
           </>
         )}
         
-        <li className={NavbarClass.navItem}>
-            <NavLink to = "/notifications" className={isCurrentPage}>
-                Notifications
-            </NavLink>
-            </li>
+       {
+        user.userType != "webmaster" && (
+          <li className={NavbarClass.navItem}>
+          <NavLink to = "/notifications" className={isCurrentPage}>
+              Notifications
+          </NavLink>
+          </li>
+        )
+       }
             {user.userType=="student" && (
            <li className={NavbarClass.navItem}>
              <NavLink to ="/yourapp" className={isCurrentPage}>

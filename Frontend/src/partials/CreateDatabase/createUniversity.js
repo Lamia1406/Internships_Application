@@ -1,4 +1,4 @@
-import createUniClass from "../../Styles/partials/CreateDatabase/createUniversity.module.css"
+import createUniClass from "../../Styles/partials/CreateDatabase/createDB.module.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Input from "../input";

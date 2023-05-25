@@ -15,14 +15,19 @@ const presenceSchema = new mongoose.Schema(
             required: [true, "please enter the supervisor information"]
         },
         is_present:{
-            type: String,
+            type: Boolean,
+            default: false,
             required: [true, "Please mark the student's presence"]
         },
         day :{
             type: Date,
             required :[true, "please enter the date of the meeting"],
-            unique:[true,"Presence already checked for this student"]
+        },
+        changed :{
+            type: Boolean,
+            default: false
         }
+
         
     },
     {timestamps: true}

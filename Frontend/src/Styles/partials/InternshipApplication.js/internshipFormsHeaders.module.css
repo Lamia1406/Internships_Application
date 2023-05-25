@@ -1,0 +1,25 @@
+.alert{
+    text-align: center;
+    font-size: var(--BodyR);
+    margin: 0;
+    padding:16px ;
+  }
+  .reason{
+    padding: 16px;
+    border: 1px solid #780000;
+    color:#780000 ;
+    border-radius: 8px;
+}
+.title{
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 32px;
+  
+} 
+.presenceDiv{
+  text-align: center;
+  font-size: var(--BodyR);
+  margin:  0;
+  width: fit-content;
+}

@@ -1,40 +1,4 @@
-import { StatusCodes } from "http-status-codes";
-import Student from './models/student.js'
-import Responsible from './models/responsible.js'
-import ErrorResponse from "./utils/errorResponse.js";
-import { isAuthenticated } from "./middleware/auth.js";
-import Webmaster from "./models/webmaster.js";
-import Supervisor from "./models/supervisor.js";
-import Internship from "./models/offer.js";
-import Company from "./models/company.js";
-import NewEstablishment from "./models/newEstablishment.js";
 
-router.get("/profil",isAuthenticated, async (req,res,next)=>{
-var user;
-
-const isStudent = await Student.findById(req.user.id)
-const isResponsible = await Responsible.findById(req.user.id)
-const isWebmaster = await Webmaster.findById(req.user.id)
-const isSupervisor = await Supervisor.findById(req.user.id)
-if(isStudent){
-    user= isStudent
-}
-if(isResponsible){
-    user = isResponsible
-}
-if(isWebmaster){
-    user = isWebmaster
-}
-if(isSupervisor){
-    user = isSupervisor
-}
-res.status(StatusCodes.OK).send(
-    {
-        status:true,
-        user
-    }
-)
-})
 
 
 router.delete('/deleteStudent/:id', async(req, res) => {
@@ -66,26 +30,7 @@ router.delete('/deleteStudent/:id', async(req, res) => {
                         console.log(error)
                        }
                       });
-router.delete('/deleteResponsible/:id', async(req, res) => {
-                       try{
-                        const { id } = req.params;
-                        const result = await Responsible.findOneAndDelete({ _id: id });
-                        if(result){
-                          return res.status(StatusCodes.OK).send({
-                            status: true,
-                            message: `User ${id} has been deleted`
-                          });
-                        } else {
-                          return res.status(StatusCodes.NOT_FOUND).send({
-                            status: false,
-                            message: `User ${id} has not been found`
-                          });
-                        }
-                       }
-                       catch(error){
-                        console.log(error)
-                       }
-                      });
+
 router.delete('/deleteSupervisor/:id', async(req, res) => {
     const { id } = req.params;
     const internships = await Internship.find({ supervisor: id });

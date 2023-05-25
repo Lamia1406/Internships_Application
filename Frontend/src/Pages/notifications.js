@@ -1,12 +1,11 @@
 import React, { useState,useEffect } from 'react';
 import notificationsClass from '../Styles/notifications.module.css'
 import { Helmet } from 'react-helmet';
-import OneDayNotification from '../partials/oneDayNotification';
-import OneNotification from '../partials/oneNotification';
+import OneDayNotification from '../partials/DatabasePartials/oneDayNotification';
+import OneNotification from '../partials/DatabasePartials/oneNotification';
 import Sort from '../Images/downArrow.svg';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-import moment from 'moment';
 function Notifications()
 {
   const token=jwtDecode(localStorage.getItem("token"))

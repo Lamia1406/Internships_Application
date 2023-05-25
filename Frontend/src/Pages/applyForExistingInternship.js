@@ -98,7 +98,7 @@ function ApplyForExistingInternship(props) {
 
 
 
-              <div className={requestClass.formContent}>
+              <div className={requestClass.modifyForm}>
                 <div className={`row ${requestClass.inputDiv}`}>
                   <p className='col-lg-4'>Starting Date</p>
                   <div className={`col-lg-8 ${requestClass.field}`}>

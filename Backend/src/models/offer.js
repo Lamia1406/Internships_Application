@@ -3,12 +3,14 @@ const {ObjectId} = mongoose.Schema;
 const internshipSchema = new mongoose.Schema(
     {   
         student: {
+            immutable:[true,"You can't update this field"],
             type: ObjectId,
             ref: "Student",
             trim: true,
             required: [true,"please enter the student information"]
         },
         post: {
+            immutable:[true,"You can't update this field"],
             type: ObjectId,
             ref: "Post",
             required: [true,"please enter the offer details"]
@@ -43,7 +45,8 @@ const internshipSchema = new mongoose.Schema(
         rejectionMessage: {
             type: String,
             default : ""
-        }
+        },
+        
     },
     {timestamps: true}
 );

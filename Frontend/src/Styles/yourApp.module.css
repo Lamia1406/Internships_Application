@@ -16,47 +16,12 @@
  margin: 0 auto;
 
 }
-.form{
-        width: 80%;
-        margin: 32px auto;
-        border-radius: 16px;
-        box-shadow: -4px 4px 12px var(--GREY);
 
-}
-.formTitle{
-    color: var(--DARKBLUE);
-    font-size: var(--H4);
-    padding: 16px;
-}
-.formTitle p{
-    width: fit-content;
-    margin: 0 auto;
 
-}
-.formContent{
-    padding: 16px 0;
-    border-radius: 16px;
 
-}
-.details{
-    margin:  0;   
-}
-.field{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--BLACK);
-    font-size: var(--BodyL);
-    margin: 32px 0;
-}
-.label{
-    width: 35%;
-}
-.content{
-    margin-left: 16px;
-    width: 65%;
-    border-bottom: 1px solid var(--DARKGREY); 
-}
+
+
+
 .divider{
     border: 1px dashed var(--DARKGREY);
     margin: 32px auto;
@@ -66,16 +31,7 @@
     width: 10%;
 
 }
-.modificationBtns{
-    display: flex;
-    justify-content: center;
 
-}
-.modificationBtns div{
-            margin:  64px;
-            width:120px;
-
-}
 
 .h3{
     width: fit-content;
@@ -88,26 +44,9 @@
     margin: 0 auto;
 
 }
-.alert{
-  width: 50%;
- text-align: center;
-}
-.reason{
-    padding: 16px 0;
-}
-.choose{
-    background-color: #e1e0e0;
-    text-align: center;
-    padding: 16px;
-    border-radius: 16px;
-}
-.choose div{
-    margin: 16px auto;
-    width: fit-content;
-}
-.choose .letter{
-    font-size: var(--BodyR);
-}
+
+
+
 
 @media only screen and (max-width:990px)
 {
@@ -120,43 +59,16 @@
     .progressDiv{
      width: 100%;
     }
-    .formTitle{
-        font-size: var(--H6);
-        margin: 0;
-    }
+  
     
-    .details{
-        display:  block;
-    }
-    .field{
-        margin: 16px 0;
-        padding: 0;
-    }
-    .label{
-        width: 36%;
-        margin: auto 0;
-        margin-right: 4%;
+   
     
-    }
-    .content{
-        width: 60%;
-        margin: auto 0;
-        overflow-wrap: break-word;
-    }
+    
     .divider{
         margin: 32px 8%;
     
     }   
-    .modificationBtns{
-        display: flex;
-        justify-content: center;
-    
-    }
-    .modificationBtns div{
-                margin: 64px  8px;
-                width:120px;
-    
-    }
+   
     .h3{
         font-size: var(--H6);
     }

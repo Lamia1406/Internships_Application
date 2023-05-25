@@ -30,6 +30,18 @@ function Button(props){
         {
             return buttonClass.grey
         }
+        else if (props.color =="blackColor")
+        {
+            return buttonClass.blackColor
+        }
+        else if (props.color =="rejectionClear")
+        {
+            return buttonClass.rejectionClear
+        }
+        else if (props.color =="rejectionDark")
+        {
+            return buttonClass.rejectionDark
+        }
     };
     return (
         <button  data-bs-toggle={props.dataBsToggle} data-bs-target={props.dataBsTarget} data-bs-dismiss={props.dataBsDismiss} className={`${btnColor()} ${buttonClass.defBtn} ${flex()} `} src={props.icon} onClick={props.onClick} 

@@ -5,10 +5,26 @@
 .section{
     padding: 64px 0;
 }
+
 .h2{
   color: var(--PRIMARY);
   font-size: var(--H2);
 }
+.select {
+  color: var(--DARKGREY);
+  font-size: var(--BodyR);
+  padding: 12px 20px;
+  background-color: var(--WHITE);
+  width: 50%;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+.select:hover {
+  background-color: var(--GREY);
+  color: var(--DARKGREY);
+}
+
+
 .results{
   border-radius: 8px;
   width: 50%;
@@ -16,8 +32,7 @@
   padding: 16px 32px;
   margin: 0 auto;
   margin-bottom: 32px;
-  display: flex;
-  justify-content: space-between;
+  
 }
 .results div{
   font-size: var(--BodyR);
@@ -25,8 +40,19 @@
   border-bottom: 1px solid var(--PRIMARY);
   padding: 8px;
   height: fit-content;
+  width: fit-content;
+  margin: 0 auto;
 }
+.navigationBtn{
+  display: flex;
+  width: 50%;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+.navigationBtn div{
+  width: 120px;
 
+}
 .sortBtn{
   border: none;
   background-color: var(--WHITE);
@@ -86,7 +112,29 @@
     left: 90vw;
     bottom: 0;
   }
-  
+  .markPresence{
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 16px;
+  }
+  .field{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--BLACK);
+    font-size: var(--BodyL);
+    margin: 16px 0;
+  }
+  .label{
+    width: 40%;
+    margin: 0;
+    text-align: center;
+  }
+  .content{
+    width: 60%;
+    margin: 0;
+    padding: 0 8px;
+  }
 
   @media only screen and (max-width:990px){
     table thead th{
@@ -103,6 +151,17 @@
  }
 .results{
   width: 100%;
+}
+.calendarBtn{
+  position: relative;
+  left: 84%;
+  bottom: 40px;
+  padding: 0;
+
+}
+
+.calendarDiv {
+  padding: 0 16px;
 }
 
   }

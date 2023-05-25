@@ -3,6 +3,7 @@ import Button from "../button";
 import { useState,useEffect} from "react";
 import axios from "axios";
 import tableClass from '../../Styles/partials/DatabaseTables/UniversityTable.module.css'
+import CreateFaculty from "../CreateDatabase/createFaculty";
 function FacultyTable(props){
     const allFacultiesURL="http://localhost:4000/university/allFaculties"
     const [faculties, setFaculties] = useState([]);
@@ -24,7 +25,7 @@ function FacultyTable(props){
       <div className={tableClass.database}>
       <div className={tableClass.newUniversity}>
 <Button content="Create Faculty" color="white" dataBsToggle="modal" dataBsTarget="#createFac"/>
-
+<CreateFaculty/>
 </div>
     <table className={`table  table-borderless `} >
   <thead>

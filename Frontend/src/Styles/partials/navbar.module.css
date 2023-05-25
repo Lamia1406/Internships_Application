@@ -1,18 +1,21 @@
 
 .navbar{
     border-bottom: solid 1px var(--GREY);   
-    padding: 8px 96px;
+    padding: 8px 92px;
     background-color: var(--WHITE);
+ 
 }
 
 .navItem{
     margin: 0 4px;
+   
 }
 
 .links{
     color: var(--BLACK);
     text-decoration: none;
     padding: 12px;
+    
 }
 
 .links:hover{

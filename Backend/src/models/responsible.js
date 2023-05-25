@@ -45,6 +45,19 @@ const responsibleSchema = new mongoose.Schema(
             type:String,
             default:""
         },
+        accepted : {
+            type: Number,
+            default : 0
+        },
+        rejected : {
+            type: Number,
+            default : 0
+        },
+        pending : {
+            type: Number,
+            default : 0
+        },
+        
              
     },
     {timestamps: true}
@@ -66,8 +79,8 @@ responsibleSchema.methods.jwtGenerateToken = function(){
     })
 }
 
-responsibleSchema.statics.hasDepartmentResponsible = async function(departmentId) {
-    const responsible = await this.findOne({ department: departmentId });
+responsibleSchema.statics.hasDepartmentResponsible = async function(department) {
+    const responsible = await this.findOne({ department: department });
     return !!responsible;
   }
   

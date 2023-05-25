@@ -2,7 +2,7 @@ import React,{useState , useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
-import OneStudent from '../partials/oneStudent';
+import OneStudent from '../partials/DatabasePartials/oneStudent';
 import studentsClass from '../Styles/students.module.css';
 import UniversityTable from '../partials/DatabaseTables/universityTable';
 import Account from '../Images/account.png'
@@ -11,11 +11,13 @@ import Pending from '../Images/pending.png';
 import Rejected from '../Images/rejected.png';
 import Search from "../Images/search.png"
 import Input from '../partials/input';
+import CompanyTable from '../partials/DatabaseTables/companyTable';
 import { Helmet } from 'react-helmet';
 import axios from 'axios'
-import CreateStudentAccount from '../partials/createStudentAccount';
+import CreateStudentAccount from '../partials/CreateDatabase/createStudentAccount';
 import CreateUniversity from '../partials/CreateDatabase/createUniversity';
 import FacultyTable from '../partials/DatabaseTables/FacultyTable';
+import DepartmentTable from '../partials/DatabaseTables/departmentTable';
 function Database()
   {
     const getAllStudentsUrl = 'http://localhost:4000/v1/user/allStudents';
@@ -44,6 +46,8 @@ function Database()
           <div  className={`${studentsClass.section}`}>
          <UniversityTable table="Universities" header="university" collapse="uni"/>
          <FacultyTable table="Faculties" header="faculty" collapse="fac"/>
+         <DepartmentTable table="Departments" header="department" collapse="dep" />
+         <CompanyTable table="Companies" header="company" collapse="comp" />
           </div>
           {/* <div className={`${studentsClass.section} `}>
            <div className={` row ${studentsClass.accountStatistics}`}>

@@ -3,13 +3,12 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import CreateCompany from '../partials/createCompany';
-import OneSupervisor from '../partials/oneSupervisor';
+import OneSupervisor from '../partials/DatabasePartials/oneSupervisor';
 import supervisorsClass from '../Styles/internshipSupervisors.module.css';
-import CreateSupervisorAccount from '../partials/createSupervisorAccount';
+import CreateSupervisorAccount from '../partials/CreateDatabase/createSupervisorAccount';
 import { useEffect, useState } from 'react';
 function Supervisors(){
-  const getAllSupervisors = 'http://localhost:4000/v1/user/allSupervisors';
+  const getAllSupervisors = 'http://localhost:4000/user/allSupervisors';
   const [supervisors, setSupervisors] = useState([]);
   const [filter, setFilter]= useState()
   const fetchSupervisors = async () => {
@@ -53,11 +52,8 @@ function Supervisors(){
   <thead>
     <tr>
       <th scope="col">Full Name</th>
-      <th >Email</th>
       <th>Company</th>
-      <th scope="col">Company Address</th>
-      <th scope="col">Currently Supervising</th>
-      <th scope="col"></th>
+      <th scope="col">Profil</th>
     </tr>
   </thead>
   <tbody>
@@ -66,8 +62,10 @@ function Supervisors(){
         <OneSupervisor name={supervisor.full_name} 
         email={supervisor.email} 
         company= {supervisor.company.company_name}
-        address={supervisor.company.address} 
         id={supervisor._id}
+        accepted = {supervisor.accepted}
+        rejected = {supervisor.rejected}
+        pending = {supervisor.pending}
         />
       ))
     }
@@ -81,7 +79,6 @@ function Supervisors(){
         <Button content="Create Internship Supervisor Account" color="dark" dataBsToggle="modal" dataBsTarget="#supervisor"/>
       </div>
       <CreateSupervisorAccount modalId="supervisor"/>
-      <CreateCompany modalId="company" drop="supervisor"/>
 </div></>
         )
 }

@@ -16,6 +16,7 @@ function UserProfil(){
   const [full_name,setFullName]=useState(user.full_name)
   const [email,setEmail]=useState(user.email)
   const [phone,setPhone] =useState(0)
+  const [fax,setFax] = useState(0);
   const [password,setPassword]=useState(user.password)
   const [student_card_number,setCardNumber] =useState(0)
   const [image,setImage] = useState(user.image)
@@ -46,12 +47,23 @@ catch(err){
 }
     const [social_security_number,setSecurityNumber]=useState(0)
     useEffect(() => {
+      fetchUser()
       if (user.userType === "student") {
         setModifyURL(`http://localhost:4000/user/student/${user._id}`)
-        fetchUser()
         setPhone(user.phone);
         setCardNumber(user.student_card_number)
         setSecurityNumber(user.social_security_number)
+      }
+      if(user.userType === "webmaster"){
+        setModifyURL(`http://localhost:4000/user/webmaster/${user._id}`)
+      }
+      if(user.userType === "supervisor"){
+        setModifyURL(`http://localhost:4000/user/supervisor/${user._id}`)
+      }
+      if(user.userType === "department responsible"){
+        setFax(user.fax)
+        setPhone(user.phone);
+        setModifyURL(`http://localhost:4000/user/responsible/${user._id}`)
       }
     }, [userProfil]);
   
@@ -65,7 +77,8 @@ catch(err){
       social_security_number,
       password,
       phone,
-      image
+      image,
+      fax
   }
          try{
                const res = await axios.put(modifyURL,payload);
@@ -143,22 +156,13 @@ catch(err){
        )
      }
     {user.userType =="department responsible" && (
-     <>
-      <div className={` ${profilClass.profilDetails}`}>
-     <div className={`${profilClass.title}`}>Fax number</div>
-     <div className={`${profilClass.description}`}>(+213) {user.fax}</div>
-     </div>
+     
      <div className={` ${profilClass.profilDetails}`}>
-     <div className={`${profilClass.title}`}>Currently supervising</div>
-     <div className={`${profilClass.description}`}>
-         <ul>
-             <li>Lamia Hamdi</li>
-             <li>Latifa Boudiaf</li>
-             <li>Imane Hamida</li>
-             </ul>
-         </div>
+     <div className={`${profilClass.title}`}>Fax number</div>
+     <div className={`${profilClass.description}`}>(+213) 0{profilDetails.fax}</div>
      </div>
-     </>
+     
+     
     )}
     {user.userType == "student" &&(
        <>
@@ -176,11 +180,7 @@ catch(err){
     </div>
    <div className={profilClass.inputDiv} >
              <div><Button content="Modify" color="dark" onClick={()=>setModifyClass(true)} /></div>  
-             {
-               user.userType == "webmaster" && (
-                 <div><Button content="Delete" color="dark"/></div>
-               )
-             }              
+                         
    </div>
     </div>
       
@@ -240,22 +240,9 @@ catch(err){
        )
      }
     {user.userType =="department responsible" && (
-     <>
       <div className={` ${profilClass.profilDetails}`}>
-     <div className={`${profilClass.title}`}>Fax number</div>
-     <div className={`${profilClass.description}`}>(+213) 0{user.fax}</div>
-     </div>
-     <div className={` ${profilClass.profilDetails}`}>
-     <div className={`${profilClass.title}`}>Currently supervising</div>
-     <div className={`${profilClass.description}`}>
-         <ul>
-             <li>Lamia Hamdi</li>
-             <li>Latifa Boudiaf</li>
-             <li>Imane Hamida</li>
-             </ul>
-         </div>
-     </div>
-     </>
+          <Input placeholder={`Fax Number : ${fax}`} type="number"   onChange= {(e)=>setFax(e.target.value)} />
+      </div>
     )}
     {user.userType == "student" &&(
        <>
@@ -265,11 +252,12 @@ catch(err){
 <div className={` ${profilClass.profilDetails}`}>
 <Input placeholder={`Social Security Number : ${social_security_number}`} type="number" onChange={(e)=> setSecurityNumber(e.target.value)} />
 </div>
-<div className={` ${profilClass.profilDetails}`}>
-<Input placeholder="Password" type="password" onChange={(e)=> setPassword(e.target.value)} />
-</div>
+
        </>
     )}
+    <div className={` ${profilClass.profilDetails}`}>
+<Input placeholder="Password" type="password" onChange={(e)=> setPassword(e.target.value)} />
+</div>
     
     </div>
    <div className={profilClass.inputDiv} >

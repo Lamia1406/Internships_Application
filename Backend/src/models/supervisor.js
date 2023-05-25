@@ -41,6 +41,18 @@ const supervisorSchema = new mongoose.Schema(
             type:String,
             default:""
         },
+        accepted : {
+            type: Number,
+            default : 0
+        },
+        rejected : {
+            type: Number,
+            default : 0
+        },
+        pending : {
+            type: Number,
+            default : 0
+        },
              
     },
     {timestamps: true}
