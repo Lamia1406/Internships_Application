@@ -7,8 +7,8 @@ import Company from "./models/company.js";
 const router = express.Router();
 
 router.post("/createCompany",async(req,res,next)=>{
-    const {company_name}= req.body
-    const companyExist = await Company.findOne({company_name})
+    const {full_name}= req.body
+    const companyExist = await Company.findOne({full_name})
     if(companyExist){
         return next (new ErrorResponse("Company Already Exists", StatusCodes.BAD_REQUEST))
     }
@@ -29,12 +29,13 @@ router.post("/createCompany",async(req,res,next)=>{
 
 router.post("/createPost",async(req,res,next)=>{
   const company = req.body.company;
+  if(req.body.company == ""){
+    return next (new ErrorResponse("Please select a company", StatusCodes.BAD_REQUEST))
+  }
     const supervisorsCount = await Supervisor.countDocuments({ company });
     if (supervisorsCount === 0) {
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        status: false,
-        message: "The company does not have any supervisors",
-      });
+     return next (new ErrorResponse("The company does not have any supervisors", StatusCodes.BAD_REQUEST))
+
     }
   try{
       const post = await Post.create(req.body);
@@ -80,26 +81,44 @@ router.delete('/deleteCompany/:id', async(req, res) => {
             });
           }
      }
-     
+
     }
     catch(error){
      console.log(error)
     }
    });
-router.get("/allPosts",async (req,res,next)=>{
-    const pageSize= 5;
-    const page = Number(req.query.pageNumber) || 1
-    const count = await Post.find({}).estimatedDocumentCount();
+   router.get("/allPosts", async (req, res, next) => {
+    const pageSize = 3;
+    const page = Number(req.query.pageNumber) || 1;
+  
+    try {
+      const count = await Post.countDocuments({ isOffer: true }); // Count only the documents with isOffer true
+      const pages = Math.ceil(count / pageSize);
+  
+      const posts = await Post.find({ isOffer: true }) // Fetch only the documents with isOffer true
+        .populate("company")
+        .skip(pageSize * (page - 1))
+        .limit(pageSize);
+  
+      res.status(StatusCodes.OK).send({
+        status: true,
+        posts,
+        page,
+        pages,
+        count,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+  
+router.get("/allCompanies",async (req,res,next)=>{
     try{
-        const posts = await Post.find().populate("company")
-        .skip(pageSize * (page -1)).limit(pageSize)
+        const companies = await Company.find()
         res.status(StatusCodes.OK).send(
             {
                 status:true,
-                posts,
-                page,
-                pages: Math.ceil(count / pageSize),
-                count
+              companies
             }
             )
     }
@@ -109,23 +128,10 @@ router.get("/allPosts",async (req,res,next)=>{
      })
 
 
-  
 
-    router.get("/allCompanies",async (req,res)=>{
-    try{
-        const companies = await Company.find();
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,
-                companies
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
- 
+
+
+
     router.delete('/deletePost/:id', async(req, res) => {
         try{
             const { id } = req.params
@@ -142,11 +148,11 @@ router.get("/allPosts",async (req,res,next)=>{
                 });
               }
          }
-         
+
         catch(error){
          console.log(error)
         }
        });
-   
+
 
 export default router;

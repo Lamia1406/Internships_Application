@@ -84,15 +84,15 @@ function InternshipFormsHeaders(props) {
                             )
                         }
                         {
-                            new Date(props.endingDate) == new Date() && (
+                            new Date(props.endingDate) <= new Date() && (
                                 <div>
                                     {props.type !== "student" ? (
                                         <>
-                                            Student just finished their internship , you can find the button that takes you to the certificate in the internship details
+                                            Student just completed their internship
                                         </>
                                     ) : (
                                         <>
-                                            Congrats , you've just completed your internship, you can go and consult your certificate
+                                            Congrats , you've just completed your internship
                                         </>
                                     )}
                                 </div>
@@ -102,10 +102,21 @@ function InternshipFormsHeaders(props) {
                     </div>)
             }
             {
-                props.approvedByResponsible == "ongoing" && props.approvedBySupervisor == "ongoing" && (
-                    <div className={` ${internshipClass.presenceDiv}`}>
-                        <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId, startingDate: props.startingDate, endingDate: props.endingDate } })} />
-                    </div>
+                props.approvedByResponsible == "ongoing" && props.approvedBySupervisor == "ongoing"  && (
+                   <div className={internshipClass.controlDiv}>
+                     <div className={` ${internshipClass.presenceDiv}`}>
+                            <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId, startingDate: props.startingDate, endingDate: props.endingDate } })} />      
+                            </div>
+                    {
+                        new Date(props.endingDate) <= new Date() && (
+                            
+                            <div className={internshipClass.presenceDiv}>
+                                <Button content="Evaluate Student" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId, startingDate: props.startingDate, endingDate: props.endingDate } })} />  
+                            </div>    
+                        )
+                    }
+                   </div>
+                  
                 )
             }
         </div>

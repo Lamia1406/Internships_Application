@@ -75,6 +75,11 @@ function NavBar()
           </NavLink>
         </li>
              <li className={NavbarClass.navItem}>
+          <NavLink to="/students" className={isCurrentPage}>
+          Students
+          </NavLink>
+        </li>
+             <li className={NavbarClass.navItem}>
           
           <NavLink to="/departments" className={isCurrentPage}>
           Department Responsibles

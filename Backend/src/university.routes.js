@@ -2,7 +2,8 @@ import University from "./models/university.js";
 import express from 'express'
 import ErrorResponse from "./utils/errorResponse.js";
 import Faculty from './models/faculty.js'
-import Department from './models/department.js'
+import Department from './models/department.js';
+import Company from "./models/company.js";
 import { StatusCodes } from "http-status-codes";
 const router = express.Router();
 router.post("/createUniversity",async(req,res,next)=>{   
@@ -27,8 +28,8 @@ router.post("/createUniversity",async(req,res,next)=>{
 
 
 router.post("/createFaculty",async(req,res,next)=>{
-    const {name} = req.body;
-    const facultyExist = await Faculty.findOne({name});
+    const {full_name} = req.body;
+    const facultyExist = await Faculty.findOne({full_name});
     if (facultyExist){
         return next (new ErrorResponse("Faculty Already Exists", StatusCodes.BAD_REQUEST))
     }; 
@@ -74,13 +75,42 @@ router.post("/createDepartment",async(req,res,next)=>{
 
 
 //get requests 
-router.get("/allUniversities",async (req,res)=>{
+router.get("/allDatabase",async (req,res)=>{
     try{
         const universities = await University.find();
+        const faculties = await Faculty.find().populate('university');
+        const departments = await Department.find().populate({
+            path: "faculty",
+            populate :{
+                path: "university"
+            }
+        });
+        const companies = await Company.find();
         res.status(StatusCodes.OK).send(
             {
                 status:true,
-                universities
+                universities,
+                faculties,
+                departments,
+                companies
+            }
+            )
+    }
+    catch(err){
+        err.message
+         }
+     })
+router.get("/allDepartments",async (req,res)=>{
+    try{
+        const departments = await Department.find().select(
+            "_id full_name"
+        )
+        
+        const companies = await Company.find();
+        res.status(StatusCodes.OK).send(
+            {
+                status:true,
+                departments,
             }
             )
     }
@@ -89,38 +119,7 @@ router.get("/allUniversities",async (req,res)=>{
          }
      })
 
-     router.get("/allFaculties",async (req,res)=>{
-        try{
-            const faculties = await Faculty.find().populate('university');
-            res.status(StatusCodes.OK).send(
-                {
-                    status:true,
-                    faculties
-                }
-                )
-        }
-        catch(err){
-            err.message
-             }
-         })
+   
 
-router.get("/allDepartments",async (req,res)=>{
-            try{
-                const departments = await Department.find().populate({
-                    path: "faculty",
-                    populate :{
-                        path: "university"
-                    }
-                });
-                res.status(StatusCodes.OK).send(
-                    {
-                        status:true,
-                        departments
-                    }
-                    )
-            }
-            catch(err){
-                err.message
-                 }
-             })
+
 export default router

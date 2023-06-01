@@ -1,10 +1,9 @@
 import User from '../../Images/userBig.png'
-import modalClass from '../../Styles/partials/DatabaseTables/profil.module.css'
-import React, { useState,useEffect }  from 'react'
-import Button from '../button';
-import axios from 'axios'
-import {toast} from 'react-toastify'
+import modalClass from '../../Styles/partials/Database/profil.module.css'
+import React  from 'react'
 function Profil(props){
+  console.log(props)
+
   return(
             <div className={`modal fade `} id={props.modalId} tabIndex="-1" aria-labelledby="profilModal" aria-hidden="true">
 <div className={`modal-dialog modal-dialog-centered modal-lg `}>
@@ -19,7 +18,8 @@ function Profil(props){
           <div className={modalClass.name}>
                {props.name}
          </div>
-         { props.profil == 'responsible' || props.profil == "supervisor"&& (
+         {
+         ( props.user == 'responsible' || props.user == "supervisor")&& (
         <div className={modalClass.records}>
           <div className={modalClass.recordsTitle}>
             Internship Records
@@ -47,7 +47,7 @@ function Profil(props){
         <div className={`${modalClass.description}`}>{props.email}</div>
         </div>
         {
-          (props.profil == "student" || props.profil == "responsible") && (
+          (props.user == "student" || props.user == "responsible") && (
             <div className={` ${modalClass.profilDetails}`}>
         <div className={`${modalClass.title}`}>Phone number</div>
         <div className={`${modalClass.description}`}>(+213) 0{props.phone}</div>
@@ -55,7 +55,7 @@ function Profil(props){
           )
         }
         {
-          props.profil =="responsible" &&(
+          props.user =="responsible" &&(
             <>
             <div className={` ${modalClass.profilDetails}`}>
         <div className={`${modalClass.title}`}>Fax number</div>
@@ -65,7 +65,7 @@ function Profil(props){
             </>
           )
         }
-        {props.profil == "student" && (
+        {props.user == "student" && (
               <>
                  <div className={` ${modalClass.profilDetails}`}>
        <div className={`${modalClass.title}`}>Student Card Number</div>

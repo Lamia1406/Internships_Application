@@ -9,10 +9,10 @@ import { Pagination } from 'antd';
 import Internship from '../partials/DatabasePartials/onePost';
 import Input from '../partials/input.js';
 import { Helmet } from 'react-helmet';
-import CreateNewPost from '../partials/CreateDatabase/createNewPost';
 import axios from 'axios'
 import jwtDecode from 'jwt-decode';
 import {  NavLink, useNavigate } from 'react-router-dom';
+import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 function Internships()
 {      
 const user = jwtDecode(localStorage.getItem("token"))
@@ -21,27 +21,18 @@ const navigate=useNavigate
 const [pageNumber, setPageNumber] = useState(1);
 const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber}`;
   const [posts, setPosts] = useState([]);
-    const [count, setCount] = useState("");
+    const [count, setCount] = useState(0);
     const fetchPosts = async () => {
       const res = await axios.get(`${getAllPosts}`);
       if(res.data.status == true){
         setPosts(res.data.posts)
         setCount(res.data.count)
-        
       }
-      // const [applications, setApplications] = useState([])
-      // const internshipsOfResponsibleURL = `http://localhost:4000/v1/internship/allInternships/${user._id}`
-      // const fetchApplications = async () => {
-      //   const res = await axios.get(`${internshipsOfResponsibleURL}`);
-      //   if(res.data){
-      //     setApplications(res.data)
-      //   }
-      // }
+      
       
 
     }
     useEffect(()=>{
-      //fetchApplications();
       fetchPosts()
     },[pageNumber]);
        
@@ -90,7 +81,7 @@ const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber
      </div>
      {user.userType == "webmaster" && (
         <div className={internshipsClass.newPost}>
-        <Button content="Create New Post" color="dark" dataBsToggle="modal" dataBsTarget="#post"/>
+        <Button content="Create New Offer" color="dark" dataBsToggle="modal" dataBsTarget="#post"/>
       </div>
    )}
 { (user.userType == "student" || user.userType == "webmaster") && (
@@ -106,8 +97,10 @@ const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber
       
         ))}
 
-       
-<Pagination current={pageNumber} total={count} pageSize={5} onChange={(prev) =>{setPageNumber(prev)}} />
+     <div className={internshipsClass.pagination}>
+     <Pagination current={pageNumber} pageSize={3} total={count}  onChange={(page) =>{setPageNumber(page)}} />
+
+      </div>  
      </div>
 )} 
 
@@ -129,7 +122,7 @@ const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber
    
 
     </div>
-    <CreateNewPost modalId="post" />
+    <CreateOneDataRecord table="Posts" id="post" />
     </>
   );
 

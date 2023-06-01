@@ -23,8 +23,7 @@ const transporter = nodemailer.createTransport(
 )
 //Create Internship
 router.post("/createInternship",async(req,res,next)=>{
-  const student = await Student.findById(req.body.student);
-  
+  const student = await Student.findById(req.body.student)
   const {supervisor} = req.body
   if (student.enrolled === "yes") {
     return next (new ErrorResponse("Cannot apply for an internship while enrolled.", StatusCodes.BAD_REQUEST))
@@ -33,30 +32,25 @@ router.post("/createInternship",async(req,res,next)=>{
     return next (new ErrorResponse("Please choose a supervisor", StatusCodes.BAD_REQUEST))
   }
   try{
-      const internship = await Internship.create(req.body);
-      await Student.findOneAndUpdate(
-        { _id: student._id },
-        { enrolled: "pending" }
-      );
+      await Internship.create(req.body);
+      await Student.findOneAndUpdate(  { _id: student._id },  { enrolled: "pending" } );
       const responsible = await Responsible.findOne({ department:student.department }).select("_id")
-        let  message = `student ${student.full_name} has sent an internship application`
-
-
-     const notification = await Notification.create({
-      responsible:responsible._id ,
-          message: message,
+      await Notification.create({
+        responsible:responsible._id , 
+        message: `student ${student.full_name} has sent an internship application`,
           ...req.body
       })
-      res.status(StatusCodes.CREATED).send(
-          {
-              status:true,
-              message: "Successfully Created"
-          }
-          )
+      await Responsible.findOneAndUpdate(
+        { department: student.department},
+        {
+          pending: pending++
+        }
+      )
+      res.status(StatusCodes.CREATED).send( {status:true ,  message: "Successfully Created"})
       }
-      catch(err){
+  catch(err){
         next(err)
-          } 
+  } 
 })
 
 
@@ -68,13 +62,18 @@ router.post("/createNewEstablishmentInternship",async(req,res,next)=>{
       message: "Cannot apply for an internship while enrolled."
     });
   }
-  
   try{
       const internship = await NewEstablishment.create(req.body);
       await Student.findOneAndUpdate(
         { _id: student._id },
         { enrolled: "pending" }
       );
+      await Responsible.findOneAndUpdate(
+        { department: student.department},
+        {
+          pending: pending++
+        }
+      )
       res.status(StatusCodes.CREATED).send(
           {
               status:true,
@@ -217,9 +216,7 @@ router.put("/markPresence/:studentId/:supervisorId",async(req,res,next)=>{
   const supervisorId = req.params.supervisorId
   
  const isDateChanged= await Presence.findOne({day: req.body.day, student: studentId, supervisor: supervisorId} )
-  if(isDateChanged.changed == true){
-    return next(new ErrorResponse("You Already Marked the presence of this date",StatusCodes.BAD_REQUEST))
-  }
+  
  
 
   try{
@@ -557,7 +554,7 @@ router.get("/studentProgress/supervisor/:id",async (req,res)=>{
           select: "title company",
           populate: {
             path: "company",
-            select: "company_name",
+            select: "full_name",
           },
         })
         let allResponsibles = [];
@@ -758,68 +755,13 @@ router.get("/currentInterns", async (req, res) => {
     });
   }
 });
-router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
-    try{
-      const internshipId = req.params.idInternship;
-      let internship;
-      console.log(req.body.rejectionMessage)
-      const isExisting = await Internship.findById({ _id: internshipId })
-      const isNew = await NewEstablishment.findById({ _id: internshipId })
-      if(isExisting){
-        internship= isExisting
-        await Internship.updateOne(
-          {_id: internship._id},
-         { $set: { approvedByResponsible: "rejected" , rejectionMessage : req.body.rejectionMessage }}
-        );
-      }
-      else if(isNew){
-        internship = isNew
-        await NewEstablishment.updateOne(
-          {_id: internship._id},
-          { $set: { approvedByResponsible: "rejected" , rejectionMessage : req.body.rejectionMessage }}
-        );
-      }
-      const studentId= internship.student._id
-      
-      const isStudentEnrolled = await Internship.find({student:studentId})
-      const isStudentEnrolled2 = await NewEstablishment.find({student:studentId})
-      if (!isStudentEnrolled && !isStudentEnrolled2){
-        await Student.findOneAndUpdate(
-          { _id: studentId },
-          { enrolled: "no" }
-        );
-      }
-     if(internship == isNew){
-      await Notification.create({
-        student:internship.student._id ,
-        message: `your internship ${internship.theme} has been rejected by the department responsible`,
-        ...req.body
-        })
-     }
-     else {
-      await Notification.create({
-        student:internship.student._id ,
-        message: `your internship ${internship.post.title} has been rejected by the department responsible`,
-        ...req.body
-        })
-     }
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,     
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
 router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
-    try{
-      const internshipId = req.params.idInternship;
-     
-      const internship = await Internship.findById({ _id: internshipId }).populate({
-        path: "student",
-        select : "department full_name"
+  try{
+    const internshipId = req.params.idInternship;
+    
+    const internship = await Internship.findById({ _id: internshipId }).populate({
+      path: "student",
+      select : "department full_name"
       }).populate(
        { path: "post",
         select : "title"}
@@ -838,36 +780,45 @@ router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
         await Student.findOneAndUpdate(
           { _id: studentId },
           { enrolled: "no" }
-        );
-      }
-      await Notification.create({
-        student:internship.student._id ,
-        message: `your internship ${internship.post.title} has been rejected by the department responsible`,
-        ...req.body
+          );
+        }
+        await Notification.create({
+          student:internship.student._id ,
+          message: `your internship ${internship.post.title} has been rejected by the department responsible`,
+          ...req.body
         })
-      const responsible= await Responsible.findOne({department: internship.student.department})
-     await Notification.create({
-        responsible:responsible._id ,
-        message: `student ${internship.student.full_name} has been rejected by the internship supervisor from getting the internship ${internship.post.title}`,
-        ...req.body
+        const responsible= await Responsible.findOne({department: internship.student.department})
+        await Notification.create({
+          responsible:responsible._id ,
+          message: `student ${internship.student.full_name} has been rejected by the internship supervisor from getting the internship ${internship.post.title}`,
+          ...req.body
         })
         res.status(StatusCodes.OK).send(
             {
-                status:true,     
+              status:true,     
             }
             )
-    }
-    catch(err){
-        err.message
-         }
-     })
+          }
+          catch(err){
+            err.message
+          }
+        })
 router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
-    try{
+          try{
       const internshipId = req.params.idInternship;
       let internship;
-      console.log(req.body.rejectionMessage)
-      const isExisting = await Internship.findById({ _id: internshipId })
-      const isNew = await NewEstablishment.findById({ _id: internshipId })
+      const isExisting = await Internship.findById({ _id: internshipId }).populate(
+        {
+          path: "student",
+          select: "department"
+        }
+      )
+      const isNew = await NewEstablishment.findById({ _id: internshipId }).populate(
+        {
+          path: "student",
+          select: "department"
+        }
+      )
       if(isExisting){
         internship= isExisting
         await Internship.updateOne(
@@ -906,6 +857,12 @@ router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
         ...req.body
         })
      }
+     await Responsible.findOneAndUpdate(
+      { department: internship.student.department },
+      { 
+        rejected: rejected++, 
+      }
+    );
         res.status(StatusCodes.OK).send(
             {
                 status:true,     
@@ -919,17 +876,17 @@ router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
 router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
     try{
       const internshipId = req.params.idInternship;
-      const internship = await Internship.findById({ _id: internshipId }).populate({
-        path: "student", select: "full_name _id"
-      }).populate({
-        path: "supervisor",
-        select: "_id"
-      }).populate({
-        path: "post",
-        select: "title"
-      })
-      await internship.updateOne(
-        { approvedByResponsible: "accepted" },
+      const internship = await Internship.findById({ _id: internshipId })
+      .populate({ path: "student", select: "full_name _id department" })
+      .populate({ path: "supervisor", select: "_id" })
+      .populate({ path: "post", select: "title"})
+      await internship.updateOne({ approvedByResponsible: "accepted" });
+      await Responsible.findOneAndUpdate(
+        { department: internship.student.department },
+        { 
+          accepted: accepted++, 
+          pending: pending--
+        }
       );
       await Notification.create({
         student: internship.student._id,
@@ -941,57 +898,109 @@ router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
         message: `student ${internship.student.full_name} has sent an internship application`,
         ...req.body
       })
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,     
-            }
-            )
-
+        res.status(StatusCodes.OK).send({ status:true })
     }
     catch(err){
         err.message
          }
      })
-router.put("/acceptNewIntership/responsible/:idInternship",async (req,res)=>{
-  const internshipId = req.params.idInternship;
-  let company;
-  let supervisor;
-  let post;
-      const newInternship = await NewEstablishment.findById({ _id: internshipId }).populate({
-        path:"student",
-        select:"full_name"
-      })
+     
 
-    const companyExist = await Company.findOne({company_name : newInternship.company})
-    if(companyExist){
-        company = companyExist
-    }
-    else{
-       company= await Company.create({
-        company_name : newInternship.company,
-        address : "uknown"
-      })
-    }
-      const supervisorEmailExist = await Supervisor.findOne({email: newInternship.supervisor_email});
-      if (supervisorEmailExist){
-                 supervisor=supervisorEmailExist
+router.put("/acceptNewIntership/responsible/:idInternship", async (req, res) => {
+           try {
+             const { idInternship } = req.params;
+             const newInternship = await NewEstablishment.findById(idInternship).populate({ path: "student", select: "full_name department" });
+         
+             const company = await getOrCreateCompany(newInternship.company);
+             const supervisor = await getOrCreateSupervisor(newInternship.supervisor_email, newInternship.supervisor_name, company);
+             const post = await getOrCreatePost(newInternship.theme, company);
+         
+             const createInternship = await Internship.create({
+               student: newInternship.student._id,
+               supervisor: supervisor._id,
+               post: post._id,
+               approvedByResponsible: "accepted",
+               startingDate: newInternship.startingDate,
+               endingDate: newInternship.endingDate,
+             });
+         
+             const deleteNewInternship = await NewEstablishment.findByIdAndDelete(idInternship);
+             await createNotification(newInternship.student._id, `Your internship ${post.title} has been accepted by the department responsible`, req.body);
+             await createNotification(supervisor._id, `Student ${newInternship.student.full_name} has sent an internship application`, req.body);
+             await Responsible.findOneAndUpdate(
+              { department: newInternship.student.department },
+              { 
+                accepted: accepted++, 
+                pending: pending--
+              }
+            );
+             res.status(StatusCodes.OK).send({ status: true });
+         
+             if (res.statusCode === StatusCodes.OK) {
+               await sendAccountPasswordEmail(newInternship.supervisor_email, supervisor.password);
              }
-      else  {
-        let password = "";
-        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=';
-        for (let i = 0; i < 10; i++) {
-let randomIndex = Math.floor(Math.random() * characters.length);
-            password += characters[randomIndex];
-          }
-        transporter.sendMail({
-            to: newInternship.supervisor_email,
+           } catch (err) {
+             console.error(err);
+             res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ status: false, error: "Server error" });
+           }
+         });
+         
+         async function getOrCreateCompany(companyName) {
+           let company = await Company.findOne({ company_name: companyName });
+           if (!company) {
+             company = await Company.create({
+               company_name: companyName,
+               address: "unknown",
+             });
+           }
+           return company;
+         }
+         
+         async function getOrCreateSupervisor(email, name, company) {
+           let supervisor = await Supervisor.findOne({ email });
+           if (!supervisor) {
+             const password = generateRandomPassword();
+             supervisor = await Supervisor.create({
+               full_name: name,
+               email,
+               company,
+               password,
+             });
+           }
+           return supervisor;
+         }
+         
+         async function getOrCreatePost(title, company) {
+           let post = await Post.findOne({ title });
+           if (!post) {
+             post = await Post.create({
+               description: "empty",
+               company,
+               title,
+               isOffer: false,
+             });
+           }
+           return post;
+         }
+         
+         async function createNotification(userId, message, body) {
+           await Notification.create({
+             student: userId,
+             message,
+             ...body,
+           });
+         }
+         
+         async function sendAccountPasswordEmail(email, password) {
+          transporter.sendMail({
+            to: email,
             from:"lamia.hamdi@univ-constantine2.dz",
             subject: "Your Account Password | ConnectU app", 
             html:` 
             Dir sir/madame ,
 We're writing to you to inform you that a university student has recently requested an internship in your company through our app.
 <ul> <p> We have created an account for you with :</p>
-<li>the email address: ${newInternship.supervisor_email} </li>
+<li>the email address: ${email} </li>
 <li>the password: ${password}. </li>
 </ul>
 <p> The student's information and internship request are now available in your account dashboard.
@@ -1002,63 +1011,18 @@ We're writing to you to inform you that a university student has recently reques
             <strong>ConnectU </strong>
             `
         })
-         supervisor =await Supervisor.create({
-          full_name: newInternship.supervisor_name,
-          email: newInternship.supervisor_email,
-          company: company,
-          password: password
-      })
-      }
-      const postExist=await Post.findOne({title: newInternship.theme})
-      if(postExist){
-        post = postExist
-      }
-      else{
-        post = await Post.create({
-          description: "empty",
-          company:company,
-          title:newInternship.theme,
-          isOffer:false
-        })
-      }
-       const createInternship = await Internship.create(
-        {
-          student:newInternship.student._id,
-          supervisor:supervisor._id,
-          post:post._id,
-          approvedByResponsible:"accepted",
-          startingDate: newInternship.startingDate,
-          endingDate: newInternship.endingDate,
-          cv: newInternship.cv
-        },
-      )
-      console.log(createInternship)
-        
-
-    
-    try{     
-      const deleteNewInternship = await NewEstablishment.findByIdAndDelete({ _id: internshipId })
-      await Notification.create({
-        student: newInternship.student._id,
-        message: `your internship ${post.title} has been accepted by the department responsible`,
-        ...req.body
-      })
-      await Notification.create({
-        supervisor: supervisor._id,
-        message: `student ${newInternship.student.full_name} has sent an internship application`,
-        ...req.body
-      })
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,     
-            }
-            )
-
-    }
-    catch(err){
-        err.message
          }
-     })
+         
+         function generateRandomPassword() {
+           let password = "";
+           const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
+           for (let i = 0; i < 10; i++) {
+             const randomIndex = Math.floor(Math.random() * characters.length);
+             password += characters[randomIndex];
+           }
+           return password;
+         }
+         
 router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
     try{
       const internshipId = req.params.idInternship;

@@ -3,7 +3,6 @@ import requestClass from '../Styles/request.module.css'
 import axios from "axios"
 import { Helmet } from "react-helmet"
 import jwtDecode from "jwt-decode"
-// import RequestForm from "../partials/InternshipApplication/requestForm"
 import InternshipForms from "../partials/InternshipApplication/internshipForms"
 function StudentProgress(){
     const user = jwtDecode(localStorage.getItem("token"))
@@ -46,9 +45,9 @@ function StudentProgress(){
                {
                 user.userType== "department responsible"  &&  internships &&  internships.map(
                            (app) => {
-                             return <InternshipForms approvedByResponsible = {app.approvedByResponsible} 
+                             return <InternshipForms approvedByResponsible = {app.approvedByResponsible}  company= {app.post.company.full_name}
                               studentFullName = {app.student.full_name} cardNumber ={app.student.student_card_number} socialNumber ={app.student.social_security_number}
-                              levelOfStudy ={app.student.level_of_study} theme={app.post.title} company={app.post.company.company_name} startingDate={app.startingDate}
+                              levelOfStudy ={app.student.level_of_study} theme={app.post.title}  startingDate={app.startingDate}
                               endingDate = {app.endingDate} supervisorEmail ={app.supervisor.email} supervisorName= {app.supervisor.full_name} approvedBySupervisor={app.approvedBySupervisor}
                               internshipId={app._id} type= "responsible"
                               />
@@ -59,9 +58,9 @@ function StudentProgress(){
                 user.userType== "supervisor"  &&  internships &&  internships.map(
                            (app,index) => {
                             const responsible = responsibles[index]
-                             return <InternshipForms type="supervisor" approvedByResponsible = {app.approvedByResponsible} 
+                             return <InternshipForms type="supervisor" approvedByResponsible = {app.approvedByResponsible} company= {app.post.company.full_name}
                               studentFullName = {app.student.full_name} cardNumber ={app.student.student_card_number} socialNumber ={app.student.social_security_number}
-                              levelOfStudy ={app.student.level_of_study} theme={app.post.title} company={app.post.company.company_name} startingDate={app.startingDate}
+                              levelOfStudy ={app.student.level_of_study} theme={app.post.title}  startingDate={app.startingDate}
                               endingDate = {app.endingDate} responsibleEmail = {responsible.email} responsibleName=  {responsible.full_name} approvedBySupervisor={app.approvedBySupervisor}
                               responsiblePhone = {responsible.phone} responsibleFax = {responsible.fax} studentId={app.student._id}
 

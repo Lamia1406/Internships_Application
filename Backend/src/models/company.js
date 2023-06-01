@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const companySchema = new mongoose.Schema(
     {   
-        company_name: {
+        full_name: {
             type: String,
             trim: true,
             unique: true,

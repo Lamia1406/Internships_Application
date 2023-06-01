@@ -5,9 +5,7 @@ import { Chart as ChartJS, ArcElement,Tooltip,Legend } from 'chart.js';
 import HomeClass from '../Styles/home.module.css'
 import {Pie} from 'react-chartjs-2';
 import {Helmet} from 'react-helmet';
-import CreateDepartmentResponsibleAccount from '../partials/CreateDatabase/createDepartmentResponsibleAccount';
-import CreateSupervisorAccount from '../partials/CreateDatabase/createSupervisorAccount';
-import CreateStudentAccount from '../partials/CreateDatabase/createStudentAccount';
+import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
@@ -225,9 +223,10 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     </div>
 
   </div>
-  <CreateDepartmentResponsibleAccount modalId="depResponsible"/>
-  <CreateSupervisorAccount modalId="supervisor"/>
-  <CreateStudentAccount modalId="student"/>
+  <CreateOneDataRecord table="Responsibles" id="depResponsible"  />
+  <CreateOneDataRecord table="Supervisors" id="supervisor"/>
+  <CreateOneDataRecord table="Students" id="student"/>
+
 </>
 )}
     

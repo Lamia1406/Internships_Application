@@ -353,73 +353,20 @@ router.get("/allResponsibles",async (req,res)=>{
                         }
                       }
             })
-            const acceptedInternshipsByResponsibles = await Internship.find({
-                approvedByResponsible: { $in: ["accepted", "rejectedByStudent"] }
-              }).populate({
-                path: "student",
-                select: "department"
-              });
-              const rejectedInternshipsByResponsible = await Internship.find({
-                approvedByResponsible:"rejected" 
-              }).populate({
-                path: "student",
-                select: "department"
-              });
-              const pendingInternshipsByResponsible = await Internship.find({
-                approvedByResponsible:"pending" 
-              }).populate({
-                path: "student",
-                select: "department"
-              });
-              const pendingNewInternshipByResponsible = await NewEstablishment.find({
-                approvedByResponsible:"pending" 
-              }).populate({
-                path: "student",
-                select: "department"
-              });
+            const departments = await Department.find()
            
-              for (const oneResponsible of responsibles) {
-                let accepted = 0;
-                let rejected = 0;
-                let pending = 0;
-                for (const internship of acceptedInternshipsByResponsibles) {
-                    
-                  if (internship.student.department._id.toString() === oneResponsible.department._id.toString()) {
-                    accepted++;
-                  }
-                }
+           
               
-                for (const internship of rejectedInternshipsByResponsible) {
-                  if (internship.student.department._id.toString() === oneResponsible.department._id.toString()) {
-                    rejected++;
-                  }
-                }
               
-                for (const internship of pendingInternshipsByResponsible) {
-                  if (internship.student.department._id.toString() === oneResponsible.department._id.toString()) {
-                    pending++;
-                  }
-                }
               
-                for (const internship of pendingNewInternshipByResponsible) {
-                  if (internship.student.department._id.toString() === oneResponsible.department._id.toString()) {
-                    pending++;
-                  }
-                }
               
-                await Responsible.findOneAndUpdate(
-                  { _id: oneResponsible._id },
-                  { 
-                    accepted: accepted, 
-                    rejected: rejected, 
-                    pending:pending }
-                );
-              }
+           
               
             res.status(StatusCodes.OK).send(
                 {
                     status:true,
-                    responsibles
+                    responsibles,
+                    departments
                 }
                 )
         }

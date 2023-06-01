@@ -37,8 +37,7 @@ const modifyInternship = async (event) =>{
        }
        
  }
-console.log(props.studentId)
-//
+
   const [rejectClass,setRejectClass]=useState(false)
 const [startingDate, setStartingDate] = useState(new Date(props.startingDate))
 const [theme, setTheme] = useState(props.theme)

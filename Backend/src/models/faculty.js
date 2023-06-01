@@ -5,7 +5,7 @@ const {ObjectId} = mongoose.Schema;
 const facultSchema = new mongoose.Schema(
     {   
         
-        name: {
+        full_name: {
             type: String,
             trim: true,
             required: [true,"Please enter the faculty name"],

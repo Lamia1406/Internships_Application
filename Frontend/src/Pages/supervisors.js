@@ -3,14 +3,13 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import OneSupervisor from '../partials/DatabasePartials/oneSupervisor';
-import supervisorsClass from '../Styles/internshipSupervisors.module.css';
-import CreateSupervisorAccount from '../partials/CreateDatabase/createSupervisorAccount';
+import supervisorsClass from '../Styles/usersDatabase.module.css';
 import { useEffect, useState } from 'react';
+import OneDataSet from '../partials/Database/oneDataSet';
+import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 function Supervisors(){
   const getAllSupervisors = 'http://localhost:4000/user/allSupervisors';
   const [supervisors, setSupervisors] = useState([]);
-  const [filter, setFilter]= useState()
   const fetchSupervisors = async () => {
     const res = await axios.get(`${getAllSupervisors}`);
     setSupervisors(res.data.supervisors);
@@ -35,16 +34,7 @@ function Supervisors(){
             <div>
             Results({supervisors.length})
             </div>
-            <div className={`dropdown  ${supervisorsClass.sortBy}`}>
-  <button className={`dropdown-toggle ${supervisorsClass.sortBtn}`} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-   Sort by 
-  </button>
-  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <li className={supervisorsClass.category}><button classname={`dropdown-item`} onClick={()=>setSupervisors(supervisors)} >Any</button></li>
-    <li className='dropdown-divider'></li>
-    <li className={supervisorsClass.category}><button classname={`dropdown-item `} onClick={() => setSupervisors([...supervisors].sort((a, b) => a.company.localeCompare(b.department)))} >Company</button></li>
-  </ul>
-</div>
+     
         </div>
          
     <div className={supervisorsClass.database}>
@@ -59,13 +49,17 @@ function Supervisors(){
   <tbody>
     {
       Object.values(supervisors).map(supervisor => (
-        <OneSupervisor name={supervisor.full_name} 
+        <OneDataSet full_name={supervisor.full_name} 
         email={supervisor.email} 
-        company= {supervisor.company.company_name}
-        id={supervisor._id}
+        {...(supervisor.company ? { company: supervisor.company.full_name } : {})}
+        profil = {`supervisor${supervisor._id}`}
         accepted = {supervisor.accepted}
         rejected = {supervisor.rejected}
         pending = {supervisor.pending}
+        image = {supervisor.image}
+        length={Object.keys(supervisor).length}
+        user = "supervisor"
+
         />
       ))
     }
@@ -78,7 +72,7 @@ function Supervisors(){
 <div className={supervisorsClass.newResponsible}>
         <Button content="Create Internship Supervisor Account" color="dark" dataBsToggle="modal" dataBsTarget="#supervisor"/>
       </div>
-      <CreateSupervisorAccount modalId="supervisor"/>
+      <CreateOneDataRecord table="Supervisors" id="supervisor"/>
 </div></>
         )
 }

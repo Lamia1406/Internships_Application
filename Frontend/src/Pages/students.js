@@ -1,14 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
-import OneResponsible from '../partials/DatabasePartials/oneResponsible';
 import { Helmet } from 'react-helmet';
 import axios from "axios";
 import { useState,useEffect } from 'react';
-import departmentsClass from '../Styles/departments.module.css';
-import CreateDepartmentResponsibleAccount from '../partials/CreateDatabase/createDepartmentResponsibleAccount';
-import OneStudent from '../partials/DatabasePartials/oneStudent';
-import CreateStudentAccount from '../partials/CreateDatabase/createStudentAccount';
+import departmentsClass from '../Styles/usersDatabase.module.css';
+import OneDataSet from '../partials/Database/oneDataSet';
+import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 function Students(){  
   const getAllStudents = 'http://localhost:4000/user/allStudents';
   const [students, setStudents] = useState([]);
@@ -45,25 +42,30 @@ function Students(){
   <thead>
     <tr>
       <th scope="col">Full Name</th>
-      <th>Department</th>
-      <th>Faculty</th>
       <th scope="col">University</th>
+      <th>Faculty</th>
+      <th>Department</th>
       <th scope="col">Profil</th>
     </tr>
   </thead>
   <tbody>
   {students.map((r) => (
-            <OneStudent 
-            name={r.full_name} 
+            <OneDataSet 
+            full_name={r.full_name} 
             dep={r.department.full_name} 
-            faculty ={r.department.faculty.name}
-            univ ={r.department.faculty.university.full_name}
+            faculty ={r.department.faculty.full_name}
+            university ={r.department.faculty.university.full_name}
             email={r.email}
             phone={r.phone}
             image =  {r.image}
             enrolled= {r.enrolled}
             security= {r.social_security_number}
             card= {r.student_card_number}
+            profil = {`student${r._id}`}
+            length={Object.keys(r).length}
+
+            
+
    id={r._id}/>
         ))}
   </tbody>
@@ -75,7 +77,7 @@ function Students(){
 <div className={departmentsClass.newResponsible}>
         <Button content="Create Student Account" color="dark" dataBsToggle="modal" dataBsTarget="#student"/>
       </div>
-      <CreateStudentAccount modalId="student"/>
+      <CreateOneDataRecord table="Students" id="student"/>
 
 </div></>
         )

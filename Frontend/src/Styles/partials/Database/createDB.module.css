@@ -8,15 +8,6 @@
     padding: 64px;
 }
 
-.field{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--BLACK);
-    font-size: var(--BodyR);
-    margin: 16px 0;
-    text-align: left;
-}
 .label{
     width: 40%;
     margin: 0;
@@ -29,17 +20,17 @@
     margin-left: 16px;
     padding: 0 8px;
 }
-.title {
-    width: 32%;
+.profilDetails{
+    margin:16px 0;
     color: var(--BLACK);
     font-size: var(--BodyR);
-    margin-right: 4px;
+}
+.title{
+    margin: auto;
 }
 .description {
-    width: 68%;
     font-size: var(--BodyR);
     color: var(--DARKGREY);
-    text-align: center;
 }
 .inputDiv {
     display: flex;
