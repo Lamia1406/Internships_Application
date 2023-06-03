@@ -66,6 +66,8 @@ function DepartmentResponsibles(){
              pending = {r.pending}
              length={Object.keys(r).length}
              user ="responsible"
+             id= {r._id}
+             table = "Responsibles"
    />
         ))}
   </tbody>

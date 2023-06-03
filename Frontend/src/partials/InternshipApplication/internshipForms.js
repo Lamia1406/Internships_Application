@@ -1,13 +1,13 @@
-import internshipClass from "../../Styles/partials/InternshipApplication.js/internshipForms.module.css"
+import internshipClass from "../../Styles/partials/InternshipApplication/internshipForms.module.css"
 import Button from "../button"
 import { useState } from "react"
 import axios from "axios"
+import CalendarDiv from "../calendar"
+import changeDateFormat from "../../features/changeDateFormat"
 import calendarPic from '../../Images/calendar.png'
-import Calendar from "react-calendar"
 import { toast } from "react-toastify"
 import InternshipFormsFooters from './internshipFormsFooters'
 import Input from "../input"
-import { useNavigate } from "react-router-dom"
 import InternshipFormsHeaders from "./internshipFormsHeaders"
 function InternshipForms(props){
   
@@ -37,7 +37,6 @@ const modifyInternship = async (event) =>{
        }
        
  }
-
   const [rejectClass,setRejectClass]=useState(false)
 const [startingDate, setStartingDate] = useState(new Date(props.startingDate))
 const [theme, setTheme] = useState(props.theme)
@@ -45,54 +44,15 @@ const [company, setCompany] = useState(props.company)
 const [supervisor_name, setSupervisorName] = useState(props.supervisorName)
 const [supervisor_email, setSupervisorEmail] = useState(props.supervisorEmail)
 const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
-    const changDateFormat = (d) => {
-        let date = new Date(Date.UTC(
-          parseInt(d.substring(0, 4)),  
-          parseInt(d.substring(5, 7)) - 1,  
-          parseInt(d.substring(8, 10)),  
-          parseInt(d.substring(11, 13)), 
-          parseInt(d.substring(14, 16)), 
-          parseInt(d.substring(17, 19)), 
-          parseInt(d.substring(20, 23))  
-        ));
-      
-        date = date.toUTCString();
-      
-        const today = new Date();
-        const year = date.substring(12, 16);
-        const month = date.substring(8, 11);
-        const day = date.substring(5, 7);
-      
-        if (
-          today.getFullYear() == year &&
-          today.getMonth() + 1 == new Date(Date.parse(month + " 1, 2000")).getMonth() + 1 &&
-          today.getDate() == day
-        ) {
-          return "today";
-        }
-        
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        if (
-          yesterday.getFullYear() == year &&
-          yesterday.getMonth() + 1 == new Date(Date.parse(month + " 1, 2000")).getMonth() + 1 &&
-          yesterday.getDate() == day
-        ) {
-          return "yesterday";
-        }
-      
-        return `${year}/${month}/${day}`;
-      };
-   
+
     
     const [modifyClass,setModifyClass]=useState(false)
-
-   return (
+    return (
     <>
     
     <div className={` ${internshipClass.oneInternship}`}>
     
-    <InternshipFormsHeaders approvedByResponsible={props.approvedByResponsible} startingDate={props.startingDate} endingDate={props.endingDate} type= {props.type} approvedBySupervisor={props.approvedBySupervisor} message={props.rejectionMessage} studentId={props.studentId}/>
+    <InternshipFormsHeaders approvedByResponsible={props.approvedByResponsible} startingDate={props.startingDate} endingDate={props.endingDate} type= {props.type} approvedBySupervisor={props.approvedBySupervisor} message={props.message} studentId={props.studentId} internshipId= {props.internshipId}/>
      <div className="accordion-item"> 
      <button className={`collapsed text-center ${internshipClass.btn}`} id={props.internshipId} type="button" data-bs-toggle="collapse" data-bs-target={`#internship${props.internshipId}`} aria-expanded="true" aria-controls={`internship${props.internshipId}`}>
         <div className={internshipClass.name}>{props.theme} </div>
@@ -161,7 +121,7 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                          Starting Date :
                       </p>
                       <p className={internshipClass.content}>
-                            {changDateFormat(props.startingDate)}
+                            {changeDateFormat(props.startingDate)}
                            
                       </p>
                 </div>
@@ -170,7 +130,7 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                           Ending Date :
                       </p>
                       <p className={internshipClass.content}>
-                      {changDateFormat(props.endingDate)}
+                      {changeDateFormat(props.endingDate)}
                       </p>
                 </div>
                 <div className={`col ${internshipClass.field}`}>
@@ -304,17 +264,7 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                     <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#startingDateModal">
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <div className="modal fade" id="startingDateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div className={`modal-content ${internshipClass.calendarDiv}`}>
-                          <div className={`modal-body  ${internshipClass.calendarbody}`}>
-                            <Calendar onChange={(e) => setStartingDate(e)} className={internshipClass.calendar} calendarType='Arabic' minDate={new Date()} value={startingDate} />
-                            <button className={internshipClass.chosenDateBtn} data-bs-dismiss="modal" > Submit</button>
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate}/>
         </div>
         </div>
         <div className={`row ${internshipClass.modifyForm}`}>
@@ -326,17 +276,8 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                     <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#endingDateModal">
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <div className="modal fade" id="endingDateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div className={`modal-content ${internshipClass.calendarDiv}`}>
-                          <div className={`modal-body  ${internshipClass.calendarbody}`}>
-                          <Calendar onChange={(e) => setEndingDate(e)} className={internshipClass.calendar} calendarType='Arabic' minDate={startingDate} value={endingDate} />
-                            <button className={internshipClass.chosenDateBtn} data-bs-dismiss="modal" > Submit</button>
+                    <CalendarDiv onChange={(e) => setEndingDate(e)} minDate={startingDate} value={startingDate}/>
 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
         </div>
         </div>
 </div>

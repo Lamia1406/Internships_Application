@@ -60,13 +60,13 @@ function Students(){
             image =  {r.image}
             enrolled= {r.enrolled}
             security= {r.social_security_number}
+            user="student"
             card= {r.student_card_number}
             profil = {`student${r._id}`}
             length={Object.keys(r).length}
-
-            
-
-   id={r._id}/>
+   id={r._id}
+   table = "Students"
+   />
         ))}
   </tbody>
   

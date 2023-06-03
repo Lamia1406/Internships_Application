@@ -1,16 +1,20 @@
 import Button from "../button"
-import internshipClass from "../../Styles/partials/InternshipApplication.js/internshipFormsFooters.module.css"
+import internshipClass from "../../Styles/partials/InternshipApplication/internshipFormsFooters.module.css"
 import { toast } from "react-toastify"
 import axios from "axios"
 import TextArea from "../textarea"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 function InternshipFormsFooters(props){
+  const [rejectInternshipURL,setRejectInternshipURL]=useState("")
+ 
   const [rejectionMessageClass,setRejectMessageClass] =useState(false)
 const [rejectionMessage,setRejectionMessage]=useState("")
-const [rejectInternshipURL,setRejectInternshipURL]=useState("")
  
     const rejectInternship = async(event) =>{
+      console.log(props)
+      console.log(rejectionMessage)
+      console.log(rejectInternshipURL)
         event.preventDefault();
         const payload ={
             rejectionMessage
@@ -73,11 +77,12 @@ const [acceptInternshipURL,setAcceptInternshipURL]=useState('')
 
 const acceptNewInternshipURL = `http://localhost:4000/internship/acceptNewIntership/responsible/${props.internshipId}`
 const acceptNewInternship = async(event) =>{
+  console.log(acceptInternshipURL)
     event.preventDefault();
     try{
         const res = await axios.put(acceptNewInternshipURL);
         if(res.data.status){
-              toast.success("Student has been accepted")
+              toast.success("internship successfully accepted")
               window.location.reload()
               
         }
@@ -100,17 +105,7 @@ if(props.type == "supervisor"){
 })
     return(
         <div>
-                  {
- 
-    props.approvedBySupervisor === "accepted" && props.type === "student" && (
-      <div className={internshipClass.choose}>
-        <div className={internshipClass.letter}>Confirm Your Commitment to this internship</div>
-        <div>
-          <Button content="Choose Internship" color="black" />
-        </div>
-      </div>
-    ) 
-}
+              
 {
   (props.approvedByResponsible === "pending" || props.approvedByResponsible === "rejected") && props.type === "student" && (
     <>

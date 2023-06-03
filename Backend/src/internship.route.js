@@ -13,6 +13,7 @@ import Post from "./models/post.js";
 import sendgridTransport from "nodemailer-sendgrid-transport"
 import nodemailer from "nodemailer"
 import { ChangeStream } from "mongodb";
+import Mark from "./models/Mark.js";
 const router = express.Router();
 const transporter = nodemailer.createTransport(
   sendgridTransport ({
@@ -41,11 +42,11 @@ router.post("/createInternship",async(req,res,next)=>{
           ...req.body
       })
       await Responsible.findOneAndUpdate(
-        { department: student.department},
+        { department: student.department },
         {
-          pending: pending++
+          $inc: { pending: 1 }
         }
-      )
+      );
       res.status(StatusCodes.CREATED).send( {status:true ,  message: "Successfully Created"})
       }
   catch(err){
@@ -57,10 +58,7 @@ router.post("/createInternship",async(req,res,next)=>{
 router.post("/createNewEstablishmentInternship",async(req,res,next)=>{
   const student = await Student.findById(req.body.student);
   if (student.enrolled === "yes") {
-    return res.status(StatusCodes.FORBIDDEN).send({
-      status: false,
-      message: "Cannot apply for an internship while enrolled."
-    });
+    return next(new ErrorResponse("Cannot apply for an internship while enrolled.", StatusCodes.BAD_REQUEST))
   }
   try{
       const internship = await NewEstablishment.create(req.body);
@@ -69,11 +67,11 @@ router.post("/createNewEstablishmentInternship",async(req,res,next)=>{
         { enrolled: "pending" }
       );
       await Responsible.findOneAndUpdate(
-        { department: student.department},
+        { department: student.department },
         {
-          pending: pending++
+          $inc: { pending: 1 }
         }
-      )
+      );
       res.status(StatusCodes.CREATED).send(
           {
               status:true,
@@ -211,17 +209,16 @@ router.delete("/deleteInternship/:idInternship",async(req,res,next)=> {
 
        }
 )
-router.put("/markPresence/:studentId/:supervisorId",async(req,res,next)=>{
+router.put("/markPresence/:studentId/:internshipId",async(req,res,next)=>{
   const studentId = req.params.studentId
-  const supervisorId = req.params.supervisorId
-  
- const isDateChanged= await Presence.findOne({day: req.body.day, student: studentId, supervisor: supervisorId} )
+  const isDateChanged= await Presence.findOne({day: req.body.day, student: studentId, internship: req.params.internshipId} )
+  console.log(isDateChanged)
   
  
 
   try{
     const studentInternship = await Presence.findOneAndUpdate(
-      { day: req.body.day, student: studentId, supervisor: supervisorId },
+      { day: req.body.day, student: studentId },
       { $set: { is_present: req.body.is_present ,
         changed: true} },
       { new: true }
@@ -238,17 +235,74 @@ router.put("/markPresence/:studentId/:supervisorId",async(req,res,next)=>{
         next(err)
           } 
 })
-router.get("/getStudentPresence/:studentId/:supervisorId",async(req,res,next)=>{
+router.post("/evaluateStudent/:studentId/:internshipId",async(req,res,next)=>{
   const studentId = req.params.studentId
-  const supervisorId=req.params.supervisorId
+  try{
+    if(req.body.innovation < 0 || req.body.innovation > 4 || typeof req.body.innovation == "number"){
+        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+    }
+    if(req.body.knowledge < 0 || req.body.knowledge > 4 || typeof req.body.knowledge == "number"){
+        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+    }
+    if(req.body.discipline < 0 || req.body.discipline > 4 || typeof req.body.discipline == "number"){
+        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+    }
+    if(req.body.skills < 0 || req.body.skills > 4 || typeof req.body.skills == "number"){
+        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+    }
+    if(req.body.initiative < 0 || req.body.initiative > 4 || typeof req.body.initiative == "number"){
+        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+    }
+    const full_mark = (Number(req.body.skills) + Number(req.body.initiative) +Number(req.body.discipline) + Number(req.body.innovation) + Number(req.body.knowledge)).toFixed(2)
+    
+    const studentInternship = await Mark.create(
+     {
+      full_mark : full_mark,
+      skills : req.body.skills,
+      initiative : req.body.initiative,
+      discipline : req.body.discipline,
+      knowledge : req.body.knowledge,
+      innovation : req.body.innovation,
+      ...req.body
+     }
+    );
+    
+      res.status(StatusCodes.OK).send(
+          {
+              status:true,
+              message: "Student Evaluation Created Successfully"
+          }
+          )
+      }
+      catch(err){
+        next(err)
+          } 
+})
+router.get("/getStudentPresence/:studentId/:internshipId",async(req,res,next)=>{
+  const studentId = req.params.studentId
   
   
   try{
-    const studentPresence = await Presence.find({student : studentId,supervisor:supervisorId}).select("is_present day")
+    const studentPresence = await Presence.find({student : studentId , internship: req.params.internshipId}).select("is_present day")
      return res.status(StatusCodes.OK).send(
           {
               status:true,
               studentPresence
+          }
+          )
+      }
+      catch(err){
+        next(err)
+          } 
+})
+router.get("/getStudentEvaluation/:studentId/:internshipId",async(req,res,next)=>{
+  const studentId = req.params.studentId
+  try{
+    const studentEvaluation = await Mark.find({student : studentId , internship: req.params.internshipId})
+     return res.status(StatusCodes.OK).send(
+          {
+              status:true,
+              studentEvaluation
           }
           )
       }
@@ -263,9 +317,8 @@ router.get("/allInternships/student/:idStudent",async (req,res)=>{
       const studentId = req.params.idStudent; 
       const student = await Student.findById(studentId).populate("department");
       const studentDepartment = student.department;   
-      const responsible = await Responsible.findOne({ department:studentDepartment }).select("full_name email phone fax")
-         
-        const internships = await Internship.find({student:studentId, approvedByResponsible:{$ne :"rejectedByStudent"}})
+      const responsible = await Responsible.findOne({ department:studentDepartment }).select("full_name email phone fax")   
+      const internships = await Internship.find({student:studentId, approvedByResponsible:{$ne :"rejectedByStudent"}})
         .populate({
           path: "student",
           select: "full_name level_of_study student_card_number social_security_number",
@@ -275,7 +328,7 @@ router.get("/allInternships/student/:idStudent",async (req,res)=>{
           select: "title company",
           populate: {
             path: "company",
-            select: "company_name",
+            select: "full_name",
           },
         })
         .populate({
@@ -315,7 +368,7 @@ router.get("/allInternships/supervisor/:idSupervisor",async (req,res)=>{
           select: "title company",
           populate: {
             path: "company",
-            select: "company_name",
+            select: "full_name",
           },
         })
         .populate({
@@ -344,153 +397,56 @@ router.get("/allInternships/supervisor/:idSupervisor",async (req,res)=>{
      })
 
     
-router.get("/allInternships/responsible/:idResponsible",async (req,res)=>{
+router.get("/allInternships/responsible/:idResponsible",async (req,res,next)=>{
     try{
       const responsibleId = req.params.idResponsible;
       const responsible = await Responsible.findById({ _id: responsibleId })
       const responsibleDep= responsible.department
         const internships = await Internship.find({
-            $or: [
-              { approvedByResponsible: "pending" },
-            ]
+          approvedByResponsible: { $ne: "ongoing" },
+          post: { $ne: null },
+          supervisor: { $ne: null },
+          student: { $ne: null }
+          }) .populate({
+            path: "student",
+            select: "full_name level_of_study student_card_number social_security_number department",
+            match: { department: responsibleDep }
           })
-        .populate({
-          path: "student",
-          select: "full_name level_of_study student_card_number social_security_number department",
-          match: { department: responsibleDep }
-        })
-        .populate({
-          path: "post",
-          select: "title company",
-          populate: {
-            path: "company",
-            select: "company_name",
-          },
-        })
-        .populate({
-          path: "supervisor",
-          select: "full_name email",
-        })
+          .populate({
+            path: "post",
+            select: "title company",
+            populate: {
+              path: "company",
+              select: "full_name",
+            },
+          })
+          .populate({
+            path: "supervisor",
+            select: "full_name email",
+          })
+          const newInternships = await NewEstablishment.find({
+            approvedByResponsible: { $ne: "ongoing" },
+          }).populate(
+            {
+              path: "student",
+              select: "full_name level_of_study student_card_number social_security_number department",
+              match: { department: responsibleDep }
+            }
+          )
+       
       
         res.status(StatusCodes.OK).send(
             {
                 status:true,
                 internships,
+                newInternships
             }
             )
     }
     catch(err){
-        err.message
+       next(err)
          }
      })
-router.get("/rejectedInternships/responsible/:idResponsible",async (req,res)=>{
-    try{
-      let dateOfRejection = new Date();
-      const responsibleId = req.params.idResponsible;
-      const responsible = await Responsible.findById({ _id: responsibleId })
-      const responsibleDep= responsible.department
-        const rejectedExistingInternships = await Internship.find({
-            $or: [
-              { approvedByResponsible: { $in: ["rejected", "rejectedByStudent"] } },
-            ]
-          })
-        .populate({
-          path: "student",
-          select: "full_name level_of_study student_card_number social_security_number ",
-          match: { department: responsibleDep }
-        })
-        .populate({
-          path: "post",
-          select: "title company",
-          populate: {
-            path: "company",
-            select: "company_name",
-          },
-        })
-        .populate({
-          path: "supervisor",
-          select: "full_name email",
-        })
-        const rejectedNewInternships = await NewEstablishment.find({
-            $or: [
-              {dateOfRejection : dateOfRejection},
-              { approvedByResponsible: "rejected" },
-            ]
-          })
-          .populate(
-            {
-              path: "student",
-              select: "full_name level_of_study student_card_number social_security_number department",
-              match: { department: responsibleDep }
-            }
-          )
-      
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,
-                rejectedExistingInternships,
-                rejectedNewInternships
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
-
-router.get("/acceptedInternships/responsible/:idResponsible",async (req,res)=>{
-    try{
-      const responsibleId = req.params.idResponsible;
-      const responsible = await Responsible.findById({ _id: responsibleId })
-      const responsibleDep= responsible.department
-        const acceptedExistingInternships = await Internship.find(
-          { approvedByResponsible: "accepted",
-            approvedBySupervisor:"pending" }
-          )
-        .populate({
-          path: "student",
-          select: "full_name level_of_study student_card_number social_security_number department",
-          match: { department: responsibleDep }
-        })
-        .populate({
-          path: "post",
-          select: "title company",
-          populate: {
-            path: "company",
-            select: "company_name",
-          },
-        })
-        .populate({
-          path: "supervisor",
-          select: "full_name email",
-        })
-
-        const acceptedNewInternships = await NewEstablishment.find({
-            $or: [
-              { approvedByResponsible: "accepted" },
-            ]
-          })
-          .populate(
-            {
-              path: "student",
-              select: "full_name level_of_study student_card_number social_security_number department",
-              match: { department: responsibleDep }
-            }
-          )
-      
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,
-                acceptedExistingInternships,
-                acceptedNewInternships
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
-
 
 router.get("/studentProgress/responsible/:id",async (req,res)=>{
     try{
@@ -512,7 +468,7 @@ router.get("/studentProgress/responsible/:id",async (req,res)=>{
           select: "title company",
           populate: {
             path: "company",
-            select: "company_name",
+            select: "full_name",
           },
         })
         .populate({
@@ -576,60 +532,7 @@ router.get("/studentProgress/supervisor/:id",async (req,res)=>{
         err.message
          }
      })
-router.get("/acceptedByBoth/responsible/:idResponsible",async (req,res)=>{
-    try{
-      const responsibleId = req.params.idResponsible;
-      const responsible = await Responsible.findById({ _id: responsibleId })
-      const responsibleDep= responsible.department
-      const internships = await Internship.find({
-        approvedByResponsible: "accepted",
-        approvedBySupervisor: "accepted",
-      })
-        .populate({
-          path: "student",
-          select: "full_name level_of_study student_card_number social_security_number department",
-          match: { department: responsibleDep }
-        })
-        .populate({
-          path: "post",
-          select: "title company",
-          populate: {
-            path: "company",
-            select: "company_name",
-          },
-        })
-        .populate({
-          path: "supervisor",
-          select: "full_name email",
-        })
-      for (const internship of internships){
-        if(internship.startingDate < new Date()){
-          await Internship.findOneAndUpdate(
-            { _id: internship._id },
-            { approvedBySupervisor: "rejected",
-          rejectionMessage : "You surpassed the starting date without confirming your presence" }
-          );
-        }
-      }
-        let allResponsibles = [];
-        for (const accepted of internships) {
-          const responsible = await Responsible.findOne({ department: accepted.student.department });
-          allResponsibles.push(responsible)
-        }
-       
-      
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,
-                internships,
-                allResponsibles
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
+
 router.get("/acceptedByBoth/supervisor/:idSupervisor",async (req,res)=>{
     try{
       const supervisorId = req.params.idSupervisor;
@@ -648,7 +551,7 @@ router.get("/acceptedByBoth/supervisor/:idSupervisor",async (req,res)=>{
           select: "title company",
           populate: {
             path: "company",
-            select: "company_name",
+            select: "full_name",
           },
         })
       for (const internship of internships){
@@ -679,33 +582,7 @@ router.get("/acceptedByBoth/supervisor/:idSupervisor",async (req,res)=>{
         err.message
          }
      })
-router.get("/allNewEstablishment/responsible/:idResponsible",async (req,res)=>{
-    try{
-      const responsibleId = req.params.idResponsible;
-      const responsible = await Responsible.findById({ _id: responsibleId })
-      const responsibleDep= responsible.department
-        const newInternships = await NewEstablishment.find({
-          $or: [
-            { approvedByResponsible: "pending" },
-          ]
-        }).populate(
-          {
-            path: "student",
-            select: "full_name level_of_study student_card_number social_security_number department",
-            match: { department: responsibleDep }
-          }
-        )
-        res.status(StatusCodes.OK).send(
-            {
-                status:true,
-                newInternships
-            }
-            )
-    }
-    catch(err){
-        err.message
-         }
-     })
+
 
 //Active Offers / offers that students are interacting with
 router.get("/activeOffers", async (req, res) => {
@@ -758,7 +635,6 @@ router.get("/currentInterns", async (req, res) => {
 router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
   try{
     const internshipId = req.params.idInternship;
-    
     const internship = await Internship.findById({ _id: internshipId }).populate({
       path: "student",
       select : "department full_name"
@@ -770,10 +646,15 @@ router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
           {_id: internship._id},
          { $set: { approvedBySupervisor: "rejected" , rejectionMessage : req.body.rejectionMessage }}
         );
+        await Supervisor.findOneAndUpdate(
+          { _id: internship.supervisor._id },
+          { 
+            $inc: {rejected: 1 } ,
+          }
+        );
       
      
       const studentId= internship.student._id
-      
       const isStudentEnrolled = await Internship.find({student:studentId})
       const isStudentEnrolled2 = await NewEstablishment.find({student:studentId})
       if (isStudentEnrolled.lengh == 0 && !isStudentEnrolled2.length == 0){
@@ -793,6 +674,12 @@ router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
           message: `student ${internship.student.full_name} has been rejected by the internship supervisor from getting the internship ${internship.post.title}`,
           ...req.body
         })
+        await Supervisor.findOneAndUpdate(
+          { _id: internship.supervisor._id },
+          { 
+            $inc: { rejected: 1 } ,
+          }
+        );
         res.status(StatusCodes.OK).send(
             {
               status:true,     
@@ -803,7 +690,7 @@ router.put("/rejectInternship/supervisor/:idInternship",async (req,res)=>{
             err.message
           }
         })
-router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
+router.put("/rejectInternship/responsible/:idInternship",async (req,res,next)=>{
           try{
       const internshipId = req.params.idInternship;
       let internship;
@@ -860,7 +747,7 @@ router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
      await Responsible.findOneAndUpdate(
       { department: internship.student.department },
       { 
-        rejected: rejected++, 
+        $inc: { rejected: 1 } ,
       }
     );
         res.status(StatusCodes.OK).send(
@@ -870,7 +757,7 @@ router.put("/rejectInternship/responsible/:idInternship",async (req,res)=>{
             )
     }
     catch(err){
-        err.message
+        next(err)
          }
      })
 router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
@@ -884,8 +771,13 @@ router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
       await Responsible.findOneAndUpdate(
         { department: internship.student.department },
         { 
-          accepted: accepted++, 
-          pending: pending--
+          $inc: { accepted: 1 , pending: -1 } ,
+        }
+      );
+      await Supervisor.findOneAndUpdate(
+        { _id: internship.supervisor._id },
+        { 
+          $inc: {pending: 1 } ,
         }
       );
       await Notification.create({
@@ -909,11 +801,15 @@ router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
 router.put("/acceptNewIntership/responsible/:idInternship", async (req, res) => {
            try {
              const { idInternship } = req.params;
-             const newInternship = await NewEstablishment.findById(idInternship).populate({ path: "student", select: "full_name department" });
-         
+             const newInternship = await NewEstablishment.findById(idInternship).populate({ path: "student", select: "full_name department" });   
              const company = await getOrCreateCompany(newInternship.company);
+             
              const supervisor = await getOrCreateSupervisor(newInternship.supervisor_email, newInternship.supervisor_name, company);
              const post = await getOrCreatePost(newInternship.theme, company);
+             console.log(company)
+             console.log(newInternship)
+             console.log(supervisor)
+             console.log(post)
          
              const createInternship = await Internship.create({
                student: newInternship.student._id,
@@ -930,8 +826,13 @@ router.put("/acceptNewIntership/responsible/:idInternship", async (req, res) => 
              await Responsible.findOneAndUpdate(
               { department: newInternship.student.department },
               { 
-                accepted: accepted++, 
-                pending: pending--
+                $inc: { accepted: 1 , pending: -1 } ,
+              }
+            );
+            await Supervisor.findOneAndUpdate(
+              { _id: supervisor._id },
+              { 
+                $inc: {pending: 1 } ,
               }
             );
              res.status(StatusCodes.OK).send({ status: true });
@@ -946,10 +847,10 @@ router.put("/acceptNewIntership/responsible/:idInternship", async (req, res) => 
          });
          
          async function getOrCreateCompany(companyName) {
-           let company = await Company.findOne({ company_name: companyName });
+           let company = await Company.findOne({ full_name: companyName });
            if (!company) {
              company = await Company.create({
-               company_name: companyName,
+               full_name: companyName,
                address: "unknown",
              });
            }
@@ -1048,7 +949,12 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
         message: `student ${internship.student.full_name} has been accepted by the internship supervisor`,
         ...req.body
       })
-
+      await Supervisor.findOneAndUpdate(
+        { _id: supervisor._id },
+        { 
+          $inc: {accepted: 1 } ,
+        }
+      );
         res.status(StatusCodes.OK).send(
             {
                 status:true,     
@@ -1078,7 +984,7 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
           await Presence.create(
             {
               student: chosenInternship.student,
-              supervisor : chosenInternship.supervisor,
+              internship : chosenInternship._id,
               day : startingDate
             }
           )
@@ -1119,7 +1025,7 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
             select: "title",
             populate: {
               path: "company",
-              select: "company_name",
+              select: "full_name",
             },
           })
           .populate({

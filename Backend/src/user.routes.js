@@ -558,7 +558,7 @@ router.put("/responsible/:id",async(req,res,next)=> {
 )
 
 //delete users
-router.delete('/deleteResponsible/:id', async(req, res) => {
+router.delete('/deleteResponsible/:id', async(req, res,next) => {
     try{
      const { id } = req.params;
      const responsible= await Responsible.findOne({_id: id})
@@ -576,36 +576,71 @@ router.delete('/deleteResponsible/:id', async(req, res) => {
      )
      for (const internship of internships){
         if(internship.student.department._id.toString() === responsible.department._id.toString()){
-            return res.status(StatusCodes.OK).send({
-                status: false,
-                message: `Department Responsible has internships to follow up, can't delete him/her`
-              });
+            return next(new ErrorResponse("Department Responsible has internships to follow up, can't delete him/her", StatusCodes.BAD_REQUEST))
         }
      }
      for (const internship of newInternships){
         if(internship.student.department._id.toString() === responsible.department._id.toString()){
-            return res.status(StatusCodes.OK).send({
-                status: false,
-                message: `Department Responsible has internships to follow up, can't delete him/her`
-              });
+        return next(new ErrorResponse("Department Responsible has internships to follow up, can't delete him/her", StatusCodes.BAD_REQUEST))
         }
      }
      const result = await Responsible.findOneAndDelete({ _id: id });
      if(result){
        return res.status(StatusCodes.OK).send({
          status: true,
-         message: `Department Responsible ${responsible.full_nale} has been deleted`
+         message: `Department Responsible has been deleted`
        });
      } else {
-       return res.status(StatusCodes.NOT_FOUND).send({
-         status: false,
-         message: `User ${id} has not been found`
-       });
+       return next(new ErrorResponse(`Department Responsible has not been found`, StatusCodes.NOT_FOUND))
      }
     }
-    catch(error){
-     console.log(error)
+    catch(err){
+     next(err)
     }
    });
-  
+
+router.delete('/deleteStudent/:id', async(req, res, next) => {
+    const { id } = req.params;
+    try{
+    const students = await Internship.find({ student: id });
+    const students2 = await NewEstablishment.find({ student: id });
+    if(students.length > 0 || students2.length > 0){
+        return next(new ErrorResponse("This Student is part of an Internship Already, you can't delete them",StatusCodes.BAD_REQUEST))
+     }
+                        const result = await Student.findOneAndDelete({ _id: id });
+                        if(result){
+                          return res.status(StatusCodes.OK).send({
+                            status: true,
+                            message: `Student has been deleted`
+                          });
+                        } else {
+                          return next(new ErrorResponse(`Student has not been found`,StatusCodes.NOT_FOUND))
+                        }
+                       }
+                       catch(err){
+                        next(err)
+                       }
+                      });
+router.delete('/deleteSupervisor/:id', async(req, res, next) => {
+                        const { id } = req.params;
+                        const internships = await Internship.find({ supervisor: id });
+                        if(internships.length > 0){
+                            return next(new ErrorResponse(`This Supervisor is supervising an internship,you can't delete it`, StatusCodes.BAD_REQUEST))
+                         }
+                                           try{
+                                            const { id } = req.params;
+                                            const result = await Supervisor.findOneAndDelete({ _id: id });
+                                            if(result){
+                                              return res.status(StatusCodes.OK).send({
+                                                status: true,
+                                                message: `Supervisor has been deleted`
+                                              });
+                                            } else {
+                                              return next(new ErrorResponse(`Supervisor  has not been found`, StatusCodes.NOT_FOUND))
+                                            }
+                                           }
+                                           catch(err){
+                                            next(err)
+                                           }
+                });
 export default router

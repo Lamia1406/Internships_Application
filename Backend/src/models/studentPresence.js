@@ -8,11 +8,11 @@ const presenceSchema = new mongoose.Schema(
             trim: true,
             required: [true, "please enter the student information"]
         },
-        supervisor: {
+        internship: {
             type: ObjectId,
-            ref: "Supervisor",
+            ref: "Internship",
             trim: true,
-            required: [true, "please enter the supervisor information"]
+            required: [true, "please enter the internship information"]
         },
         is_present:{
             type: Boolean,

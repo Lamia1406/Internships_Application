@@ -1,0 +1,191 @@
+.form {
+    border-radius: 16px;
+    box-shadow: -4px 4px 12px var(--GREY);
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+}
+
+
+.formTitle {
+    color: var(--DARKBLUE);
+    font-size: var(--H6);
+    padding: 0px;
+
+    text-align: center;
+}
+
+.formTitle p {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--BLACK);
+    font-size: var(--BodyR);
+    margin: 16px 0;
+    text-align: left;
+}
+
+.label {
+    width: 40%;
+    margin: 0;
+
+}
+
+.content {
+    width: 60%;
+    border-bottom: 1px solid var(--DARKGREY);
+    margin: 0;
+    margin-left: 16px;
+    padding: 0 8px;
+}
+
+.modificationBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modificationBtns div {
+    margin: 64px;
+    width: max-content;
+
+}
+
+
+
+
+.btn {
+    padding: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-size: var(--H6);
+    color: var(--BLACK);
+    border: none;
+    width: 100%;
+
+}
+
+
+.title {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+
+    margin-right: 32px;
+}
+
+.name {
+    width: max-content;
+    margin: 16px auto;
+    font-size: var(--H5);
+
+}
+
+
+.calendarBtn {
+    position: absolute;
+    left: 72%;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+.modifyForm {
+    margin: 16px 0;
+
+}
+
+.details {
+    margin: 0;
+}
+
+.modifyForm p {
+    font-size: var(--BodyL);
+    color: var(--BLACK);
+    margin: auto;
+    margin-left: 16px;
+    text-align: center;
+}
+
+.formField {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.formField button {
+    margin-left: 100px;
+}
+
+@media only screen and (max-width: 990px) {
+    .formTitle {
+        font-size: var(--BodyR);
+        margin: 0;
+    }
+
+    .name {
+        font-size: var(--BodyL);
+    }
+
+    .details {
+        display: block;
+    }
+
+    .field {
+        margin: 16px 0;
+        padding: 0;
+    }
+
+    .oneInternship {
+        padding: 16px 0 !important;
+        margin: 16px 0 !important;
+        width: 100% !important;
+    }
+
+    .label {
+        width: 36%;
+        margin: auto 0;
+        margin-right: 4%;
+
+    }
+
+    .content {
+        width: 60%;
+        margin: auto 0;
+        overflow-wrap: break-word;
+    }
+
+    .modificationBtns {
+        display: flex;
+        justify-content: center;
+
+    }
+
+    .modificationBtns div {
+        margin: 64px 8px;
+        width: 120px;
+
+    }
+
+    .calendarBtn {
+        position: relative;
+        left: 84%;
+        bottom: 40px;
+        padding: 0;
+
+    }
+
+}

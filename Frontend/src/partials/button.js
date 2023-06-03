@@ -44,7 +44,7 @@ function Button(props){
         }
     };
     return (
-        <button  data-bs-toggle={props.dataBsToggle} data-bs-target={props.dataBsTarget} data-bs-dismiss={props.dataBsDismiss} className={`${btnColor()} ${buttonClass.defBtn} ${flex()} `} src={props.icon} onClick={props.onClick} 
+        <button  data-bs-toggle={props.dataBsToggle} data-bs-target={props.dataBsTarget} data-bs-dismiss={props.dataBsDismiss} className={`${btnColor()} ${buttonClass.defBtn} ${flex()} `} src={props.icon} onClick={props.onClick}  onMouseOut={props.onMouseOut}
         type={props.type} value={props.value} disabled={props.disabled}>
             <img className={displayIcon()} src={props.icon} alt='icon'/>{props.content}
             </button>

@@ -10,21 +10,6 @@
   color: var(--PRIMARY);
   font-size: var(--H2);
 }
-.select {
-  color: var(--DARKGREY);
-  font-size: var(--BodyR);
-  padding: 12px 20px;
-  background-color: var(--WHITE);
-  width: 50%;
-  border-radius: 8px;
-  margin: 0 auto;
-}
-.select:hover {
-  background-color: var(--GREY);
-  color: var(--DARKGREY);
-}
-
-
 .results{
   border-radius: 8px;
   width: 50%;
@@ -45,17 +30,7 @@
   width: fit-content;
   margin: 0 auto;
 }
-.navigationBtn{
-  display: flex;
-  width: 50%;
-  justify-content: space-evenly;
-  margin: 0 auto;
 
-}
-.navigationBtn div{
-  width: 120px;
-
-}
 .database{
     border-radius: 8px;
     outline: 1px solid var(--GREY);
@@ -71,19 +46,12 @@
     font-size: var(--BodyR);
     text-align: center;
     vertical-align: middle;
+    
+   
 
   }
+
   
- 
-  table tbody td {
-    font-size: var(--BodyR);
-    border-top: 1px solid var(--GREY) !important;
-    padding:8px 8 !important;
-    text-align: center;
-    vertical-align: middle;
-
-
-  }
   
   
   
@@ -100,29 +68,6 @@
     left: 90vw;
     bottom: 0;
   }
-  .markPresence{
-    width: 80%;
-    margin: 0 auto;
-    margin-bottom: 16px;
-  }
-  .field{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--BLACK);
-    font-size: var(--BodyL);
-    margin: 16px 0;
-  }
-  .label{
-    width: 40%;
-    margin: 0;
-    text-align: center;
-  }
-  .content{
-    width: 60%;
-    margin: 0;
-    padding: 0 8px;
-  }
 
   @media only screen and (max-width:990px){
     table thead th{
@@ -137,19 +82,17 @@
  .h2{
   font-size: var(--H4);
  }
-.results{
+ .results{
   width: 100%;
+  padding: 16px  ; 
+  justify-content: space-between;  
 }
-.calendarBtn{
-  position: relative;
-  left: 84%;
-  bottom: 40px;
+.results div{
+  text-align: center;
   padding: 0;
-
+  width:50%;
+  margin: 0 8px;
 }
 
-.calendarDiv {
-  padding: 0 16px;
-} 
 
   }

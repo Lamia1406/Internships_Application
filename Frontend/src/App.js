@@ -22,10 +22,10 @@ import UserProfil from './Pages/userProfil';
 import PrivateRoute from './features/PrivateRoute';
 import ApplyForInternship from './Pages/applyForInternship';
 import Database from './Pages/database';
-import RequestsSupervisor from './Pages/requestsSupervisor';
 import StudentProgress from './Pages/studentProgress';
 import Students from './Pages/students';
 import Presence from './Pages/studentPresence';
+import Evaluation from './Pages/studentEvaluation';
 function App() {
   const location = useLocation(); // Get the current location
   const isLoginPage = location.pathname === '/login';
@@ -52,10 +52,10 @@ function App() {
             <Route path='/notifications' element={<Notifications/>}/>  
             <Route path='/userProfil' element={<UserProfil />} />
             <Route path='/requests' element={<Requests />} />
-            <Route path='/requestsForSupervisor' element={<RequestsSupervisor/>}/>
             <Route path='/studentProgress' element={<StudentProgress/>}/>
             <Route path='/students' element={<Students/>}/>
             <Route path='/presence' element={<Presence/>}/>
+            <Route path='/evaluation' element={<Evaluation/>}/>
       </Routes>
       {(!isLoginPage && !isSignupPage) && <Footer />}
     </>

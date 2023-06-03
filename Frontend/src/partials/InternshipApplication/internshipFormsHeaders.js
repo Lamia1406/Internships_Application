@@ -1,8 +1,27 @@
-import internshipClass from "../../Styles/partials/InternshipApplication.js/internshipFormsHeaders.module.css"
+import { toast } from "react-toastify";
+import internshipClass from "../../Styles/partials/InternshipApplication/internshipFormsHeaders.module.css"
 import Button from "../button"
 import { useNavigate } from "react-router-dom"
+import axios from "axios";
 function InternshipFormsHeaders(props) {
+    const chooseInternshipURL = `http://localhost:4000/internship/chooseInternship/student/${props.internshipId}`
     const navigate = useNavigate();
+    const chooseInternship =async () =>{
+           try{
+            const res = await axios.put(chooseInternshipURL);
+            if(res.data.status){
+                toast.success("Operation Successful")
+                window.location.reload()
+            }
+            else{
+                toast.warn("Failed Operation")
+            }
+           }
+           catch(err){
+            toast.error(err.response.data.error)
+            console.log(err.response.data.error)
+           }
+    }
     return (
         <div className={internshipClass.title}>
             {
@@ -105,13 +124,13 @@ function InternshipFormsHeaders(props) {
                 props.approvedByResponsible == "ongoing" && props.approvedBySupervisor == "ongoing"  && (
                    <div className={internshipClass.controlDiv}>
                      <div className={` ${internshipClass.presenceDiv}`}>
-                            <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId, startingDate: props.startingDate, endingDate: props.endingDate } })} />      
+                            <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId,internshipId:props.internshipId, startingDate: props.startingDate, endingDate: props.endingDate } })} />      
                             </div>
                     {
-                        new Date(props.endingDate) <= new Date() && (
+                        new Date(props.endingDate) <= new Date() && props.type == "supervisor"&& (
                             
                             <div className={internshipClass.presenceDiv}>
-                                <Button content="Evaluate Student" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId, startingDate: props.startingDate, endingDate: props.endingDate } })} />  
+                                <Button content="Evaluate Student" color="black" onClick={() => navigate('/evaluation', { state: { studentId: props.studentId, internshipId:props.internshipId } })} />  
                             </div>    
                         )
                     }
@@ -119,6 +138,15 @@ function InternshipFormsHeaders(props) {
                   
                 )
             }
+                {
+ 
+ props.approvedBySupervisor === "accepted" && props.type === "student" && (
+     <div className={internshipClass.presenceDiv}>
+       <Button content="Choose Internship" color="black"  onClick={chooseInternship}/>
+     </div>
+   
+ ) 
+}
         </div>
     )
 }

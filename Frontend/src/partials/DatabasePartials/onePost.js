@@ -10,7 +10,7 @@ function Internship(props){
   const handleSubmit = () => {
     navigate('/applyForExistingInternship', { state: { post: props.id ,company:props.company} });
   }
-  const deletePostUrl= `http://localhost:4000/v1/post/deletePost/${props.id}`
+  const deletePostUrl= `http://localhost:4000/post/deletePost/${props.id}`
   const deletePost = async(event) =>{
     console.log(deletePostUrl)
     event.preventDefault();

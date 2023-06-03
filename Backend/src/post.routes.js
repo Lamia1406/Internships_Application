@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import Supervisor from "./models/supervisor.js";
 import ErrorResponse from "./utils/errorResponse.js";
 import Company from "./models/company.js";
+import Internship from "./models/offer.js";
 const router = express.Router();
 
 router.post("/createCompany",async(req,res,next)=>{
@@ -50,22 +51,17 @@ router.post("/createPost",async(req,res,next)=>{
         next(err)
           } 
 })
-router.delete('/deleteCompany/:id', async(req, res) => {
+router.delete('/deleteCompany/:id', async(req, res, next) => {
     try{
      const { id } = req.params;
      const companyPosts = await Post.find({ company: id });
      const companySupervisors = await Supervisor.find({company:id})
      if(companyPosts.length > 0){
-        return res.status(StatusCodes.NOT_FOUND).send({
-            status: false,
-            message: `This company can't be deleted directly, it is related to so many posts`
-          });
+        return next(new ErrorResponse("This company can't be deleted directly, it is related to so many posts", StatusCodes.NOT_FOUND))
      }
     else if(companySupervisors.length > 0){
-        return res.status(StatusCodes.NOT_FOUND).send({
-            status: false,
-            message: `This company can't be deleted directly, it is related to so many supervisors`
-          });
+      console.log(companySupervisors)
+        return next(new ErrorResponse(`This company can't be deleted directly, it is related to so many supervisors`, StatusCodes.NOT_FOUND))
      }
      else{
         const result = await Company.findOneAndDelete({ _id: id });
@@ -83,8 +79,8 @@ router.delete('/deleteCompany/:id', async(req, res) => {
      }
 
     }
-    catch(error){
-     console.log(error)
+    catch(err){
+     next(err)
     }
    });
    router.get("/allPosts", async (req, res, next) => {
@@ -132,25 +128,26 @@ router.get("/allCompanies",async (req,res,next)=>{
 
 
 
-    router.delete('/deletePost/:id', async(req, res) => {
+    router.delete('/deletePost/:id', async(req, res,next) => {
         try{
             const { id } = req.params
+     const internships = await Internship.find({ post: id });
+     if(internships.length > 0){
+        return next(new ErrorResponse("This post can't be deleted directly, it is related to so many internships", StatusCodes.NOT_FOUND))
+     }
             const result = await Post.findOneAndDelete({ _id: id });
             if(result){
                 return res.status(StatusCodes.OK).send({
                   status: true,
-                  message: `Post ${id} has been deleted`
+                  message: `Post has been deleted`
                 });
               } else {
-                return res.status(StatusCodes.NOT_FOUND).send({
-                  status: false,
-                  message: `Post ${id} has not been found`
-                });
+                return next(new ErrorResponse( `Post has not been found`, StatusCodes.NOT_FOUND))
               }
          }
 
-        catch(error){
-         console.log(error)
+        catch(err){
+        next(err)
         }
        });
 

@@ -79,7 +79,7 @@ function CreateOneDataRecord(props){
 
         }
         if(props.table == "Presences"){
-            setCreateDataURL(`http://localhost:4000/internship/markPresence/${props.student}/${props.supervisor}`)
+            setCreateDataURL(`http://localhost:4000/internship/markPresence/${props.student}/${props.internshipId}`)
 
 
 
@@ -87,7 +87,7 @@ function CreateOneDataRecord(props){
         
 
       },[]);
-    
+    console.log(createDataURL)
     const [full_name,setFullName]=useState("");
     const [address,setAddress]=useState("");
     const [university,setUniversity] = useState("")

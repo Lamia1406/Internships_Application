@@ -9,7 +9,6 @@ import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
-import { Spinner } from '@chakra-ui/react';
 
 ChartJS.register(
   ArcElement
@@ -34,7 +33,6 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
  const [notifications,setNotifications]=useState([])
  const [loading,setIsLoading]=useState(false)
  const fetchData = async () => {
-  // setIsLoading(true)
   if(user.userType != "webmaster"){
     setIsLoading(true)
     const res = await axios.get(`${allNotificationsURL}`);
@@ -102,7 +100,7 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     <title>ConnectU | HomePage</title>
     <meta name='description' content='HomePage'/>
    </Helmet>
-    { loading == false ? <div className={`${HomeClass.page} container-fluid`}>
+     <div className={`${HomeClass.page} container-fluid`}>
         <div className= {HomeClass.section}>
         <h2 id={HomeClass.welcome}>
             Welcome, {user.full_name}
@@ -232,11 +230,7 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     
 
 
-    </div> : (
-      <div>
-        <Spinner/>
-      </div>
-    )}
+    </div> 
    </>
   );
 }

@@ -91,8 +91,10 @@ function DatabaseTable(props) {
               {
                 props.data && props.data.map(data => (
                   <OneDataSet
+                  table={props.table}
                   length= {Object.keys(data).length}
                     full_name={data.full_name}
+                    id={data._id}
                     {...(props.table === "Universities" || props.table === "Faculties" || props.table == "Companies" ? { address: data.address } : {})}
                     {...(props.table === "Faculties" && data.university ? { university: data.university.full_name } : {})}
                     {...(props.table === "Departments" && data.faculty ? { faculty: data.faculty.full_name } : {})}

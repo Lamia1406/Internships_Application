@@ -4,6 +4,8 @@ import ErrorResponse from "./utils/errorResponse.js";
 import Faculty from './models/faculty.js'
 import Department from './models/department.js';
 import Company from "./models/company.js";
+import Student from './models/student.js';
+import Responsible from './models/responsible.js'
 import { StatusCodes } from "http-status-codes";
 const router = express.Router();
 router.post("/createUniversity",async(req,res,next)=>{   
@@ -25,8 +27,6 @@ router.post("/createUniversity",async(req,res,next)=>{
           next(err)
             } 
 })
-
-
 router.post("/createFaculty",async(req,res,next)=>{
     const {full_name} = req.body;
     const facultyExist = await Faculty.findOne({full_name});
@@ -49,7 +49,6 @@ router.post("/createFaculty",async(req,res,next)=>{
           next(err)
             } 
 })
-
 router.post("/createDepartment",async(req,res,next)=>{
     const {full_name} = req.body;
     const departmentExist = await Department.findOne({full_name});
@@ -118,7 +117,73 @@ router.get("/allDepartments",async (req,res)=>{
         err.message
          }
      })
+router.delete('/deleteUniversity/:id', async(req, res,next) => {
+        try{
+            const { id } = req.params
+           const universityFaculties = await Faculty.find({university: id})
+           if(universityFaculties.length > 0){
+            return next(new ErrorResponse("This university can't be deleted directly, it is related to so many faculties", StatusCodes.NOT_FOUND))
+         }
+            const result = await University.findOneAndDelete({ _id: id });
+            if(result){
+                return res.status(StatusCodes.OK).send({
+                  status: true,
+                  message: `University  has been deleted`
+                });
+              } else {
+                return next(new ErrorResponse("University has not been found"),StatusCodes.NOT_FOUND)
+              }
+         }
 
+        catch(err){
+         next(err)
+        }
+       });
+router.delete('/deleteFaculty/:id', async(req, res,next) => {
+        try{
+            const { id } = req.params
+           const facultyDepartments = await Department.find({faculty: id})
+           if(facultyDepartments.length > 0){
+            return next(new ErrorResponse("This faculty can't be deleted directly, it is related to so many departments", StatusCodes.NOT_FOUND))
+         }
+            const result = await Faculty.findOneAndDelete({ _id: id });
+            if(result){
+                return res.status(StatusCodes.OK).send({
+                  status: true,
+                  message: `Faculty  has been deleted`
+                });
+              } else {
+                return next(new ErrorResponse("Faculty has not been found"),StatusCodes.NOT_FOUND)
+              }
+         }
+
+        catch(err){
+         next(err)
+        }
+       });
+router.delete('/deleteDepartment/:id', async(req, res,next) => {
+        try{
+            const { id } = req.params
+           const departmentStudents = await Student.find({department: id})
+           const departmentResponsibles = await Responsible.find({department: id})
+           if(departmentStudents.length > 0 || departmentResponsibles.length>0){
+            return next(new ErrorResponse("This department can't be deleted directly, it is related to so many accounts", StatusCodes.NOT_FOUND))
+         }
+            const result = await Department.findOneAndDelete({ _id: id });
+            if(result){
+                return res.status(StatusCodes.OK).send({
+                  status: true,
+                  message: `Department  has been deleted`
+                });
+              } else {
+                return next(new ErrorResponse("Department has not been found"),StatusCodes.NOT_FOUND)
+              }
+         }
+
+        catch(err){
+         next(err)
+        }
+       });
    
 
 

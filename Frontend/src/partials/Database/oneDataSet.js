@@ -1,88 +1,111 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import Button from "../button"
 import Profil from "../DatabasePartials/profil"
+import axios from "axios"
+import { toast } from "react-toastify"
+import changeDateFormat from "../../features/changeDateFormat"
 import oneLine from '../../Styles/partials/DatabasePartials/oneUser.module.css'
 function OneDataSet(props) {
   console.log(props)
-  const changDateFormat = (d) => {
-    let date = new Date(Date.UTC(
-      parseInt(d.substring(0, 4)),  
-      parseInt(d.substring(5, 7)) - 1,  
-      parseInt(d.substring(8, 10)),  
-      parseInt(d.substring(11, 13)), 
-      parseInt(d.substring(14, 16)), 
-      parseInt(d.substring(17, 19)), 
-      parseInt(d.substring(20, 23))  
-    ));
-  
-    date = date.toUTCString();
-  
-    const year = date.substring(12, 16);
-    const month = date.substring(8, 11);
-    const day = date.substring(5, 7);
-  
+  const [deleteDataURL,setDeleteDataURL]=useState("")
+  const deleteData = async()=>{
+          try{
+            const res = await axios.delete(deleteDataURL);
+          if(res.data.status){
+            toast.success("Successfully Deleted")
+            window.location.reload()
+          }
+          }
+          catch(err){
+            toast.error(err.response.data.error)
+            console.log(err.response.data.error)
+          }
+  }
+  useEffect(()=>{
+    if(props.table == "Universities"){
+        setDeleteDataURL(`http://localhost:4000/university/deleteUniversity/${props.id}`)
+    }
+    if(props.table == "Faculties"){
+        setDeleteDataURL(`http://localhost:4000/university/deleteFaculty/${props.id}`)
+    }
+    if(props.table == "Departments"){
+        setDeleteDataURL(`http://localhost:4000/university/deleteDepartment/${props.id}`)
+    }
+    if(props.table == "Companies"){
+        setDeleteDataURL(`http://localhost:4000/post/deleteCompany/${props.id}`)
+    }
+    if(props.table == "Responsibles"){
+        setDeleteDataURL(`http://localhost:4000/user/deleteResponsible/${props.id}`)
+    }
+    if(props.table == "Students"){
+        setDeleteDataURL(`http://localhost:4000/user/deleteStudent/${props.id}`)
+        
+    }
+    if(props.table == "Supervisors"){
+        setDeleteDataURL(`http://localhost:4000/user/deleteSupervisor/${props.id}`)
+        
+    }
     
+    
+
+  },[deleteDataURL]);
   
-  
-    return `${year}/${month}/${day}`;
-  };
   const [displayBtns, setDisplayBtns] = useState(false)
   const displayProfile = () => {
-    setDisplayBtns(!displayBtns)
-    if(props.mark_presence){
-      setDisplayBtns(false)
+    if(props.table != "Presences"){
+      setDisplayBtns(!displayBtns)
     }
   }
   return (
     <tr onClick={displayProfile}>
-      {!displayBtns && (
+      {!displayBtns  && (
         <>
           {
-            props.full_name ? (
+            props.full_name && (
               <td>{props.full_name}</td>
-            ) :<td></td>
+            ) 
           }
           {
-            props.address ? (
+            props.address && (
               <td>{props.address}</td>
-            ):<td></td>
+            )
           }
           {
-            props.university ? (
+            props.university && (
               <td>{props.university}</td>
-            ) : <td></td>
+            ) 
           }
           {
-            props.company ? (
+            props.company && (
               <td>{props.company}</td>
-            ) : <td></td>
+            ) 
           }
           {
-            props.faculty ? (
+            props.faculty && (
               <td>{props.faculty}</td>
-            ): <td></td>
+            )
           }
           {
-            props.dep ? (
+            props.dep &&(
               <td>{props.dep}</td>
-            ) : <td></td>
+            ) 
           }
           {
-            props.day ? (
-              <td>{changDateFormat(props.day)}</td>
-            ) : <td></td>
+            props.day && (
+              <td>{changeDateFormat(props.day)}</td>
+            )
           }
           {
-            props.present!= null ? (
+            props.present!= null && (
               <td>{props.present== true ? "Yes" : "No"}</td>
-            ) : <td></td>
+            ) 
           }
           {
-            props.profil ? (
+            props.profil && (
               <>
               <td>
                 <div  className={oneLine.profil}>
-        <Button content="Profil" color="white"  dataBsToggle="modal"  dataBsTarget={`#${props.profil}`} />
+        <Button content="Profil" color="white"  dataBsToggle="modal"  dataBsTarget={`#${props.profil}`}  onMouseOut={()=>setDisplayBtns(false)}/>
         </div>
               </td>
               <Profil modalId={props.profil}
@@ -98,12 +121,12 @@ function OneDataSet(props) {
               enrolled ={props.enrolled}/>
 
               </>
-            ) :<td></td>
+            ) 
           }
          
         </>
       )}
-      {displayBtns && (
+      {displayBtns   &&(
         <>
           <td colSpan={props.length}>
             <div>
@@ -117,7 +140,7 @@ function OneDataSet(props) {
               {
                 !props.day && !props.present &&(
                   <div>
-                <Button content="Delete" color="clear" dataBsToggle="modal" />
+                <Button content="Delete" color="clear"   onClick={deleteData}/>
               </div>
                 )
               }

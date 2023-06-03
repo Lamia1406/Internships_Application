@@ -43,39 +43,9 @@ const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber
     <meta name='description' content='Internships'/>
    </Helmet>
     <div className={internshipsClass.page}>
-<div className={`${internshipsClass.section} row`}>
-  <div className={`col-lg-6 ${internshipsClass.left}`}>
+<div className={`${internshipsClass.section} `}>
   <h3 className={internshipsClass.h3}> Internships</h3>
-  {(user.userType == "webmaster" || user.userType == "student") &&(
-         <div className={internshipsClass.sorting}>
-         <span className={internshipsClass.allPosts}>All Post</span>
-         <div className={`dropdown ${internshipsClass.sortBy}`}>
-       <button className={`dropdown-toggle ${internshipsClass.sortBtn}`} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        Sort by Year <img className={internshipsClass.icon} src={Sort} alt='sort icon'/>
-       </button>
-       <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-         <li className={internshipsClass.year}><button classname={`dropdown-item ${internshipsClass.year}`} >Any</button></li>
-         <li className='dropdown-divider'></li>
-         <li className={internshipsClass.year}><button classname={`dropdown-item `} >2023</button></li>
-         <li className={internshipsClass.year}><button classname={`dropdown-item `} >2022</button></li>
-         <li className={internshipsClass.year}><button classname={`dropdown-item `} >2020</button></li>
-       </ul>
-     </div>
-     
-     
-        </div>
-  )}
-  </div>
-  {(user.userType == "webmaster" || user.userType == "student") && (
-         <div className={`col-lg-6 ${internshipsClass.right}`}>
-         <form className={`${internshipsClass.inputDiv} d-flex`}>
-         <Input placeholder="search by keyword..."/>
-         <button className={internshipsClass.searchIcon} type="submit"><img src={Search} alt='search icon' /></button>
-         </form>
-       
-         </div>       
-  )
-  }
+  
 
  
      </div>
@@ -89,10 +59,13 @@ const getAllPosts = `http://localhost:4000/post/allPosts?pageNumber=${pageNumber
           {posts.map((p) => (
       
             p.isOffer == true && (
-                  <Internship company={p.company.company_name} image={p.image} title={p.title} id={p._id}
+                  <Internship 
+                  {...(p.company ? { company: p.company.full_name } : {})}
+                  image={p.image} title={p.title} id={p._id}
                   description={p.description} published={`Last Updated at : ${new Date(p.updatedAt).toLocaleDateString("en-GB").split('/').reverse().join('/')}`}
-                  user={user.userType} 
+                  user={user.userType}
                   />
+                 
             )
       
         ))}

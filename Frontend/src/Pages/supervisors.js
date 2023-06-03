@@ -59,7 +59,8 @@ function Supervisors(){
         image = {supervisor.image}
         length={Object.keys(supervisor).length}
         user = "supervisor"
-
+        table = "Supervisors"
+        id={supervisor._id}
         />
       ))
     }

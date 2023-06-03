@@ -42,11 +42,21 @@ function YourApplication() {
                                                 application && application.map(
                                                       app => {
                                                             return <InternshipForms approvedByResponsible={app.approvedByResponsible} rejectionMessage={app.rejectionMessage}
-                                                                  studentFullName={app.student.full_name} cardNumber={app.student.student_card_number} socialNumber={app.student.social_security_number}
-                                                                  levelOfStudy={app.student.level_of_study} theme={app.post.title} company={app.post.company.company_name} startingDate={app.startingDate}
-                                                                  endingDate={app.endingDate} supervisorEmail={app.supervisor.email} supervisorName={app.supervisor.full_name} approvedBySupervisor={app.approvedBySupervisor}
+                                                            {...(app.student ?  {studentFullName:app.student.full_name} : {})}
+{...(app.student ? {cardNumber :app.student.student_card_number} : {})}
+{...(app.student ? {socialNumber :app.student.social_security_number} : {})}
+{...(app.student ?  {levelOfStudy :app.student.level_of_study} : {})}
+{...(app.post ? {theme :app.post.title}  : {})}
+{...(app.post ?{company:app.post.company.full_name}   : {})}
+{...(app.post ?{studentId:app.student._id}   : {})}
+{...(app.supervisor  ?{supervisorEmail :app.supervisor.email}    : {})}
+{...(app.supervisor ?{supervisorName:app.supervisor.full_name}     : {})}
+
+
+                                                            startingDate={app.startingDate}
+                                                                  endingDate={app.endingDate} approvedBySupervisor={app.approvedBySupervisor}
                                                                   responsibleName={responsible.full_name} responsibleEmail={responsible.email} responsibleFax={responsible.fax} responsiblePhone={responsible.phone}
-                                                                  internshipId={app._id} isOffer={true} type="student"
+                                                                  internshipId={app._id} isOffer={true} type="student" 
                                                             />
                                                       }
                                                 )
@@ -55,12 +65,15 @@ function YourApplication() {
                                                 application2 && application2.map(
                                                       app => {
 
-                                                            return <InternshipForms approvedByResponsible={app.approvedByResponsible} rejectionMessage={app.rejectionMessage}
-                                                                  studentFullName={app.student.full_name} cardNumber={app.student.student_card_number} socialNumber={app.student.social_security_number}
-                                                                  levelOfStudy={app.student.level_of_study} theme={app.theme} company={app.company} startingDate={app.startingDate}
+                                                            return <InternshipForms approvedByResponsible={app.approvedByResponsible} message={app.rejectionMessage}
+                                                            {...(app.student ?  {studentFullName:app.student.full_name} : {})}
+                                                            {...(app.student ? {cardNumber :app.student.student_card_number} : {})}
+                                                            {...(app.student ? {socialNumber :app.student.social_security_number} : {})}
+                                                            {...(app.student ?  {levelOfStudy :app.student.level_of_study} : {})}
+                                                             theme={app.theme} company={app.company} startingDate={app.startingDate}
                                                                   endingDate={app.endingDate} supervisorEmail={app.supervisor_email} supervisorName={app.supervisor_name} approvedBySupervisor={app.approvedBySupervisor}
                                                                   responsibleName={responsible.full_name} responsibleEmail={responsible.email} responsibleFax={responsible.fax} responsiblePhone={responsible.phone}
-                                                                  internshipId={app._id} isOffer={false} type="student"
+                                                                  internshipId={app._id} isOffer={false} type="student" 
                                                             />
                                                       }
                                                 )}

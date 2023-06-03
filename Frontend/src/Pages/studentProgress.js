@@ -43,31 +43,36 @@ function StudentProgress(){
             
                <div className={`${requestClass.section} ${requestClass.internships}`}>
                {
-                user.userType== "department responsible"  &&  internships &&  internships.map(
-                           (app) => {
-                             return <InternshipForms approvedByResponsible = {app.approvedByResponsible}  company= {app.post.company.full_name}
-                              studentFullName = {app.student.full_name} cardNumber ={app.student.student_card_number} socialNumber ={app.student.social_security_number}
-                              levelOfStudy ={app.student.level_of_study} theme={app.post.title}  startingDate={app.startingDate}
-                              endingDate = {app.endingDate} supervisorEmail ={app.supervisor.email} supervisorName= {app.supervisor.full_name} approvedBySupervisor={app.approvedBySupervisor}
-                              internshipId={app._id} type= "responsible"
-                              />
-                           }
-                     )
-               }
-               {
-                user.userType== "supervisor"  &&  internships &&  internships.map(
-                           (app,index) => {
+                  internships &&  internships.map(
+                           (app, index) => {
                             const responsible = responsibles[index]
-                             return <InternshipForms type="supervisor" approvedByResponsible = {app.approvedByResponsible} company= {app.post.company.full_name}
-                              studentFullName = {app.student.full_name} cardNumber ={app.student.student_card_number} socialNumber ={app.student.social_security_number}
-                              levelOfStudy ={app.student.level_of_study} theme={app.post.title}  startingDate={app.startingDate}
-                              endingDate = {app.endingDate} responsibleEmail = {responsible.email} responsibleName=  {responsible.full_name} approvedBySupervisor={app.approvedBySupervisor}
-                              responsiblePhone = {responsible.phone} responsibleFax = {responsible.fax} studentId={app.student._id}
+                             return <InternshipForms 
+                             
+{...(app.student ?  {studentFullName:app.student.full_name} : {})}
+{...(app.student ? {cardNumber :app.student.student_card_number} : {})}
+{...(app.student ? {socialNumber :app.student.social_security_number} : {})}
+{...(app.student ?  {levelOfStudy :app.student.level_of_study} : {})}
+{...(app.post ? {theme :app.post.title}  : {})}
+{...(app.post ?{company:app.post.company.full_name}   : {})}
+{...(app.post ?{studentId:app.student._id}   : {})}
+{...(app.supervisor && user.userType== "department responsible" ?{supervisorEmail :app.supervisor.email}    : {})}
+{...(app.supervisor && user.userType== "department responsible" ?{supervisorName:app.supervisor.full_name}     : {})}
+{...( user.userType== "department responsible" ?{type:"responsible"}     : {type:"supervisor"})}
+{...( user.userType== "supervisor" ?{responsibleEmail:responsible.email}     : {})}
+{...( user.userType== "supervisor" ?{responsibleName:responsible.full_name}     : {})}
+{...( user.userType== "supervisor" ?{responsiblePhone:responsible.phone}     : {})}
+{...( user.userType== "supervisor" ?{responsibleFax:responsible.fax}     : {})}
+endingDate = {app.endingDate}
+startingDate = {app.startingDate}
+approvedBySupervisor={app.approvedBySupervisor}
+approvedByResponsible={app.approvedByResponsible}
+internshipId={app._id} 
 
                               />
                            }
                      )
                }
+             
               
                
          
