@@ -1,0 +1,99 @@
+.page{
+    background-color:#404F7F;
+    height: 100vh;
+    padding: 32px;
+}
+.page2{
+    background-color: #D6DAF6;
+   height:calc(100vh - 64px);
+    padding: 32px;
+    border-radius: 8px;
+
+}
+.page3{
+    border-radius: 8px;
+    height: calc(100vh - 128px);
+}
+.page4A{
+    height: 50%;
+}
+
+.welcome{
+    margin-top: 16px;
+    text-align: center;
+}
+.weclome h1{
+    font-size: var(--H1);
+    color: var(--BLACK);
+}
+.welcome p{
+    font-size: var(--H6);
+    color: var(--DARKGREY);
+}
+.page4B{
+    height: 60%;
+    background-color: var(--WHITE);
+    padding: 16px;
+    border-radius: 8px;
+    
+}
+
+
+.login{
+    width: 35%;
+    margin-bottom: 16px;
+}
+
+.forms{
+    display: flex;
+    justify-content: center;
+}
+.loginbtns{
+    width:30%;
+    margin: 0 auto;
+
+}
+.loginbtns div{
+    margin: 16px 0;
+    padding: 0;
+   
+}
+.connection{
+    border-top: 1px solid var(--GREY);
+    width: 40%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+@media only screen and (max-width:990px) {
+    .page{
+        padding: 16px;
+    }
+    .page2{
+       height:calc(100vh - 32px);
+        padding: 16px;    
+    }
+    .page3{
+        border-radius: 8px;
+        height: calc(100vh - 64px);
+    }
+   
+    .login{
+        width: 100%;
+        margin-bottom: 16px;
+    }
+    
+    .loginbtns{
+        width:80%;
+    }
+    .welcome{
+        padding: 128px 0;
+    }
+}
+  
+  
+  
+  
+
+
+

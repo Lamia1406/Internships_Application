@@ -24,12 +24,17 @@
   
   .calendar button:enabled:hover {
     cursor: pointer;
-    background-color: var(--DARKGREY);
-    color: var(--WHITE);
+    background-color: var(--GREY);
+    border: 1px solid var(--DARKGREY);
+    color: var(--BLACK);
     border-radius: 8px;
   }
   .calendar div {
     background-color: white;
+    
+}
+.calendar div div button {
+  margin: 4px auto;
 }
   .chosenDateBtn{
     background-color: var(--PRIMARY);
@@ -43,7 +48,7 @@
 
   @media only screen and (max-width:990px) { 
     .calendarDiv {
-        padding: 0 16px;
+        padding: 0 ;
       }
       
     

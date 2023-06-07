@@ -7,24 +7,15 @@ import facebook from '../Images/facebook.png';
 import twitter from '../Images/twitter.png';
 import ntic from '../Images/ntic.png'; 
 import footerClass from '../Styles/partials/footer.module.css';
-import { useState,useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 function Footer (){
-  const [user,setUser]=useState("")
-  useEffect(() => {
-    axios.get('http://localhost:4000/v1/user/profil')
-      .then(response => {
-        setUser(response.data.user);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  const userType = jwtDecode(localStorage.getItem("token")).userType
+ 
     return(
      <>
      {
-      (user.userType == "student" || user.userType == "supervisor" )&& (
+      (userType == "student" || userType == "supervisor" )&& (
         <div className={`row ${footerClass.footer}`}>
         <div className={`${footerClass.slogan} col-lg-5`}>
                <img src={logo} alt='logo'/>

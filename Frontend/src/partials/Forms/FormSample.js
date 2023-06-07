@@ -4,6 +4,7 @@ import Button from '../button';
 import Input from '../input';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import changeDateFormat from '../../features/changeDateFormat'
 import { toast } from 'react-toastify';
 import calendarPic from '../../Images/calendar.png';
 import requestClass from '../../Styles/partials/Forms/applyForInternship.module.css'
@@ -11,10 +12,7 @@ import { NavLink,useLocation } from 'react-router-dom';
 import TextArea from '../textarea';
 import CalendarDiv from '../calendar';
 function FormSample(props) {
-
-    const user = jwtDecode(localStorage.getItem("token"))
-    
-    
+    const user = jwtDecode(localStorage.getItem("token"))    
     const getAllSupervisors = "http://localhost:4000/user/allSupervisors"
     const [supervisors, setSupervisors] = useState([])
     const [startingDate, setStartingDate] = useState()
@@ -35,7 +33,6 @@ function FormSample(props) {
     const [initiative,setInitiative]=useState(0)
       
     const fetchSupervisors = async () => {
-  
         const res = await axios.get(`${getAllSupervisors}`);
         if (res.data) {
           setSupervisors(res.data.supervisors.filter((s)=> s.company != null))
@@ -131,14 +128,14 @@ function FormSample(props) {
                         {
                         props.isOffer== false && (
                             <>
-                            <div className={`row ${requestClass.inputDiv}`}>
-                      <p className='col-lg-3'>Theme</p>
+                            <div className={`row ${requestClass.inputDiv} gx-5`}>
+                      <div className={`col-lg-3 ${requestClass.title}`}>Theme</div>
                       <div className={`col-lg-9 ${requestClass.field}`}>
                       <Input placeholder="please fill this form" type='text' value={theme} onChange={(e)=>setTheme(e.target.value)} />
                       </div>
                     </div>
-                    <div className={`row ${requestClass.inputDiv}`}>
-                      <p className='col-lg-3'>Company</p>
+                    <div className={`row ${requestClass.inputDiv} gx-5`}>
+                      <div className={`col-lg-3 ${requestClass.title}`}>Company</div>
                       <div className={`col-lg-9 ${requestClass.field}`}>
                       <Input placeholder="please fill this form" type='text' value={company} onChange={(e)=>setCompany(e.target.value)} />
 
@@ -147,41 +144,41 @@ function FormSample(props) {
                             </>
                         )
                     }
-                    <div className={`row ${requestClass.inputDiv}`}>
-                  <p className='col-lg-4'>Starting Date</p>
-                  <div className={`col-lg-8 ${requestClass.field}`}>
-                    <Input value={startingDate} disabled />
-                    <button type="button" className={`btn btn-primary} ${requestClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <div className={`row ${requestClass.inputDiv} gx-5`}>
+                  <div className={`col-lg-3 ${requestClass.title}`}>Starting Date</div>
+                  <div className={` col-lg-9 ${requestClass.field} `}>
+                    <Input value={startingDate == null ? "" : changeDateFormat(startingDate)} disabled />
+                    <button type="button" className={`btn btn-primary} ${requestClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target={`#startingModal${internship}`}>
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate}/>
+                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate} id={`startingModal${internship}`}/>
 
 
                   </div>
                 </div>
-                <div className={`row ${requestClass.inputDiv}`}>
-                  <p className='col-lg-4'>Ending Date</p>
-                  <div className={`col-lg-8 ${requestClass.field}`}>
-                    <Input placeholder={endingDate} disabled />
-                    <button type="button" className={`btn btn-primary} ${requestClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#endingModal">
+                <div className={`row ${requestClass.inputDiv} gx-5`}>
+                  <div className={`col-lg-3 ${requestClass.title}`}>Ending Date</div>
+                  <div className={` col-lg-9 ${requestClass.field}`}>
+                    <Input placeholder={endingDate == null ? "" : changeDateFormat(endingDate)} disabled />
+                    <button type="button" className={`btn btn-primary} ${requestClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target={`#endingModal${internship}`}>
                       <img src={calendarPic} alt='calendar' />
                     </button>
 
-                    <CalendarDiv onChange={(e) => setEndingDate(e)} minDate={startingDate} value={endingDate}/>
+                    <CalendarDiv onChange={(e) => setEndingDate(e)} minDate={startingDate} value={endingDate} id ={`endingModal${internship}`}/>
 
                   </div>
                 </div>
                 {
                     props.isOffer == false && (
                         <>
-                          <div className={`row ${requestClass.inputDiv}`}>
-                    <p className='col-lg-3'>Internship Supervisor</p>
+                          <div className={`row ${requestClass.inputDiv} gx-5`}>
+                    <div className={`col-lg-3 ${requestClass.title}`}>Internship Supervisor</div>
                     <div className={`col-lg-9 ${requestClass.field}`}>
                       <Input placeholder="please fill this form" type='text' value={supervisor_name} onChange={(e)=>setSupervisorName(e.target.value)} />
                     </div>
                   </div>
-                  <div className={`row ${requestClass.inputDiv}`}>
-                    <p className='col-lg-3'>Internship Supervisor Email</p>
+                  <div className={`row ${requestClass.inputDiv} gx-5`}>
+                    <div className={`col-lg-3 ${requestClass.title}`}>Internship Supervisor Email</div>
                     <div className={`col-lg-9 ${requestClass.field}`}>
                       <Input placeholder="please fill this form" type='email' value={supervisor_email} onChange={(e)=>setSupervisorEmail(e.target.value)} />
                 
@@ -193,8 +190,9 @@ function FormSample(props) {
                 {
                   props.isOffer == true && (
                     <div className={`row ${requestClass.inputDiv}`}>
-                    <p className='col-lg-4'>Internship Supervisor</p>
-                    <select className={`col-lg-8 ${requestClass.select}`} onChange={(e) => setSupervisor(e.target.value)} value={supervisor}>
+                    <div className={`col-lg-3 ${requestClass.title}`}>Internship Supervisor</div>
+                  <div className={`col-lg-9  ${requestClass.field}`}>
+                  <select className={`${requestClass.select} `} onChange={(e) => setSupervisor(e.target.value)} value={supervisor}>
                         <option disabled value="" > Select an Internship Supervisor </option>
                         {
                          supervisors.filter((s) => s.company.full_name == `${props.company}`).map((s) => (
@@ -213,6 +211,7 @@ function FormSample(props) {
   
   
                     </select>
+                  </div>
                   </div>
                   )
                 }

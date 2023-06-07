@@ -1,9 +1,8 @@
-import signupClass from "../Styles/signup.module.css"
+import signupClass from "../Styles/main/signup.module.css"
 import logo from '../Images/logo.png'
 import Input from "../partials/input";
 import  Button from "../partials/button";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Helmet } from "react-helmet";
 import {NavLink} from 'react-router-dom'
 import {useState,useEffect} from 'react';
@@ -124,11 +123,11 @@ function Signup(){
                         <div>
                             <div className={signupClass.loginbtns}>
                             <div>
-                            <Button content="Sign Up" color="signup" onClick={submitForm} />
+                            <Button content="Sign Up" color="signupDark" onClick={submitForm} />
                             </div>
                            <div>
                            <NavLink to="/login">
-                           <Button content="Already Have an Account" color="accountExist"/>
+                           <Button content="Already Have an Account" color="signupLight"/>
                            </NavLink>
                            </div>
                             </div>

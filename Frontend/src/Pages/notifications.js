@@ -1,11 +1,12 @@
-import React, { useState,useEffect } from 'react';
-import notificationsClass from '../Styles/notifications.module.css'
-import { Helmet } from 'react-helmet';
+import { useState,useEffect } from 'react';
+import notificationsClass from '../Styles/main/notifications.module.css'
 import OneDayNotification from '../partials/DatabasePartials/oneDayNotification';
 import OneNotification from '../partials/DatabasePartials/oneNotification';
-import Sort from '../Images/downArrow.svg';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import Layout from '../features/Layout';
+import changeDateFormat from '../features/changeDateFormat';
+import NotAvailable from '../partials/not_available';
 function Notifications()
 {
   const token=jwtDecode(localStorage.getItem("token"))
@@ -33,45 +34,6 @@ function Notifications()
   const notificationsByDate = uniqueDates.map(date =>
     notifications.filter(obj => obj.date.substr(0, 10) === date).map(obj => ({ ...obj }))
   );
-  const changDateFormat = (d) => {
-    let date = new Date(Date.UTC(
-      parseInt(d.substring(0, 4)),  
-      parseInt(d.substring(5, 7)) - 1,  
-      parseInt(d.substring(8, 10)),  
-      parseInt(d.substring(11, 13)), 
-      parseInt(d.substring(14, 16)), 
-      parseInt(d.substring(17, 19)), 
-      parseInt(d.substring(20, 23))  
-    ));
-  
-    date = date.toUTCString();
-    console.log(date);
-  
-    const today = new Date();
-    const year = date.substring(12, 16);
-    const month = date.substring(8, 11);
-    const day = date.substring(5, 7);
-  
-    if (
-      today.getFullYear() == year &&
-      today.getMonth() + 1 == new Date(Date.parse(month + " 1, 2000")).getMonth() + 1 &&
-      today.getDate() == day
-    ) {
-      return "today";
-    }
-    
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-    if (
-      yesterday.getFullYear() == year &&
-      yesterday.getMonth() + 1 == new Date(Date.parse(month + " 1, 2000")).getMonth() + 1 &&
-      yesterday.getDate() == day
-    ) {
-      return "yesterday";
-    }
-  
-    return `${year}/${month}/${day}`;
-  };
   
   const changeTimeFormat = (d)=>{
         const date = new Date(d);
@@ -90,45 +52,36 @@ function Notifications()
         
   }
   return (
-  <>
-    <Helmet>
-    <title>ConnectU | Notifications</title>
-    <meta name='description' content='Notifications'/>
-   </Helmet>
-    <div className={`${notificationsClass.page} container-fluid`}>
-        <div className={` ${notificationsClass.section} `}>
-        <h2 className={notificationsClass.h2}>Notifications</h2>
-        </div>
+  
+  <Layout pageTitle = "Notifications" header = "Notifications" content ={
+    
+      notificationsByDate && notificationsByDate.length != 0 ? (
         <div className={notificationsClass.section}>
-        <div className={`dropdown ${notificationsClass.sortBy}`}>
-  <button className={`dropdown-toggle ${notificationsClass.sortBtn}`} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-   last 30 Days <img className={notificationsClass.icon} src={Sort} alt='sort icon'/>
-  </button>
-  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <li className={notificationsClass.category}><button classname={`dropdown-item `} >last 24 Hours</button></li>
-    <li className={notificationsClass.category}><button classname={`dropdown-item `} >last 7 Days</button></li>
-    <li className={notificationsClass.category}><button classname={`dropdown-item `} >last 30 Days</button></li>
-  </ul>
-</div>
 {
-  Object.values(notificationsByDate).map(specialDate => (
-    <OneDayNotification date = {changDateFormat(specialDate[0].date)} notifications ={
-    Object.values(specialDate).map(notification =>{
-      return <OneNotification notif ={notification.message} time = {changeTimeFormat(notification.date)}/>
-    }
-      )
-    }
-    />
-  ))
+Object.values(notificationsByDate).map(specialDate => (
+<OneDayNotification date = {changeDateFormat(specialDate[0].date)} notifications ={
+Object.values(specialDate).map(notification =>{
+  return <OneNotification notif ={notification.message} time = {changeTimeFormat(notification.date)}/>
 }
-          
-               
-            
-          
+  )
+}
+/>
+))
+}
+      
+           
+        
+      
 
-        </div>
+    </div>
+      ) :
+      <NotAvailable message= "No notifications available in the moment"/>
+    
+  }/>
+   
+       
 
-    </div></>
+    
   );
 }
 export default Notifications;

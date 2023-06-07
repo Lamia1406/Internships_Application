@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import requestClass from '../Styles/applyForInternship.module.css'
+import requestClass from '../Styles/main/applyForInternship.module.css'
 import FormSample from '../partials/Forms/FormSample';
+import Layout from '../features/Layout';
 function ApplyForInternship() {
   return (
-    <div className={`${requestClass.page} container-fluid`}>
-      <div className={requestClass.main}>
-        <div className={requestClass.section}>
-          <h2 className={requestClass.pageTitle}>Internship Application</h2>
-        </div>
-        <div className={requestClass.section}>
-         <FormSample destination= "/internships" isOffer={false} formType="application" />
-          </div>
-        </div>
-
-
-      </div>
-
+    <Layout pageTitle = "Application Form" header = "Internship Application" content ={
+      <div className={requestClass.section}>
+      <FormSample destination= "/internships" isOffer={false} formType="application" />
+       </div>
+    }/>
   );
 }
 export default ApplyForInternship; 

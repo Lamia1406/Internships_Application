@@ -1,34 +1,36 @@
-
+.newRecord{
+ width: fit-content;
+ margin: 16px;
+ margin-bottom: 0;
+ float: right;
+ 
+}
 .btn {
-  padding: 16px;
+  padding: 8px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  font-size: var(--H6);
-  color: var(--BLACK);
-  border: none;
+  color: var(--DARKBLUE);
+  border: 1px solid var(--PRIMARY);
   width: 100%;
+  background-color: #d0d4f4;
 
 }
 
   table thead th
   {
-    background-color: rebeccapurple;
-   padding:  32px 0!important;
+   padding:  32px !important;
    border-top:none ;
    color: var(--DARKGREY);
    font-size: var(--BodyR);
    text-align: center;
    vertical-align: middle;
-
  }
-
-
  table tbody td {
    font-size: var(--BodyR);
    border-top: 1px solid var(--GREY) !important;
-   padding:8px 8 !important;
-   text-align: center;
+   padding:8px 16px  !important;
    vertical-align: middle;
+   text-align: left;
  }
  table tbody td div{
   display: flex;
@@ -47,12 +49,6 @@
     cursor: pointer;
    background-color: rgb(3, 10, 35,0.075);
  }
-.newRecord{
- width: fit-content;
- margin: 16px;
- margin-bottom: 0;
- float: right;
-}
 .name{
   width: max-content;
   margin: 16px auto;

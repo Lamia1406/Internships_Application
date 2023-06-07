@@ -1,21 +1,18 @@
-.page{
-    padding: 0 32px;
-}
+
 
 .section{
     padding: 64px 0;
 }
-#welcome{
-    font-size: var(--H4);
-    color: var(--BLACK);
-}
+
 #notifications{
     text-align: center;
+    
 }
 .h3{
     color: var(--DARKBLUE);
-    font-size: var(--H3);
+    font-size: var(--H4);
     margin-bottom: 24px;
+    text-align: center;
 }
 .notif{
     color: var(--DARKGREY);
@@ -28,14 +25,8 @@
     width: max-content;
     margin: 0 auto;
     margin-top: 32px;
+}
 
-}
-.progressDiv{
-    width: 50%;
-}
-.btn2{
-    width: max-content;
-}
 .pieChartTitle{
     margin: 0 auto;
     margin-bottom: 32px;
@@ -48,14 +39,14 @@
     margin: 0 auto;
 }
 .pieChartPercentage{
-    color: var(--PRIMARY);
+    color: #D5A6BD;
     font-size: var(--BodyR);
     width: fit-content;
     margin: 0 auto;
     margin-top: 32px;
 }
 .pieChartPercentage2{
-    color: #7F00FF;
+    color: #FFC857;
     font-size: var(--BodyR);
     width: fit-content;
     margin: 0 auto;
@@ -79,15 +70,11 @@
 
 @media only screen and (width <= 990px) {
     
-    #welcome{
-        font-size: var(--H6);
-    }
+   
     .h3{
-        font-size: var(--H4);
+        font-size: var(--H6);
     } 
-    .progressDiv{
-        width: 100%;
-    }
+    
     .pieChartTitle{
         margin-top: 32px;
     }

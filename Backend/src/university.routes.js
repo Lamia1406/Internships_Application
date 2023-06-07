@@ -99,6 +99,21 @@ router.get("/allDatabase",async (req,res)=>{
         err.message
          }
      })
+router.get("/allUniversities",async (req,res)=>{
+    try{
+        const universities = await University.find();
+        const companies = await Company.find();
+        res.status(StatusCodes.OK).send(
+            {
+                status:true,
+                universities
+            }
+            )
+    }
+    catch(err){
+        err.message
+         }
+     })
 router.get("/allDepartments",async (req,res)=>{
     try{
         const departments = await Department.find().select(
@@ -110,6 +125,21 @@ router.get("/allDepartments",async (req,res)=>{
             {
                 status:true,
                 departments,
+            }
+            )
+    }
+    catch(err){
+        err.message
+         }
+     })
+router.get("/allFaculties",async (req,res)=>{
+    try{
+        const faculties = await Faculty.find()
+        
+        res.status(StatusCodes.OK).send(
+            {
+                status:true,
+                faculties,
             }
             )
     }
@@ -184,7 +214,63 @@ router.delete('/deleteDepartment/:id', async(req, res,next) => {
          next(err)
         }
        });
-   
-
+router.put("/modifyUniversity/:id",async(req,res,next)=> {
+        try{ 
+         const userId= req.params.id;
+         const university = await University.findOneAndUpdate({_id : userId}
+             ,{
+                 full_name: req.body.full_name,
+                 address: req.body.address
+             },
+            
+             
+             )
+              res.status(StatusCodes.OK).send({
+                 status:true
+              })
+             
+        }
+        catch(err){
+         next(err)
+        }
+     
+             }
+     )
+router.put("/modifyFaculty/:id",async(req,res,next)=> {
+        try{ 
+         const userId= req.params.id;
+         const university = await Faculty.findOneAndUpdate({_id : userId}
+             ,{
+                 ...req.body
+             },   
+             )
+              res.status(StatusCodes.OK).send({
+                 status:true
+              })
+             
+        }
+        catch(err){
+         next(err)
+        }
+             }
+     )
+router.put("/modifyDepartment/:id",async(req,res,next)=> {
+        try{ 
+         const userId= req.params.id;
+         const department = await Department.findOneAndUpdate({_id : userId}
+             ,{
+                 ...req.body
+             },   
+             )
+              res.status(StatusCodes.OK).send({
+                 status:true
+              })
+             
+        }
+        catch(err){
+         next(err)
+        }
+             }
+     )
 
 export default router

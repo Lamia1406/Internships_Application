@@ -7,7 +7,8 @@ import Button from "../button";
  import { useState,useEffect } from 'react';
  import TextArea from "../textarea";
 import calendarPic from '../../Images/calendar.png'
-import Calendar from "react-calendar";
+import CalendarDiv from "../calendar";
+import changeDateFormat from "../../features/changeDateFormat";
 function CreateOneDataRecord(props){
     const getAllDepartmentsURL = "http://localhost:4000/university/allDepartments"
     const getAllCompanies = "http://localhost:4000/post/allCompanies"
@@ -37,14 +38,12 @@ function CreateOneDataRecord(props){
      const fetchDepartments = async () => {
         const res = await axios.get(`${getAllDepartmentsURL}`);
         if(res.data){
-            console.log(res.data)
           setDepartments(res.data.departments)
         }
       }
       const fetchCompanies = async () => {
         const res = await axios.get(`${getAllCompanies}`);
         if(res.data){
-            console.log(res.data)
           setCompanies(res.data.companies)
         }
       }
@@ -87,7 +86,6 @@ function CreateOneDataRecord(props){
         
 
       },[]);
-    console.log(createDataURL)
     const [full_name,setFullName]=useState("");
     const [address,setAddress]=useState("");
     const [university,setUniversity] = useState("")
@@ -159,7 +157,7 @@ return (
                     <div className={`row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>University</div>
             <div className={`${createUniClass.description} col-lg-9`}>
-            <select className={createUniClass.select} onChange={(e)=> setUniversity(e.target.value)} value={university} defaultValue='university'>
+            <select className={createUniClass.select} onChange={(e)=> setUniversity(e.target.value)} value={university} >
       <option disabled  value="" > Select University</option>
       {
       props.universities.map((u) => 
@@ -239,7 +237,7 @@ return (
                     <div className={`row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>Faculty</div>
             <div className={`${createUniClass.description } col-lg-9`}>
-            <select className={createUniClass.select} onChange={(e)=> setFaculty(e.target.value)} value={faculty} defaultValue='faculty'>
+            <select className={createUniClass.select} onChange={(e)=> setFaculty(e.target.value)} value={faculty} >
       <option disabled  value="" > Select Faculty</option>
       {
       props.faculties.map((u) => 
@@ -279,7 +277,7 @@ return (
     : ""
     }</div>
            {
-            props.table != "Posts" && (
+            (props.table != "Posts"  && props.table != "Presences"  ) && (
                 <div className={`${createUniClass.description} col-lg-9`}>
                 <Input placeholder="fill this input" type="text" onChange={(e)=> setFullName(e.target.value)} value={full_name}/>
             </div>
@@ -336,19 +334,19 @@ return (
                 <div className={` row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>Student Card Number</div>
             <div className={`${createUniClass.description} col-lg-9`}>
-                <Input placeholder="fill this input" type="number"  onChange={(e)=> setCardNumber(e.target.value)} />
+                <Input placeholder="fill this input" type="number"  onChange={(e)=> setCardNumber(e.target.value)}  value={student_card_number}/>
             </div>
             </div>
            <div className={`row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>Social Security Number</div>
             <div className={`${createUniClass.description} col-lg-9`}>
-                <Input placeholder="fill this input" type="number" onChange={(e)=> setSecurityNumber(e.target.value)} />
+                <Input placeholder="fill this input" type="number" onChange={(e)=> setSecurityNumber(e.target.value)} value={social_security_number} />
             </div>
             </div>
            <div className={`row ${createUniClass.profilDetails} `}>
             <div className={`${createUniClass.title} col-lg-3`}>Study Level</div>
             <div className={`${createUniClass.description} col-lg-9`}>
-            <select className={createUniClass.select} onChange={(e)=> setLevelOfStudy(e.target.value)} defaultValue="level of study">
+            <select className={createUniClass.select} onChange={(e)=> setLevelOfStudy(e.target.value)} defaultValue="level of study" >
       <option disabled value="level of study"> Level of Study </option>
       <option className={createUniClass.category} value="L3"> L3</option>
       <option className={createUniClass.category} value="M2"> M2</option>
@@ -383,7 +381,7 @@ return (
                 <div className={`row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>Day </div>
             <div className={`${createUniClass.description} col-lg-9`}>
-            <Input  disabled value={day}/>
+            <Input  disabled value={changeDateFormat(day)} />
                              <button type="button" className={`btn btn-primary} ${createUniClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#calendarforpresence">
                                    <img src={calendarPic} alt='calendar icon' />
                                  </button>
@@ -425,17 +423,8 @@ return (
       </div>
     
     </div>
-     <div className="modal fade" id="calendarforpresence" tabindex="-1" aria-labelledby="calendarforpresenceLabel" data-bs-backdrop= "static" aria-hidden="true">
-     <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-       <div className={`modal-content ${createUniClass.calendarDiv}`}>
-         <div className={`modal-body  `}>
-           <Calendar onChange={(e) => setDay(e)} className={createUniClass.calendar} calendarType='Arabic' minDate={new Date(props.startingDate)} maxDate={new Date(props.endingDate)} value={day} />
-           <button className={createUniClass.chosenDateBtn} data-bs-target={`#${props.id}`} data-bs-toggle="modal" > Submit</button>
-
-         </div>
-       </div>
-     </div>
-   </div>
+    <CalendarDiv  onChange={(e) => setDay(e) } minDate={new Date(props.startingDate)} maxDate={new Date(props.endingDate)} value={day} id={"calendarforpresence"} footer = {props.id}/>
+    
     </>
    
 )

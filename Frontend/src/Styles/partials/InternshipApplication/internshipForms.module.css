@@ -1,11 +1,14 @@
+.oneInternship {
+    padding: 0 !important;
+    margin: 32px 0 !important;
+    width: 100% !important;
+}
 .form {
     border-radius: 16px;
     box-shadow: -4px 4px 12px var(--GREY);
     margin-bottom: 16px;
     padding-bottom: 16px;
 }
-
-
 .formTitle {
     color: var(--DARKBLUE);
     font-size: var(--H6);
@@ -62,11 +65,10 @@
     padding: 16px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    font-size: var(--H6);
-    color: var(--BLACK);
-    border: none;
     width: 100%;
-
+    color: var(--DARKBLUE);
+  border: 1px solid var(--PRIMARY);
+    background-color: #d0d4f4;
 }
 
 
@@ -74,12 +76,11 @@
     margin: 0;
     display: flex;
     justify-content: space-between;
-
     margin-right: 32px;
 }
 
 .name {
-    width: max-content;
+    width: fit-content;
     margin: 16px auto;
     font-size: var(--H5);
 
@@ -131,6 +132,9 @@
 }
 
 @media only screen and (max-width: 990px) {
+    .form{
+        padding: 16px;
+    }
     .formTitle {
         font-size: var(--BodyR);
         margin: 0;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import profilClass from '../Styles/userProfil.module.css'
+import profilClass from '../Styles/main/userProfil.module.css'
 import { Helmet } from 'react-helmet';
 import User from '../Images/userBig.png'
 import Button from '../partials/button';
@@ -7,12 +7,9 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import Input from '../partials/input';
 import { toast } from 'react-toastify';
-import { json } from 'react-router-dom';
 function UserProfil(){
   const user = jwtDecode(localStorage.getItem("token"))
   const[modifyURL,setModifyURL]=useState("")
-  const [userProfil,setUserProfil]=useState("")
-  const [profilDetails,setDetails]=useState([])
   const [full_name,setFullName]=useState(user.full_name)
   const [email,setEmail]=useState(user.email)
   const [phone,setPhone] =useState(0)
@@ -32,22 +29,9 @@ function UserProfil(){
         setImage(reader.result)
     }
 }
-const fetchUser = async()=>{
-  setUserProfil(`http://localhost:4000/user/profil/${user.userType}/${user._id}`)
-try{
-  const res = await axios.get(`${userProfil}`);
 
-  if(res.data.status){
-     setDetails(res.data.profil)
-  }
-}
-catch(err){
-  console.log(err)
-}
-}
     const [social_security_number,setSecurityNumber]=useState(0)
     useEffect(() => {
-      fetchUser()
       if (user.userType === "student") {
         setModifyURL(`http://localhost:4000/user/student/${user._id}`)
         setPhone(user.phone);
@@ -65,7 +49,7 @@ catch(err){
         setPhone(user.phone);
         setModifyURL(`http://localhost:4000/user/responsible/${user._id}`)
       }
-    }, [userProfil]);
+    }, [modifyURL]);
   
   
   const [modifyClass,setModifyClass]=useState(false)
@@ -101,16 +85,16 @@ catch(err){
          <title>ConnectU | Profil</title>
          <meta name='description' content='HomePage'/>
         </Helmet>
+        <div className={`${profilClass.page} container-fluid`}>
          {modifyClass == false && (
-          <div className={`${profilClass.page} container-fluid`}>
           <div className= {profilClass.section}>
           <div className={profilClass.avatar}>
        {
-         user.image != "" ? <img src={profilDetails.image} alt='User pic' /> : <img src={User} alt='User pic' />
+         user.image != "" ? <img src={user.image} alt='User pic' /> : <img src={User} alt='User pic' />
        }
        </div>
        <div className={profilClass.name}>
-       {profilDetails.full_name}
+       {user.full_name}
        </div>
           
         
@@ -126,15 +110,15 @@ catch(err){
        <div className={profilClass.recordsDetails}>
          <div> 
            <h6> Accepted</h6>
-           <div className={profilClass.accepted}>12</div>
+           <div className={profilClass.accepted}>{user.accepted}</div>
            </div>
          <div> 
            <h6 > Pending</h6>
-           <div className={profilClass.pending}>4</div>
+           <div className={profilClass.pending}>{user.pending}</div>
            </div>
          <div> 
            <h6> Rejected</h6>
-           <div className={profilClass.rejected}>4</div>
+           <div className={profilClass.rejected}>{user.rejected}</div>
            </div>
        </div>
      </div>
@@ -143,14 +127,14 @@ catch(err){
     <div className={profilClass.information}>
     <div className={` ${profilClass.profilDetails}`}>
      <div className={`${profilClass.title}`}>Email</div>
-     <div className={`${profilClass.description}`}>{profilDetails.email}</div>
+     <div className={`${profilClass.description}`}>{user.email}</div>
      </div>
      {
        (user.userType == "department responsible" || user.userType == "student") &&(
            <>
             <div className={` ${profilClass.profilDetails}`}>
      <div className={`${profilClass.title}`}>Phone number</div>
-     <div className={`${profilClass.description}`}>(+213) {profilDetails.phone}</div>
+     <div className={`${profilClass.description}`}>(+213) {user.phone}</div>
      </div>
            </>
        )
@@ -159,7 +143,7 @@ catch(err){
      
      <div className={` ${profilClass.profilDetails}`}>
      <div className={`${profilClass.title}`}>Fax number</div>
-     <div className={`${profilClass.description}`}>(+213) 0{profilDetails.fax}</div>
+     <div className={`${profilClass.description}`}>(+213) 0{user.fax}</div>
      </div>
      
      
@@ -168,11 +152,11 @@ catch(err){
        <>
        <div className={` ${profilClass.profilDetails}`}>
 <div className={`${profilClass.title}`}>Student Card Number</div>
-<div className={`${profilClass.description}`}>{profilDetails.student_card_number}</div>
+<div className={`${profilClass.description}`}>{user.student_card_number}</div>
 </div>
 <div className={` ${profilClass.profilDetails}`}>
 <div className={`${profilClass.title}`}> Social Security Number</div>
-<div className={`${profilClass.description}`}>{profilDetails.social_security_number}</div>
+<div className={`${profilClass.description}`}>{user.social_security_number}</div>
 </div>
        </>
     )}
@@ -186,16 +170,15 @@ catch(err){
       
       
   
-      </div>
+    
          )}
          {
           modifyClass == true && (
-            <div className={`${profilClass.page} container-fluid`}>
           <div className= {profilClass.section}>
           <div className={profilClass.avatar}>
           <Input placeholder="Image" type="file" onChange={handleImage}/>
        </div>
-       <div className={profilClass.name}>
+       <div className={user.name}>
        <Input placeholder={`Full Name : ${full_name}`} type="text" onChange={(e)=> setFullName(e.target.value)}/>
        </div>
           
@@ -265,13 +248,13 @@ catch(err){
                  <div><Button content="Cancel" color="white" onClick={()=>setModifyClass(false)} /></div>
                           
    </div>
-    </div>
       
       
   
       </div>
           )
-         }
+        }
+        </div>
         </>
        );
 }

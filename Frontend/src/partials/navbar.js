@@ -94,7 +94,7 @@ function NavBar()
         </>
         )}
         {
-          user.userType== "department responsible" || user.userType== "supervisor" && (
+          (user.userType== "department responsible" || user.userType== "supervisor") && (
             <li className={NavbarClass.navItem}>
           <NavLink to="/requests" className={isCurrentPage}>
           Internships

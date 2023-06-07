@@ -1,0 +1,21 @@
+.main{
+    display: flex;
+    width: fit-content;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+.notAvailableImg{
+    width: 30px;
+    margin-right: 8px;
+}
+.message{
+    font-size: var(--BodyL);
+}
+@media only screen and (max-width : 990px ){
+    
+    .notAvailableImg{
+        width: 24px;
+    }
+
+}

@@ -33,26 +33,26 @@ const modifyInternship = async (event) =>{
        }
        catch(err){
         console.log(err)
-        toast.error(err)
+        toast.error(err.response.data.error)
        }
        
  }
   const [rejectClass,setRejectClass]=useState(false)
-const [startingDate, setStartingDate] = useState(new Date(props.startingDate))
+const [startingDate, setStartingDate] = useState(props.startingDate)
 const [theme, setTheme] = useState(props.theme)
 const [company, setCompany] = useState(props.company)
 const [supervisor_name, setSupervisorName] = useState(props.supervisorName)
 const [supervisor_email, setSupervisorEmail] = useState(props.supervisorEmail)
-const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
+const [endingDate, setEndingDate] = useState(props.endingDate)
 
-    
+    console.log(props)
     const [modifyClass,setModifyClass]=useState(false)
     return (
     <>
     
     <div className={` ${internshipClass.oneInternship}`}>
     
-    <InternshipFormsHeaders approvedByResponsible={props.approvedByResponsible} startingDate={props.startingDate} endingDate={props.endingDate} type= {props.type} approvedBySupervisor={props.approvedBySupervisor} message={props.message} studentId={props.studentId} internshipId= {props.internshipId}/>
+    <InternshipFormsHeaders approvedByResponsible={props.approvedByResponsible}  startingDate={props.startingDate} endingDate={props.endingDate} type= {props.type} approvedBySupervisor={props.approvedBySupervisor} message={props.message} studentId={props.studentId} internshipId= {props.internshipId} certificate = {props}/>
      <div className="accordion-item"> 
      <button className={`collapsed text-center ${internshipClass.btn}`} id={props.internshipId} type="button" data-bs-toggle="collapse" data-bs-target={`#internship${props.internshipId}`} aria-expanded="true" aria-controls={`internship${props.internshipId}`}>
         <div className={internshipClass.name}>{props.theme} </div>
@@ -260,11 +260,11 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                  Starting Date :
               </p>
         <div className={` col-lg-7 ${internshipClass.formField}`}>
-        <Input placeholder={startingDate} disabled />
-                    <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#startingDateModal">
+        <Input placeholder={changeDateFormat(startingDate)} disabled />
+                    <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target={`#startingModal2${props.internshipId}`}>
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate}/>
+                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate} id= {`startingModal2${props.internshipId}`}/>
         </div>
         </div>
         <div className={`row ${internshipClass.modifyForm}`}>
@@ -272,11 +272,11 @@ const [endingDate, setEndingDate] = useState(new Date(props.endingDate))
                  Ending Date :
               </p>
         <div className={` col-lg-7 ${internshipClass.formField}`}>
-        <Input placeholder={endingDate} disabled />
-                    <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#endingDateModal">
+        <Input placeholder={changeDateFormat(endingDate)} disabled />
+                    <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target={`#endingModal2${props.internshipId}`}>
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <CalendarDiv onChange={(e) => setEndingDate(e)} minDate={startingDate} value={startingDate}/>
+                    <CalendarDiv onChange={(e) => setEndingDate(e)}   minDate={new Date(startingDate)} value={endingDate} id={`endingModal2${props.internshipId}`}/>
 
         </div>
         </div>

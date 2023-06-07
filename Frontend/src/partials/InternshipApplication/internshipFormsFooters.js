@@ -11,11 +11,10 @@ function InternshipFormsFooters(props){
   const [rejectionMessageClass,setRejectMessageClass] =useState(false)
 const [rejectionMessage,setRejectionMessage]=useState("")
  
-    const rejectInternship = async(event) =>{
-      console.log(props)
-      console.log(rejectionMessage)
-      console.log(rejectInternshipURL)
-        event.preventDefault();
+const rejectInternship = async(event) =>{
+  console.log(rejectionMessage)
+  console.log(rejectInternshipURL)
+  event.preventDefault();
         const payload ={
             rejectionMessage
         } 
@@ -29,19 +28,18 @@ const [rejectionMessage,setRejectionMessage]=useState("")
                   window.location.reload()
                   
             }
-      }
-      catch(err){
+          }
+          catch(err){
             console.log(err)
-      }
+          }
     }
-  
-    console.log(props.modifyClass)
-const [deleteClass,setDeleteClass]=useState(false)
-const [acceptClass,setAcceptClass]=useState(false)
-
-const deleteAppURL = `http://localhost:4000/internship/deleteInternship/${props.internshipId}`
-
-
+    
+    const [deleteClass,setDeleteClass]=useState(false)
+    const [acceptClass,setAcceptClass]=useState(false)
+    
+    const deleteAppURL = `http://localhost:4000/internship/deleteInternship/${props.internshipId}`
+    
+    
 const deleteInternship = async (event) =>{
     event.preventDefault();
          try{
@@ -52,8 +50,8 @@ const deleteInternship = async (event) =>{
                }
          }
          catch(err){
-          console.log(err)
-          toast.error(err)
+          console.log(err.response.data)
+           toast.error(err.response.data.error)
          }
          
    }
@@ -67,7 +65,8 @@ const deleteInternship = async (event) =>{
            }
      }
      catch(err){
-           console.log(err)
+           console.log(err.response.data.error)
+           toast.error(err.response.data.error)
      }
 
    }
@@ -88,7 +87,8 @@ const acceptNewInternship = async(event) =>{
         }
   }
   catch(err){
-        console.log(err)
+    console.log(err.response.data.error)
+    toast.error(err.response.data.error)
   }
 
 }
@@ -107,7 +107,7 @@ if(props.type == "supervisor"){
         <div>
               
 {
-  (props.approvedByResponsible === "pending" || props.approvedByResponsible === "rejected") && props.type === "student" && (
+  (props.approvedByResponsible === "pending" || props.approvedBySupervisor === "rejected") && props.type === "student" && (
     <>
       {!deleteClass && (
         <div className={internshipClass.modificationBtns}>

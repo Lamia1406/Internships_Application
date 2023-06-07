@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ApplyImage from '../Images/apply.png';
 import Collab from '../Images/collaboration.png';
 import '../partials/features';
@@ -13,26 +12,26 @@ import Linkedin from '../Images/linkedin.png'
 import Microsoft from '../Images/microsoft.png'
 import Oracle from '../Images/oracle.png'
 import Ibm from '../Images/ibm.png'
-import productClass from '../Styles/product.module.css';
+import productClass from '../Styles/main/product.module.css';
 import Feature from '../partials/features';
 import Button from '../partials/button';
 import Testimonial from '../partials/testimonial';
 import FAQ from '../partials/FAQ';
 import TextArea from '../partials/textarea';
 import { Helmet } from 'react-helmet';
-import { useLocation } from 'react-router-dom';
 function Product()
 {
 
   return ( 
   <>
+  
     <Helmet>
     <title>ConnectU | Product</title>
     <meta name='description' content='Product'/>
    </Helmet>
-    <div className={`${productClass.page} container-fluid`}>
+    <div className={`${productClass.page}`}>
         <div className={`row ${productClass.section} gx-5`}>
-          <div className={`col-lg-7  ${productClass.hero}`}>
+          <div className={`col-lg-6  ${productClass.hero}`}>
              <h1 className={productClass.h1}> Manage your internship with ConnectU </h1>
              <p className={productClass.bodyl}>
 We know how daunting it can be to navigate the internship search process,
@@ -44,7 +43,7 @@ which is why we created our platform to simplify things for you</p>
              
           </div>
           
-          <div className={`col-lg-5 ${productClass.heroImg}`} >
+          <div className={`col-lg-6 ${productClass.heroImg}`} >
               <img src={Collab}  alt='hero'/>
           </div>
         </div>
@@ -101,20 +100,7 @@ which is why we created our platform to simplify things for you</p>
             </div>
   </div>
           </div>
-          <div className={`row ${productClass.feedback}`}>
-          <div className='col-lg-6'>
-          <p className={productClass.feedbackTitle}> If you have any further questions or feedback, please do not hesitate to share them with us: </p>
-          </div>
-          <div className={`col-lg-6 ${productClass.field}`} >
-          <TextArea maxLength="500" placeholder="Fill this input"/>
-          <div className={productClass.submitDiv}>
-          <div className={productClass.submitBtn}>
-          <Button color ="dark" content="submit"/>
-
-          </div>
-          </div>
-          </div>
-</div>
+     
         
 
     

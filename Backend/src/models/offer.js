@@ -46,6 +46,10 @@ const internshipSchema = new mongoose.Schema(
             type: String,
             default : ""
         },
+        isOffer: {
+            type: Boolean,
+            default : true
+        },
         
     },
     {timestamps: true}

@@ -8,7 +8,11 @@ function OneNotification(props)
               <div className={`${oneNotificationClass.oneNotification}`}>
                      <img src={Bell}/>
                       <div className={oneNotificationClass.notif}>{props.notif}</div>
-                      <small className={oneNotificationClass.time}>{props.time}</small>
+                      {
+                        props.time && (
+                            <small className={oneNotificationClass.time}>{props.time}</small>
+                        )
+                      }
                       </div>
                      </div>
     )

@@ -1,0 +1,133 @@
+@font-face {
+    font-family: "Federo";
+    src: url('/src/Fonts/Federo-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Book Antiqua";
+    src: url("/src/Fonts/Book\ Antiqua\ Font.ttf") format("truetype");
+}
+
+.main{
+    padding: 2cm;
+    border: 1px solid black;
+    width: 297mm;
+    height: 210mm;
+    margin: 16px auto;
+    font-family: "Book Antiqua", sans-serif;
+    font-size: 12pt;
+}
+.republic{
+    padding-bottom: 8px;
+}
+.title{
+    font-size: 23pt;
+    font-family: "Federo";
+    font-weight: bold;
+    padding-bottom: 8px;
+}
+.header div{
+    width: fit-content;
+    margin: auto;
+}
+.content{
+    padding: 8px 0;
+    
+    line-height: calc(12pt * 2);
+
+}
+.data{
+    font-style: italic;
+    padding-bottom: 1px;
+    border-bottom: 1px solid black;
+    
+}
+.date{
+    margin-left: 45%;
+    padding: 8px 0;
+    font-weight: bold;
+    font-size: 10pt;
+}
+.footer{
+    padding: 8px 1.5cm;
+    display: flex;
+    font-weight: bold;
+    justify-content: space-between;
+}
+.footer div{
+    width: 50%;
+    text-align: center;
+    font-size: 10pt;
+}
+.rights{
+    font-size: 11pt;
+    font-style: italic;
+    padding: 11pt 0 ;
+    border-top: 1px solid black;
+    position: relative;
+    top: 50%;
+}
+.download {
+    width: fit-content;
+    margin: 16px auto;
+}
+@media only screen  and (max-width : 990px){
+    .main{
+        padding: 4px;
+        border: 1px solid black;
+        width: 297px;
+        height: fit-content;
+        margin: 16px auto;
+        font-family: "Book Antiqua", sans-serif;
+        font-size: 12px;
+    }
+    .republic{
+        padding-bottom: 4px;
+    }
+    .title{
+        font-size:18px;
+        font-family: "Federo";
+        font-weight: bold;
+        padding-bottom: 4px;
+    }
+    .header div{
+        width: fit-content;
+        margin: auto;
+    }
+    .content{
+        padding: 4px 0;
+        line-height: 16px;
+    
+    }
+    .data{
+        font-style: italic;
+        padding-bottom: 1px;
+        border-bottom: 1px solid black;
+        
+    }
+    .date{
+        margin-left: 45%;
+        padding: 4px 0;
+        font-weight: bold;
+        font-size: 10px;
+    }
+    .footer{
+        padding: 4px 1.5px;
+        display: flex;
+        font-weight: bold;
+        justify-content: space-between;
+    }
+    .footer div{
+        width: 50%;
+        text-align: center;
+        font-size: 10px;
+        overflow-wrap: break-word;
+    }
+    .rights{
+        font-size: 11px;
+        font-style: italic;
+        padding: 11px 0 ;
+        border-top: 1px solid black;
+        position: relative;
+        top: 50%;
+    }
+}

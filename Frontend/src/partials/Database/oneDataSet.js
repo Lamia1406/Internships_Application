@@ -5,8 +5,9 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import changeDateFormat from "../../features/changeDateFormat"
 import oneLine from '../../Styles/partials/DatabasePartials/oneUser.module.css'
+import ModifyOneDataRecord from "./modifyOneDataRecord"
 function OneDataSet(props) {
-  console.log(props)
+  const [modifyURL, setModifyURL] = useState("")
   const [deleteDataURL,setDeleteDataURL]=useState("")
   const deleteData = async()=>{
           try{
@@ -24,17 +25,22 @@ function OneDataSet(props) {
   useEffect(()=>{
     if(props.table == "Universities"){
         setDeleteDataURL(`http://localhost:4000/university/deleteUniversity/${props.id}`)
-    }
-    if(props.table == "Faculties"){
+        setModifyURL(`http://localhost:4000/university/modifyUniversity/${props.id}`)
+      }
+      if(props.table == "Faculties"){
         setDeleteDataURL(`http://localhost:4000/university/deleteFaculty/${props.id}`)
-    }
-    if(props.table == "Departments"){
+        setModifyURL(`http://localhost:4000/university/modifyFaculty/${props.id}`)
+        
+      }
+      if(props.table == "Departments"){
         setDeleteDataURL(`http://localhost:4000/university/deleteDepartment/${props.id}`)
-    }
-    if(props.table == "Companies"){
+        setModifyURL(`http://localhost:4000/university/modifyDepartment/${props.id}`)
+      }
+      if(props.table == "Companies"){
         setDeleteDataURL(`http://localhost:4000/post/deleteCompany/${props.id}`)
-    }
-    if(props.table == "Responsibles"){
+        setModifyURL(`http://localhost:4000/university/modifyCompany/${props.id}`)
+      }
+      if(props.table == "Responsibles"){
         setDeleteDataURL(`http://localhost:4000/user/deleteResponsible/${props.id}`)
     }
     if(props.table == "Students"){
@@ -133,7 +139,7 @@ function OneDataSet(props) {
               {
                 !props.profil  && !props.day && !props.present && (
                   <div>
-                <Button content="Modify" color="black" dataBsToggle="modal" />
+                <Button content="Modify" color="black" dataBsToggle="modal" dataBsTarget={`#modify${props.id}`}  />
               </div>
                 )
               }
@@ -148,6 +154,8 @@ function OneDataSet(props) {
           </td>
         </>
       )}
+      <ModifyOneDataRecord table = {props.table} modifyId = {props.id} id = {`modify${props.id}`} 
+              />
     </tr>
   )
 }

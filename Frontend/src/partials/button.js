@@ -18,13 +18,21 @@ function Button(props){
         {
             return buttonClass.white
         }
-        else if (props.color ==="signup")
+        else if (props.color ==="signupDark")
         {
-            return buttonClass.signup
+            return buttonClass.signupDark
         }
-        else if (props.color =="accountExist")
+        else if (props.color =="signupLight")
         {
-            return buttonClass.accountExist
+            return buttonClass.signupLight
+        }
+        else if (props.color =="loginDark")
+        {
+            return buttonClass.loginDark
+        }
+        else if (props.color =="loginLight")
+        {
+            return buttonClass.loginLight
         }
         else if (props.color =="grey")
         {

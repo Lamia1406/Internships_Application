@@ -10,11 +10,11 @@
   --BodyS: 0.75rem;
   --P: 1rem;
 
-  --PRIMARY: #F9A620        ;
+  --PRIMARY: #6C77BB        ;
   --BLACK: #0a0601;
-  --DARKBLUE: #4c3309;
-  --DARKGREY:  #373634;
-  --GREY: #bec9d1;
+  --DARKBLUE: #2E324B  ;
+  --DARKGREY:  #535B6E ;
+  --GREY: #b6b6b4 ;
   --WHITE: #FFFFFF;
 }
 *{
@@ -24,6 +24,3 @@
   box-sizing: border-box;
 }
 
-@media  only screen and (max-width:990px){
-  
-}

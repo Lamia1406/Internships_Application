@@ -2,14 +2,15 @@ import React, {useState,useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from '../partials/button';
 import { Chart as ChartJS, ArcElement,Tooltip,Legend } from 'chart.js';
-import HomeClass from '../Styles/home.module.css'
+import HomeClass from '../Styles/main/home.module.css'
 import {Pie} from 'react-chartjs-2';
-import {Helmet} from 'react-helmet';
 import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
-
+import Layout from '../features/Layout';
+import NotAvailable from '../partials/not_available'
+import OneNotification from '../partials/DatabasePartials/oneNotification';
 ChartJS.register(
   ArcElement
 )
@@ -31,10 +32,9 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
  const [activeInternships,setActiveInternships] = useState([])
  const [currentInterns,setCurrentInterns] = useState([])
  const [notifications,setNotifications]=useState([])
- const [loading,setIsLoading]=useState(false)
  const fetchData = async () => {
   if(user.userType != "webmaster"){
-    setIsLoading(true)
+
     const res = await axios.get(`${allNotificationsURL}`);
     if(res.data.status){
       setNotifications(res.data.notifications.filter((n)=>{
@@ -46,17 +46,14 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
          notificationDate.getDate() === today.getDate()
        );
      }))
-     setIsLoading(false)
     }
   }
   if(user.userType == "department responsible" || user.userType == "webmaster"){
-    setIsLoading(true)
     const res2 = await axios.get(`${activeOffersUrl}`)
     const res3 = await axios.get(`${currentInternsUrl}`)
     if(res2.data.status && res3.data.status ){
       setActiveInternships(res2.data)
       setCurrentInterns(res3.data)
-      setIsLoading(false)
     }
   }
  }
@@ -73,80 +70,89 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     const data = {
       datasets: []
     };
-    if (activeInternships) {
+    if (activeInternships.length != 0) {
       data.datasets.push({
         data: [
-         activeInternships.count,
+          activeInternships.count,
           activeInternships.postCount - activeInternships.count
         ],
-        backgroundColor: ['#D9D9D9', '#20A6F9']
+        backgroundColor: ['#D5A6BD', '#D9D9D9']
+      });
+    } else {
+      data.datasets.push({
+        data: [0, 10],
+        backgroundColor: ['#FFC857', '#C0C0C0']
       });
     }
+    
     const data2 = {
       datasets: []
     };
     
-    if (currentInterns) {
+    if (currentInterns.length != 0) {
       data2.datasets.push({
         
             data : [ currentInterns.interns,(currentInterns.allInternships-currentInterns.interns)],
-            backgroundColor : ['#A620F9','#D9D9D9']
+            backgroundColor : [ '#A620F9', '#D9D9D9']
          
+      });
+    }
+    else {
+      data2.datasets.push({
+        data: [0, 10],
+        backgroundColor: ['#FFC857', '#C0C0C0']
       });
     }
   return ( 
    <>
-   <Helmet>
-    <title>ConnectU | HomePage</title>
-    <meta name='description' content='HomePage'/>
-   </Helmet>
-     <div className={`${HomeClass.page} container-fluid`}>
-        <div className= {HomeClass.section}>
-        <h2 id={HomeClass.welcome}>
-            Welcome, {user.full_name}
-        </h2>
-        </div>
-        {notif && user.userType != "webmaster" && (
+   <Layout pageTitle = "HomePage" header = {
+     ` Welcome, ${user.full_name}`
+   }
+   content = { 
+    <>
+    {notif && user.userType != "webmaster" && (
             <div className={HomeClass.section} >
            <div id={HomeClass.notifications}>
            <h3 className={HomeClass.h3}> Recent notifications</h3>
             {
               notifications.length == 0  && (
-                <p className={HomeClass.notif}> No recent notifications</p>
+                <div className={HomeClass.notif}>
+                  <OneNotification notif = " No recent notifications" />
+                </div>
               )
             }
             {
               notifications.length != 0 && (
                 notifications.map( n =>{
-                 return <p className={HomeClass.notif}>{n.message}</p>
+                return <div className={HomeClass.notif}> <OneNotification notif ={n.message}/></div> 
                 }
 
                 )
               )
             }
             <div className={HomeClass.btn1}>
-            <Button content="Clear" color="dark" onClick={clearNotifications} iconClassName="icon"/>
+            <Button content="Clear" color="grey" onClick={clearNotifications} iconClassName="icon"/>
 
               </div>
             </div>
     </div>
         )}
-        {user.userType == 'student' && 
+            {user.userType == 'student' && 
         (
           <div className={HomeClass.section}>
           <h3 className={HomeClass.h3}> Application status</h3>
          {user.enrolled == "yes" && (
            <>
-           You're enrolled in an internship
-           <div className={HomeClass.btn2}>
+           <NotAvailable message= "You're enrolled in an internship" warning = {false}/>
+           <div className={HomeClass.btn1}>
            <NavLink to="/yourApp">
-           <Button content="View Application" color={"dark"}/>
+           <Button content="View Application" color="dark"/>
            </NavLink>
            </div></>
          )}
          {user.enrolled == "no" && (
           <>
-          <h3 className={HomeClass.notif}>You're not enrolled to any application</h3>
+          <NotAvailable message = "You're not enrolled to any application"/>
                        <NavLink to='/internships'>
                        <div className={HomeClass.btn1}>
                         <Button content="Apply" color="black"/>
@@ -158,15 +164,14 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
          )}
          {user.enrolled == "pending" && (
           <>
-          <h3 className={HomeClass.notif}>Your sent applications are being reviewed in the moment</h3>
-                       
+          <NotAvailable message = "Your sent applications are being reviewed in the moment" warning = {false} />          
           </>
                         
          )}
           
   </div>
         )}
-         {(user.userType == 'webmaster' || user.userType == 'department responsible') &&
+           {(user.userType == 'webmaster' || user.userType == 'department responsible') &&
 ( <React.Fragment>
   <div className={`row ${HomeClass.section}`}>
     <div  className='col-lg-6'>
@@ -180,9 +185,12 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     </Pie>
   </div>
   <div className={HomeClass.pieChartPercentage}>
-  {activeInternships.count && (
-    (activeInternships.count * 100 / activeInternships.postCount).toFixed(2) + '%'
-  )}
+  {activeInternships && activeInternships.count != 0 ? (
+    (activeInternships.count * 100 / activeInternships.postCount).toFixed(2)  
+  ): "0"
+}
+  %
+  
 </div>
     </div>
     <div  className='col-lg-6'>
@@ -196,9 +204,12 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
     </Pie>
   </div>
   <div className={HomeClass.pieChartPercentage2}>
-    {currentInterns && (
-      (currentInterns.interns * 100 / currentInterns.allInternships).toFixed(2) +`%`
-    )}
+    {currentInterns && currentInterns.allInternships != 0 ? (
+      (currentInterns.interns * 100 / currentInterns.allInternships).toFixed(2) 
+    ): "0"
+  }
+   
+  %
   </div>
     </div>
   </div>
@@ -227,10 +238,15 @@ const activeOffersUrl= 'http://localhost:4000/internship/activeOffers'
 
 </>
 )}
+    </>
+
+
+   }/>
+        
     
 
 
-    </div> 
+    
    </>
   );
 }

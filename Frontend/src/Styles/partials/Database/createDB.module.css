@@ -59,7 +59,12 @@
     background-color: var(--GREY);
     color: var(--DARKGREY);
 }
+.calendarBtn{
+    position: absolute;
+    right: 10%;
+    top: 28%;
 
+  }
  
 @media only screen and (max-width:990px) {
     .body {

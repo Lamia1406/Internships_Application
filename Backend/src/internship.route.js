@@ -12,9 +12,12 @@ import Company from './models/company.js'
 import Post from "./models/post.js";
 import sendgridTransport from "nodemailer-sendgrid-transport"
 import nodemailer from "nodemailer"
-import { ChangeStream } from "mongodb";
+import html_to_pdf from "html-pdf-node"
 import Mark from "./models/Mark.js";
 const router = express.Router();
+
+
+
 const transporter = nodemailer.createTransport(
   sendgridTransport ({
       auth: {
@@ -33,20 +36,26 @@ router.post("/createInternship",async(req,res,next)=>{
     return next (new ErrorResponse("Please choose a supervisor", StatusCodes.BAD_REQUEST))
   }
   try{
+    const alreadyApplied = await Internship.findOne({post : req.body.post , student : student._id})
+    if(alreadyApplied && student.enrolled == "pending"){
+      return next (new ErrorResponse("Your Already Applied to this internship", StatusCodes.BAD_REQUEST))
+    }
       await Internship.create(req.body);
       await Student.findOneAndUpdate(  { _id: student._id },  { enrolled: "pending" } );
       const responsible = await Responsible.findOne({ department:student.department }).select("_id")
-      await Notification.create({
-        responsible:responsible._id , 
-        message: `student ${student.full_name} has sent an internship application`,
-          ...req.body
-      })
-      await Responsible.findOneAndUpdate(
-        { department: student.department },
-        {
-          $inc: { pending: 1 }
-        }
-      );
+      if(responsible){
+        await Notification.create({
+          responsible:responsible._id , 
+          message: `student ${student.full_name} has sent an internship application`,
+            ...req.body
+          })
+          await Responsible.findOneAndUpdate(
+            { department: student.department },
+            {
+              $inc: { pending: 1 }
+            }
+          );
+      }
       res.status(StatusCodes.CREATED).send( {status:true ,  message: "Successfully Created"})
       }
   catch(err){
@@ -61,6 +70,10 @@ router.post("/createNewEstablishmentInternship",async(req,res,next)=>{
     return next(new ErrorResponse("Cannot apply for an internship while enrolled.", StatusCodes.BAD_REQUEST))
   }
   try{
+    const alreadyApplied = await NewEstablishment.findOne({theme : req.body.theme , student : student._id})
+    if(alreadyApplied && student.enrolled == "pending"){
+      return next (new ErrorResponse("Your Already Applied to this internship", StatusCodes.BAD_REQUEST))
+    }
       const internship = await NewEstablishment.create(req.body);
       await Student.findOneAndUpdate(
         { _id: student._id },
@@ -72,6 +85,20 @@ router.post("/createNewEstablishmentInternship",async(req,res,next)=>{
           $inc: { pending: 1 }
         }
       );
+      const responsible = await Responsible.findOne({ department:student.department }).select("_id")
+      if(responsible){
+        await Notification.create({
+          responsible:responsible._id , 
+          message: `student ${student.full_name} has sent an internship application`,
+            ...req.body
+          })
+          await Responsible.findOneAndUpdate(
+            { department: student.department },
+            {
+              $inc: { pending: 1 }
+            }
+          );
+      }
       res.status(StatusCodes.CREATED).send(
           {
               status:true,
@@ -110,7 +137,7 @@ router.put("/modifyInternship/:idInternship",async(req,res,next)=> {
         message: "Internship not found",
       });
     }
-    if(internship.approvedByResponsible == "pending" ||internship.approvedByResponsible == "rejected" ){
+    if((internship.approvedBySupervisor == "pending" &&internship.approvedByResponsible == "rejected") || (internship.approvedBySupervisor == "rejected" && internship.approvedByResponsible == "accepted") || (internship.approvedBySupervisor == "pending" && internship.approvedByResponsible == "pending") ){
       
       if(req.body.startingDate > req.body.startingDate || req.body.startingDate > internship.endingDate || req.body.endingDate < internship.startingDate){
        return res.status(StatusCodes.BAD_REQUEST).send({
@@ -127,23 +154,21 @@ router.put("/modifyInternship/:idInternship",async(req,res,next)=> {
         await NewEstablishment.updateOne({ _id: internshipId }, {...req.body,approvedByResponsible: "pending"}); 
       }
       const responsible = await Responsible.findOne({ department:internship.student.department })
+       if( responsible){
         await Notification.create({
           responsible:responsible._id ,
           message: `student ${internship.student.full_name} has modified his internship`,
           ...req.body
           })
+       }
          return res.status(StatusCodes.OK).send({
             status:true
          })
     }
     else{
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        status: false,
-        message: "internship can't be updated ",
-      });
-    }
-        
+      return next( new ErrorResponse("internship can't be updated " , StatusCodes.BAD_REQUEST))     
        
+  }
   }
   catch(err){
    next(err)
@@ -155,54 +180,55 @@ router.put("/modifyInternship/:idInternship",async(req,res,next)=> {
 //Delete Internship
 router.delete("/deleteInternship/:idInternship",async(req,res,next)=> {
   try{ 
-   const internshipId= req.params.idInternship;
-   const isExisting = await Internship.findById({_id : internshipId}).populate({
+   const isExisting = await Internship.findById({_id : req.params.idInternship}).populate({
     path: "student",
     select: "full_name department"
   })
-   const isNew = await NewEstablishment.findById({_id : internshipId}).populate({
+  console.log(isExisting)
+  const isNew = await NewEstablishment.findById({_id : req.params.idInternship}).populate({
     path: "student",
     select: "full_name department"
   })
-    let internship;
-    if(isExisting){
-      internship = isExisting
-    }
-    else if(isNew){
-      internship = isNew
-    }
-    else {
-      return res.status(StatusCodes.NOT_FOUND).send({
-        status: false,
-        message: "Internship not found",
-      });
-    }
-    if(internship.approvedByResponsible == "pending" || internship.approvedByResponsible== "rejected"){
+  console.log(isNew)
+  let internship;
+  if(isExisting){
+    internship = isExisting
+  }
+  else if(isNew){
+    internship = isNew
+  }
+  else {
+    return res.status(StatusCodes.NOT_FOUND).send({
+      status: false,
+      message: "Internship not found",
+    });
+  }
+  console.log(internship)
+    if((internship.approvedByResponsible == "accepted" && internship.approvedBySupervisor== "rejected") ||( internship.approvedByResponsible == "rejected" && internship.approvedBySupervisor== "pending")){
       if(internship == isExisting){
-        await Internship.deleteOne({ _id: internshipId }); 
+        await Internship.deleteOne({ _id: req.params.idInternship }); 
       }
       if(internship == isNew){
-        await NewEstablishment.deleteOne({ _id: internshipId }); 
+        await NewEstablishment.deleteOne({ _id: req.params.idInternship }); 
       }
       const responsible = await Responsible.findOne({ department:internship.student.department })
+       if(responsible){
         await Notification.create({
           responsible:responsible._id ,
           message: `student ${internship.student.full_name} has deleted his/her internship`,
           ...req.body
           })
+       }
          return res.status(StatusCodes.OK).send({
             status:true
          })
     }
     else{
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        status: false,
-        message: "Internship can't be deleted",
-      });
-    }
+      return next (new ErrorResponse( "Internship can't be deleted" , StatusCodes.BAD_REQUEST))
         
        
   }
+}
   catch(err){
    next(err)
   }
@@ -402,12 +428,12 @@ router.get("/allInternships/responsible/:idResponsible",async (req,res,next)=>{
       const responsibleId = req.params.idResponsible;
       const responsible = await Responsible.findById({ _id: responsibleId })
       const responsibleDep= responsible.department
-        const internships = await Internship.find({
-          approvedByResponsible: { $ne: "ongoing" },
-          post: { $ne: null },
-          supervisor: { $ne: null },
-          student: { $ne: null }
-          }) .populate({
+      const internships = await Internship.find({
+        approvedByResponsible: { $nin: ["ongoing", "completed"] },
+        post: { $ne: null },
+        supervisor: { $ne: null },
+        student: { $ne: null }
+      }).populate({
             path: "student",
             select: "full_name level_of_study student_card_number social_security_number department",
             match: { department: responsibleDep }
@@ -455,9 +481,8 @@ router.get("/studentProgress/responsible/:id",async (req,res)=>{
       const responsibleDep= responsible.department
         const studentProgress = await Internship.find(
            
-              { approvedBySupervisor: "ongoing",
-            approvedByResponsible:"ongoing" },
-            
+         { approvedBySupervisor: { $in: ["ongoing", "completed"] },
+          approvedByResponsible: { $in: ["ongoing", "completed"] } }           
           )
         .populate({
           path: "student",
@@ -495,11 +520,11 @@ router.get("/studentProgress/supervisor/:id",async (req,res)=>{
       const id = req.params.id;
 
         const studentProgress = await Internship.find({
-            $or: [
-              { approvedBySupervisor: "ongoing",
-            approvedByResponsible:"ongoing",
-          supervisor : id },
-            ]
+            
+          approvedBySupervisor: { $in: ["ongoing", "completed"] },
+  approvedByResponsible: { $in: ["ongoing", "completed"] },
+  supervisor: id
+            
           })
         .populate({
           path: "student",
@@ -554,15 +579,6 @@ router.get("/acceptedByBoth/supervisor/:idSupervisor",async (req,res)=>{
             select: "full_name",
           },
         })
-      for (const internship of internships){
-        if(internship.startingDate < new Date()){
-          await Internship.findOneAndUpdate(
-            { _id: internship._id },
-            { approvedBySupervisor: "rejected",
-          rejectionMessage : "You surpassed the starting date without confirming your presence" }
-          );
-        }
-      }
         let allResponsibles = [];
         for (const accepted of internships) {
           const responsible = await Responsible.findOne({ department: accepted.student.department });
@@ -619,7 +635,14 @@ router.get("/currentInterns", async (req, res) => {
     const interns = await Student.countDocuments({enrolled: "yes"})
     const existingInternships = await Internship.countDocuments()
     const newInternships = await NewEstablishment.countDocuments()
-    const allInternships = newInternships + existingInternships
+    let allInternships;
+    console.log(newInternships)
+    if(newInternships == 0 && existingInternships == 0){
+          allInternships = 0
+    }
+    else {
+      allInternships = newInternships + existingInternships
+    }
     res.status(StatusCodes.OK).send({
       status: true,
       allInternships,
@@ -760,7 +783,7 @@ router.put("/rejectInternship/responsible/:idInternship",async (req,res,next)=>{
         next(err)
          }
      })
-router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
+router.put("/acceptInternship/responsible/:idInternship",async (req,res, next)=>{
     try{
       const internshipId = req.params.idInternship;
       const internship = await Internship.findById({ _id: internshipId })
@@ -793,12 +816,12 @@ router.put("/acceptInternship/responsible/:idInternship",async (req,res)=>{
         res.status(StatusCodes.OK).send({ status:true })
     }
     catch(err){
-        err.message
+       next(err)
          }
      })
      
 
-router.put("/acceptNewIntership/responsible/:idInternship", async (req, res) => {
+router.put("/acceptNewIntership/responsible/:idInternship", async (req, res,next) => {
            try {
              const { idInternship } = req.params;
              const newInternship = await NewEstablishment.findById(idInternship).populate({ path: "student", select: "full_name department" });   
@@ -924,7 +947,7 @@ We're writing to you to inform you that a university student has recently reques
            return password;
          }
          
-router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
+router.put("/acceptInternship/supervisor/:idInternship",async (req,res, next)=>{
     try{
       const internshipId = req.params.idInternship;
       const internship = await Internship.findById({ _id: internshipId }).populate({
@@ -950,7 +973,7 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
         ...req.body
       })
       await Supervisor.findOneAndUpdate(
-        { _id: supervisor._id },
+        { _id: internship.supervisor._id },
         { 
           $inc: {accepted: 1 } ,
         }
@@ -963,10 +986,10 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
 
     }
     catch(err){
-        err.message
+       next(err)
          }
      })
-     router.put("/chooseInternship/student/:idInternship", async (req, res) => {
+router.put("/chooseInternship/student/:idInternship", async (req, res) => {
       try {
         const internshipId = req.params.idInternship;
         const chosenInternship = await Internship.findById(internshipId);
@@ -993,7 +1016,10 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
         await Internship.updateMany(
           {
             student: chosenInternship.student,
-            _id: { $ne: chosenInternship._id }
+            _id: { $ne: chosenInternship._id },
+            approvedByResponsible: { $ne: "completed" },
+            approvedBySupervisor: { $ne: "completed" },
+            
           },
           {
             $set: {
@@ -1054,10 +1080,61 @@ router.put("/acceptInternship/supervisor/:idInternship",async (req,res)=>{
         });
       }
     });
-    
+router.put("/completeInternship/supervisor/:idInternship", async (req, res) => {
+      try {
+        const { idInternship } = req.params;
+        const newInternship = await Internship.findById(idInternship).populate({
+          path: "student",
+          select: "_id department full_name"
+        }).populate({
+          path: "post",
+          select : "title"
+        })
+        await Internship.findOneAndUpdate(
+         { _id: idInternship },
+         { 
+           approvedByResponsible : "completed",
+           approvedBySupervisor : "completed",
+         }
+       );
+       await Student.findOneAndUpdate(
+        {_id: newInternship.student._id},
+        {
+          enrolled : "no"
+        }
+        )
+       const responsible = await Responsible.findOne({ department:newInternship.student.department }).select("_id")
+      await Notification.create({
+        responsible:responsible._id , 
+        message: `student ${newInternship.student.full_name} has completed their internship . Marks are available`,
+          ...req.body
+      })
+      await Notification.create({
+        student:newInternship.student._id , 
+        message: `you've completed your internship ${newInternship.post.title}.Marks are available. Please approach your internship supervisor as soon as possible to get your certificate `,
+          ...req.body
+      })
 
-
+        res.status(StatusCodes.OK).send({ status: true });
     
+      } catch (err) {
+        next(err)
+      }
+    });    
+
+    router.post('/generateCertificate/:internshipId', async (req, res, next) => {
+      try {
+        let options = { format: 'A4' };
+        let file = { content: '<h1>Welcome to html-pdf-node</h1>' };
+        const internship = await Internship.find({ internship: req.params.internshipId });
+        const pdfBuffer =  html_to_pdf.generatePdf(file, options);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=certificate.pdf');
+        res.sendFile(pdfBuffer);
+      } catch (err) {
+        next(err);
+      }
+    });
 
 
      

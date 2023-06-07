@@ -1,5 +1,3 @@
-import './App.css';
-import React from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Home from './Pages/home';
 import Product from './Pages/product';
@@ -26,6 +24,7 @@ import StudentProgress from './Pages/studentProgress';
 import Students from './Pages/students';
 import Presence from './Pages/studentPresence';
 import Evaluation from './Pages/studentEvaluation';
+import StudentCertificate from './Pages/studentCertificate';
 function App() {
   const location = useLocation(); // Get the current location
   const isLoginPage = location.pathname === '/login';
@@ -56,6 +55,7 @@ function App() {
             <Route path='/students' element={<Students/>}/>
             <Route path='/presence' element={<Presence/>}/>
             <Route path='/evaluation' element={<Evaluation/>}/>
+            <Route path='/certificate' element={<StudentCertificate/>}/>
       </Routes>
       {(!isLoginPage && !isSignupPage) && <Footer />}
     </>

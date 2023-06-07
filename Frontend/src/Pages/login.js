@@ -1,13 +1,10 @@
-import loginClass from "../Styles/login.module.css"
+import loginClass from "../Styles/main/login.module.css"
 import logo from '../Images/logo.png'
 import Input from "../partials/input";
 import  Button from "../partials/button";
 import {useState} from 'react'
 import axios from 'axios';
-import Google from "../Images/google2.png";
-import ForgotPassword from "../partials/forgotPassword";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Helmet } from "react-helmet";
 import {toast} from 'react-toastify'
 import { NavLink } from "react-router-dom";
@@ -59,33 +56,23 @@ function Login({history}){
                         <div className={`row ${loginClass.forms}`}>
                             <div className={`col-lg-6 ${loginClass.login}`}>
                                 <Input placeholder="University email" type="email"  onChange={(event) => setEmail(event.target.value)}/>
-                                <div className={`form-check ${loginClass.remembermeCheck}`}>
-  <input className="form-check-input" type="checkbox" id="rememberme" />
-  <label className="form-check-label" htmlFor="rememberme">Remember me</label>
-</div>  
+     
                           </div>
                             <div className={`col-lg-6 ${loginClass.login}`}>
                                 <Input placeholder="Password"  type="password"
             onChange={(event) => setPassword(event.target.value)}/>
-                                <div  className={`${loginClass.forgotpassword}`}>
-<button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Forgot password
-</button>
-
-<ForgotPassword/>
-
-                                </div>
+                               
                                
                           </div>
                         </div>
                         <div>
                             <div className={loginClass.loginbtns}>
                             <div>
-                              <Button content="Login" color="black" type="submit" value="Login" onClick={submitForm} />
+                              <Button content="Login" color="loginDark" type="submit" value="Login" onClick={submitForm} />
                             </div>
                            <NavLink to="/signup">
                            <div>
-                           <Button content="Create an account" color="clear"/>
+                           <Button content="Create an account" color="loginLight"/>
                            </div>
                            </NavLink>
                             </div>

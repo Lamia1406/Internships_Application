@@ -151,5 +151,40 @@ router.get("/allCompanies",async (req,res,next)=>{
         }
        });
 
-
+       router.put("/modifyPost/:idPost",async(req,res,next)=> {
+        try{ 
+         const postId= req.params.idPost;
+         const post = await Post.findById({_id : postId})
+        
+          if(!post) {
+            return next(new ErrorResponse("Post not found", StatusCodes.NOT_FOUND))
+          }
+          await Post.updateOne({ _id: postId }, { ...req.body}); 
+      
+               return res.status(StatusCodes.OK).send({
+                  status:true
+               })    
+        }
+        catch(err){
+         next(err)
+        }
+      
+             }
+      )
+       router.put("/modifyCompany/:idCompany",async(req,res,next)=> {
+        try{ 
+         const companyId= req.params.idCompany;
+        
+          await Company.findOneAndUpdate({ _id: companyId }, { ...req.body}); 
+      
+               return res.status(StatusCodes.OK).send({
+                  status:true
+               })    
+        }
+        catch(err){
+         next(err)
+        }
+      
+             }
+      )
 export default router;

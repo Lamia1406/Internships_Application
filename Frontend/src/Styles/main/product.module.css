@@ -4,7 +4,6 @@
 
 
 .section{
-    margin: 0;
     padding: 64px 0;
 }
 .hero{
@@ -16,12 +15,12 @@
 }
 .h1{
     color: var(--BLACK);
-    font-size: var(--H1);
-
+    font-size: var(--H2);
+    padding: 32px 0;
 }
 .bodyl{
-    align-items: flex-start;
     margin-top: auto;
+    padding: 32px 0;
     color: var(--DARKGREY);
     font-size: var(--BodyL);
 }
@@ -37,7 +36,7 @@
 .h3{
     text-align: center;
     color: var(--DARKBLUE);
-    font-size: var(--H3);
+    font-size: var(--H4);
     margin-bottom: 24px;
 }
 .testimonialTitle p{
@@ -47,19 +46,9 @@
 }
 .testimonialTitle h3{
     color: var(--DARKBLUE);
-    font-size: var(--H3);
+    font-size: var(--H4);
     margin-bottom: 24px;
 }
-.feedback{
-    padding: 32px 0;
-   
-}
-.feedbackTitle{
-    color: var(--BLACK);
-    font-size: var(--BodyL);
-    margin: 16px 0;
-}
-
 .brandLogo{
     width: 76%;
     padding: 0;
@@ -70,25 +59,21 @@
     display: inline-block;
 }
 .applyBtn{
-    align-items: start;
     margin-top: auto;
     width: max-content;
+    padding-top: 32px;
 }
-.submitBtn{
-    width: max-content;
-    
-}
-.submitDiv
-{
-    display: flex;
-    justify-content: flex-end;
-}
-
 @media only screen and (max-width:990px){
 
     .h1{
         font-size: var(--H4);
-        margin-bottom: 32px;
+        padding: 0;
+        padding-bottom: 32px;
+    }
+    .bodyl{
+        padding: 0;
+        padding-bottom: 32px;
+        font-size: var(--BodyR);
     }
     .heroImg{
        display: none;
@@ -98,18 +83,20 @@
         text-align: center;
     }
     .h3{
-        font-size: var(--H5);
+        font-size: var(--H6);
+    }
+    .testimonialTitle h3{
+        font-size: var(--H6);
     }
     .brands{
 
         width: 100%;
         padding: 30px 0;
     }
-    .field{
-        text-align: center;
-    }
+    
     .applyBtn{
-        margin: 36px  auto;
+       margin: 0 auto;
+       padding: 0;
     }
     
 }

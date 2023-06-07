@@ -1,10 +1,10 @@
 .page{
-    background-color: var(--DARKGREY);
+    background-color:#4D4D4D ;
     height: 100vh;
     padding: 32px;
 }
 .page2{
-    background-color: var(--GREY);
+    background-color:#F8E9A1;
    height:calc(100vh - 64px);
     padding: 32px;
     border-radius: 8px;
@@ -15,7 +15,8 @@
     height: calc(100vh - 128px);
 }
 .page4A{
-    height: 50%;
+    height: 40%;
+    margin-bottom: 16px;
 }
 
 .welcome{
@@ -31,61 +32,30 @@
     color: var(--DARKGREY);
 }
 .page4B{
-    height: 60%;
     background-color: var(--WHITE);
-    padding: 16px;
+    padding: 8px;
     border-radius: 8px;
     
 }
 
 
-.login{
-    width: 35%;
-    margin-bottom: 16px;
-}
 
-.remembermeCheck{
-    display: flex;
-    align-items: center;
-    margin-top: 4px;
-}
-.forgotpassword{
-    margin-top: 4px;
-  
-}
-.forgotpassword button, .forgotpassword button:hover{
-    font-size: var(--BodyS);
-    background-color: transparent;
-    color: var(--BLACK);
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    border-bottom: 1px solid black;
-}
-
-.remembermeCheck input{
-    margin: 0;
-    background-color: var(--GREY);
-    height: 24px;
-    width: 24px;
-    margin-right: 8px;
-}
-.remembermeCheck label{
-    font-size: var(--BodyS);
-    color: var(--BLACK);
-}
 .forms{
     display: flex;
     justify-content: center;
+    width: 100%;
+    margin: 0;
 }
+
 .loginbtns{
-    width:30%;
-    margin: 0 auto;
+    width:80%;
+    margin: 16px auto;
+    display: flex;
+    justify-content: space-around;
 
 }
 .loginbtns div{
-    margin: 16px 0;
-    padding: 0;
+    width: 48%;
    
 }
 .connection{
@@ -101,42 +71,74 @@
     padding: 0 12px;
     font-size: var(--BodyR);
 }
+.select{
+    color: var(--WHITE);
+    font-size: var(--BodyR);
+    padding: 12px 20px;
+    background-color: var(--DARKGREY);
+    width: 80%;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+
+.select:hover{
+    background-color: var(--GREY);
+    color: var(--DARKGREY);
+}
+option {
+    color: var(--BLACK);
+
+}
+
 @media only screen and (max-width:990px) {
     .page{
         padding: 16px;
     }
     .page2{
        height:calc(100vh - 32px);
-        padding: 16px;    
+        padding: 16px; 
     }
     .page3{
         border-radius: 8px;
         height: calc(100vh - 64px);
     }
    
-    .login{
-        width: 100%;
-        margin-bottom: 16px;
-    }
-    .remembermeCheck{
-        display: flex;
-        align-items: center;
-        margin-top: 4px;
-    }
-    .loginbtns{
-        width:80%;
-    }
     
+    .page4A{
+        height: 22%;
+
+    }
+    .page4B{
+        height: 78%;
+        
+    }
     .connection{
         width:90%;
     }
     .connection legend{
         margin-bottom: 0px;
     }
+.forms{
+    display: block;
+    padding: 8px 0;
     
-    .welcome{
-        padding: 128px 0;
-    }
+}
+.loginbtns{
+    width:fit-content;
+    margin: 16px auto;
+    display: block;
+
+}
+.loginbtns div{
+    width: 100%;
+    margin: 8px auto;
+}
+.select{
+    width: 100%;
+   
+}
+
 }
   
   

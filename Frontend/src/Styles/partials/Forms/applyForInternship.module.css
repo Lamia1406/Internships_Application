@@ -21,6 +21,7 @@
 }
 .completedInternship{
     width: 50%;
+    text-align: center;
 }
 .completedInternshipBtn{
     width: fit-content;
@@ -52,6 +53,26 @@
     justify-content: baseline;
    
 }
+.select{
+     padding: 12px 20px;
+    color: var(--WHITE);
+    font-size: var(--BodyR);
+    background-color: var(--DARKGREY);
+
+    border-radius: 8px; 
+    width: 100%;
+    margin-right: 24px;
+}
+
+
+.select:hover{
+    background-color: var(--GREY);
+    color: var(--DARKGREY);
+}
+option {
+    color: var(--BLACK);
+
+}
 
 .radio{
     width: 60%;
@@ -69,120 +90,94 @@
     margin: auto 0;
     padding: 0;
 }
-.formTabs{
-    padding: 4px;
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--GREY);
-    border-radius: 32px;
-}
-.tabBtn{
-    border: none;
-    color: var(--BLACK);
-    font-size: var(--H6);
-    background-color: transparent;
-    padding: 16px;
-    border-radius: 32px;
-}
-.active{
-    background-color: var(--DARKBLUE);
-    color: white;
-}
 .navigationBtn{
     width: 120px;
     margin: 0 auto;
 }
-.mobileNavigation{
-    display: none;
-}
-
-
-  .wrongDateNotif{
-    color: red;
-  }
   .calendarBtn{
     position: absolute;
-   left: 72%;
+    right: 24%;
 
   }
-  .inputDiv hr{
-   color: var(--BLACK);
-    width: 80%;
-    margin: 0 auto;
-  }
-
-
-  
-
-    
-
+.fullEvaluation{
+    background-color: #bcea93;
+    border-radius: 16px;
+    padding: 4px;
+    font-size: var(--BodyL);
+}
 @media only screen and (max-width:990px) {
    
     .form{
         margin: 0;
         padding: 16px;
     }
+     
     .formHeader{
         padding: 0;
     }
+   
     .formContent{
         width: 100%;
         margin:0 auto;
     }
-    .formTabs{
-        display: none;
-    }
+    
+   
     .inputDiv{
         display: block;
         margin: 32px 0;
     }
+    .title{
+        text-align: center;
+        margin-bottom: 8px;
+    }
+     
     .field{
         width: 100%;
         padding: 0;
         display: block;
     
     }
-    .radio{
+    .completedInternship{
         width: 100%;
+        text-align: left;
+        margin-right: 4px;
+        
+    }
+    .completedInternshipBtn{
+     margin: 0;
+    }
+    .fullEvaluation{
+        background-color: #bcea93;
+        border-radius: 16px;
+        font-size: var(--BodyR);
+    } 
+    .fullEvaluation div {
+        text-align: center;
+        width: fit-content;
+        margin: 8px auto;
+    }
     
-    }
-    .formContent p{
-        margin: 16px auto;
-        padding: 0;
-    }
    
    
     
      
-      
-      
-      
-      .wrongDateNotif{
-        margin: 8px 0;
+      .coheff{
+        display: flex;
+        margin: 0  auto;
+        padding: 0;
+        justify-content: center;
       }
+
+    .coheff div{
+        width: fit-content;
+    }
+      
+      
       .calendarBtn{
         position: relative;
         left: 84%;
         bottom: 40px;
         padding: 0;
-
       }
-      
-     .mobileNavigation{
-        display: flex;
-        justify-content: space-between;
-     }
-     .active{
-        border: none;
-        font-size: var(--BodyL);
-        padding: 16px;
-        border-radius: 32px;
-        width: 240px;
-    }
-    .arrows{
-        border: none;
-        background-color: transparent;
-    }
-      
-   
+
 }

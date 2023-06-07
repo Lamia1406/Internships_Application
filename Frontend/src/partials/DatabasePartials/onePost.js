@@ -5,6 +5,7 @@ import Post from '../../Images/emptyPost.jpg'
 import internshipPostClass from '../../Styles/partials/DatabasePartials/onePost.module.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ModifyOneDataRecord from '../Database/modifyOneDataRecord';
 function Internship(props){
   const navigate = useNavigate();
   const handleSubmit = () => {
@@ -52,14 +53,16 @@ function Internship(props){
               {props.user == 'webmaster' && (
                 <div className={internshipPostClass.manageWebmaster}>
                      <div className={internshipPostClass.apply}>
-                 <Button color="dark" content="Modify" />
+                 <Button color="clear" content="Modify" dataBsToggle="modal" dataBsTarget={`#modifypost${props.id}`} />
                  </div>
                  <div className={internshipPostClass.apply}>
-                 <Button color="dark" content="Delete" onClick={deletePost} />
+                 <Button color="clear" content="Delete" onClick={deletePost} />
                  </div>
                 </div>
-              )}
+                
+                )}
        </div>
+       <ModifyOneDataRecord table="Posts" id={`modifypost${props.id}`} postId ={props.id} />
 </div>
     );
 }

@@ -2,12 +2,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 80%;
+    width: 100%;
     margin: 16px auto;
+
+}
+.oneNotification img {
+    margin-right: 8px;
 }
 .notif{
     font-size: var(--BodyL);
-    color: var(--BLACK);
+    color: var(--DARKGREY);
 }
 .time{
     font-size: var(--BodyS);

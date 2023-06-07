@@ -22,6 +22,7 @@ const transporter = nodemailer.createTransport(
 //Create Accounts
 router.post("/createStudent",async(req,res,next)=>{
     const {email,department} = req.body;
+
     const emailExist = await Student.findOne({email});
     if (emailExist){
         return next (new ErrorResponse("Email Already Exists", StatusCodes.BAD_REQUEST))
@@ -29,7 +30,10 @@ router.post("/createStudent",async(req,res,next)=>{
     if (!department){
         return next (new ErrorResponse("Please Choose your department", StatusCodes.BAD_REQUEST))
     }; 
-
+    const responsible = await Responsible.findOne({department : department})
+    if(!responsible){
+        return next (new ErrorResponse("Your department does not have a department responsible account , we'll do our best to fix this as soon as possible", StatusCodes.NOT_FOUND))
+    }
     try{
         let password = "";
         let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=';
@@ -50,7 +54,7 @@ router.post("/createStudent",async(req,res,next)=>{
             )
             if(res.statusCode==StatusCodes.CREATED){
                 transporter.sendMail({
-                    to: email,
+                    to: "lamia.hamdi@univ-constantine2.dz",
                     from:"lamia.hamdi@univ-constantine2.dz",
                     subject: "Your Account Password", 
                     html:` 
@@ -108,7 +112,7 @@ router.post("/createResponsible",
                             )
                             if(res.statusCode==StatusCodes.CREATED){
                                 transporter.sendMail({
-                                    to: email,
+                                    to: "lamia.hamdi@univ-constantine2.dz",
                                     from:"lamia.hamdi@univ-constantine2.dz",
                                     subject: "Your Account Password", 
                                     html:` 

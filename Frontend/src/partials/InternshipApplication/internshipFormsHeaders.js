@@ -80,8 +80,8 @@ function InternshipFormsHeaders(props) {
                 props.approvedByResponsible == "ongoing" && props.approvedBySupervisor == "ongoing" && (
                     <div className={`alert alert-primary ${internshipClass.alert}`} role="alert">
                         {
-                            new Date(props.startingDate) > new Date() && (
-                                <div> {Math.floor((new Date(props.startingDate) - new Date()) / (1000 * 60 * 60 * 24))} days left to the start of the internship</div>
+                             new Date() < new Date(props.startingDate) && (
+                                <div> {Math.floor((new Date() - new Date(props.startingDate)  ) / (1000 * 60 * 60 * 24))} days left to the start of the internship</div>
                             )
                         }
                         {
@@ -121,16 +121,34 @@ function InternshipFormsHeaders(props) {
                     </div>)
             }
             {
-                props.approvedByResponsible == "ongoing" && props.approvedBySupervisor == "ongoing"  && (
+                props.approvedByResponsible == "completed" && props.approvedBySupervisor == "completed" && (
+                    <div className={`alert alert-light ${internshipClass.alert}`} role="alert">
+                        Archive
+                    </div>)
+            }
+            
+            {
+                (props.approvedByResponsible == "ongoing" || props.approvedByResponsible== "completed")&& (props.approvedBySupervisor == "ongoing" || (props.approvedBySupervisor == "completed")) && (
                    <div className={internshipClass.controlDiv}>
-                     <div className={` ${internshipClass.presenceDiv}`}>
-                            <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId,internshipId:props.internshipId, startingDate: props.startingDate, endingDate: props.endingDate } })} />      
-                            </div>
                     {
-                        new Date(props.endingDate) <= new Date() && props.type == "supervisor"&& (
+                props.approvedByResponsible == "completed" && props.approvedBySupervisor == "completed" && (
+                    <div className={` ${internshipClass.presenceDiv}`}>
+                    <Button content="View Certificate" color="black" onClick={() => navigate('/certificate', { state: { certificate : props.certificate} })} />      
+                    </div>
+                )
+            }{
+                new Date(props.startingDate) <= new Date()  && (
+                    
+                    <div className={` ${internshipClass.presenceDiv}`}>
+                    <Button content="View Presence" color="black" onClick={() => navigate('/presence', { state: { studentId: props.studentId,internshipId:props.internshipId, startingDate: props.startingDate, endingDate: props.endingDate , approvedBySupervisor: props.approvedBySupervisor , approvedByResponsible: props.approvedByResponsible} })} />      
+                    </div>
+                )
+            }
+                    {
+                        new Date(props.endingDate) <= new Date() && (
                             
                             <div className={internshipClass.presenceDiv}>
-                                <Button content="Evaluate Student" color="black" onClick={() => navigate('/evaluation', { state: { studentId: props.studentId, internshipId:props.internshipId } })} />  
+                                <Button content="Student Evaluation" color="black" onClick={() => navigate('/evaluation', { state: { studentId: props.studentId, internshipId:props.internshipId , approvedBySupervisor: props.approvedBySupervisor , approvedByResponsible: props.approvedByResponsible} })} />  
                             </div>    
                         )
                     }

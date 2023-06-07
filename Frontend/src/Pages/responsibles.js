@@ -1,11 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from '../partials/button';
-import { Helmet } from 'react-helmet';
 import axios from "axios";
 import { useState,useEffect } from 'react';
-import departmentsClass from '../Styles/usersDatabase.module.css';
+import departmentsClass from '../Styles/main/usersDatabase.module.css';
 import OneDataSet from '../partials/Database/oneDataSet';
 import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
+import Layout from '../features/Layout';
 function DepartmentResponsibles(){  
   const getAllResponsiblesURL = 'http://localhost:4000/user/allResponsibles';
   const [responsibles, setResponsibles] = useState([]);
@@ -19,16 +19,10 @@ function DepartmentResponsibles(){
     fetchResponsibles();
   },[]);
         return(
-      <>
-          <Helmet>
-    <title>ConnectU | Department Responsibles</title>
-    <meta name='description' content='Department Responsibles'/>
-   </Helmet>
-            <div className={`${departmentsClass.page} container-fluid`}>
-            <div className={departmentsClass.section}>
-            <h2 className={departmentsClass.h2}>Department Responsibles</h2>
-          </div>
-             <div className= {departmentsClass.section}>
+      
+      <Layout pageTitle = "Department Responsibles" header ="Department Responsibles" content = {
+        <>
+                <div className= {departmentsClass.section}>
           
           <div className={`${departmentsClass.results}`}>
             <div>
@@ -81,8 +75,13 @@ function DepartmentResponsibles(){
       </div>
       <CreateOneDataRecord table="Responsibles" id="depResponsible"  
               />
+        </>
+      }/>
+         
+        
+     
 
-</div></>
+
         )
 }
 export default DepartmentResponsibles

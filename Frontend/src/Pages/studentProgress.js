@@ -1,9 +1,10 @@
 import { useState,useEffect } from "react"
-import requestClass from '../Styles/request.module.css'
+import requestClass from '../Styles/main/request.module.css'
 import axios from "axios"
-import { Helmet } from "react-helmet"
 import jwtDecode from "jwt-decode"
 import InternshipForms from "../partials/InternshipApplication/internshipForms"
+import Layout from "../features/Layout"
+import NotAvailable from "../partials/not_available"
 function StudentProgress(){
     const user = jwtDecode(localStorage.getItem("token"))
      const [studentProgressURL,setStudentProgressURL]=useState("")    
@@ -29,25 +30,16 @@ function StudentProgress(){
       fetchInternships()
     },[studentProgressURL]);
     return ( 
-        <>
-           <Helmet>
-       <title>ConnectU | Requests</title>
-       <meta name='description' content='Requests'/>
-      </Helmet>
-       <div className={requestClass.page}>
-       <div className={`${requestClass.section}`}>
-       <p className={requestClass.h3}> Student Progress</p> 
-               </div>
-     {
-            internships.length != 0  ?  <>
+        <Layout pageTitle ="Student Progress" header = "Student Progress" content = { 
+              internships.length != 0  ?  <>
             
-               <div className={`${requestClass.section} ${requestClass.internships}`}>
-               {
-                  internships &&  internships.map(
-                           (app, index) => {
-                            const responsible = responsibles[index]
-                             return <InternshipForms 
-                             
+              <div className={`${requestClass.section} ${requestClass.internships}`}>
+              {
+                 internships &&  internships.map(
+                          (app, index) => {
+                           const responsible = responsibles[index]
+                            return <InternshipForms 
+                            
 {...(app.student ?  {studentFullName:app.student.full_name} : {})}
 {...(app.student ? {cardNumber :app.student.student_card_number} : {})}
 {...(app.student ? {socialNumber :app.student.social_security_number} : {})}
@@ -68,39 +60,29 @@ approvedBySupervisor={app.approvedBySupervisor}
 approvedByResponsible={app.approvedByResponsible}
 internshipId={app._id} 
 
-                              />
-                           }
-                     )
-               }
+                             />
+                          }
+                    )
+              }
+            
              
               
-               
-         
-           
         
-                          
-               
-      
-            
-     </div>
-      
-         </>  
-               :
-              
-                    
-                     <div className={`${requestClass.section}`}>
-                           <h3 className={requestClass.h4}>No applications</h3>
+          
+       
                          
-                     </div>
               
-              
-           }
      
-   
-    
-        
-   </div>
-   </>
+           
+    </div>
+     
+        </>  
+              :               
+                    <div className={`${requestClass.section}`}>
+                          <NotAvailable message = "No available internships in the moment"/>
+                        
+                    </div>
+        }/>           
      )
 }
 export default StudentProgress

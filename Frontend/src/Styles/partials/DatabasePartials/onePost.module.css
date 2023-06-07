@@ -12,6 +12,7 @@
     font-size: var(--BodyR);
     color: var(--DARKGREY);
     margin-bottom: 16px;
+    overflow-wrap: break-word;
 }
 .published{
     font-size: var(--BodyS);
@@ -30,9 +31,7 @@
 .apply{
     width: fit-content;
 }
-.col-lg-6{
-    padding: 0;
-}
+
 .manageWebmaster{
     width: 50%;
     display: flex;

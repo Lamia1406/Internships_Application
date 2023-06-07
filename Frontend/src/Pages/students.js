@@ -1,11 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from '../partials/button';
-import { Helmet } from 'react-helmet';
 import axios from "axios";
 import { useState,useEffect } from 'react';
-import departmentsClass from '../Styles/usersDatabase.module.css';
+import departmentsClass from '../Styles/main/usersDatabase.module.css';
 import OneDataSet from '../partials/Database/oneDataSet';
 import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
+import Layout from '../features/Layout';
 function Students(){  
   const getAllStudents = 'http://localhost:4000/user/allStudents';
   const [students, setStudents] = useState([]);
@@ -19,16 +19,10 @@ function Students(){
     fetchStudents();
   },[]);
         return(
-      <>
-          <Helmet>
-    <title>ConnectU | Students</title>
-    <meta name='description' content='Department Responsibles'/>
-   </Helmet>
-            <div className={`${departmentsClass.page} container-fluid`}>
-            <div className={departmentsClass.section}>
-            <h2 className={departmentsClass.h2}>Students</h2>
-          </div>
-             <div className= {departmentsClass.section}>
+      
+      <Layout pageTitle = "Students" header = "Students" content ={
+          <>
+          <div className= {departmentsClass.section}>
           
           <div className={`${departmentsClass.results}`}>
             <div>
@@ -78,8 +72,8 @@ function Students(){
         <Button content="Create Student Account" color="dark" dataBsToggle="modal" dataBsTarget="#student"/>
       </div>
       <CreateOneDataRecord table="Students" id="student"/>
-
-</div></>
+          </>
+      }/>
         )
 }
 export default Students

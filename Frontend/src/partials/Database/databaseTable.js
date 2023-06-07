@@ -37,6 +37,7 @@ function DatabaseTable(props) {
                 props.table === "Departments" ? props.faculties : null
               }
             />
+            
           </div>
     <div className={`accordion-item`}>
     <button className={`collapsed text-center ${tableClass.btn}`} id={props.header} type="button" data-bs-toggle="collapse" data-bs-target={`#${props.collapse}`} aria-expanded="true" aria-controls={props.collapse}>
@@ -98,6 +99,8 @@ function DatabaseTable(props) {
                     {...(props.table === "Universities" || props.table === "Faculties" || props.table == "Companies" ? { address: data.address } : {})}
                     {...(props.table === "Faculties" && data.university ? { university: data.university.full_name } : {})}
                     {...(props.table === "Departments" && data.faculty ? { faculty: data.faculty.full_name } : {})}
+                    {...(props.table === "Faculties" && data.university ? { universities: props.data } : {})}
+
                   />
                 ))
               }

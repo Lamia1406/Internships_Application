@@ -1,12 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Button from '../partials/button';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import supervisorsClass from '../Styles/usersDatabase.module.css';
+import supervisorsClass from '../Styles/main/usersDatabase.module.css';
 import { useEffect, useState } from 'react';
 import OneDataSet from '../partials/Database/oneDataSet';
 import CreateOneDataRecord from '../partials/Database/createOneDataRecord';
+import Layout from '../features/Layout';
 function Supervisors(){
   const getAllSupervisors = 'http://localhost:4000/user/allSupervisors';
   const [supervisors, setSupervisors] = useState([]);
@@ -19,16 +19,10 @@ function Supervisors(){
     fetchSupervisors();
   },[]);
         return(
-      <>
-          <Helmet>
-    <title>ConnectU | Internship Supervisors</title>
-    <meta name='description' content='Internship Supervisors'/>
-   </Helmet>
-            <div className={`${supervisorsClass.page} container-fluid`}>
-            <div className={supervisorsClass.section}>
-            <h2 className={supervisorsClass.h2}>Internship Supervisors</h2>
-          </div>
-             <div className= {supervisorsClass.section}>
+     
+      <Layout pageTitle= " Internship Supervisors" header = "Internship Supervisors" content = {
+            <>
+                <div className= {supervisorsClass.section}>
           
           <div className={`${supervisorsClass.results}`}>
             <div>
@@ -74,7 +68,10 @@ function Supervisors(){
         <Button content="Create Internship Supervisor Account" color="dark" dataBsToggle="modal" dataBsTarget="#supervisor"/>
       </div>
       <CreateOneDataRecord table="Supervisors" id="supervisor"/>
-</div></>
+            </>
+      }/>            
+         
+
         )
 }
 export default Supervisors
