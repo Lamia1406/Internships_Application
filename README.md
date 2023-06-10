@@ -36,11 +36,11 @@ To get started with the Internship Management Application, follow the steps belo
 
 2. Install dependencies:
 The application has separate client-side (React) and server-side (Node.js) dependencies. Install the dependencies for both parts of the application.
-- Install server-side dependencies
+Install server-side dependencies
 * $ cd Backend
 * $ npm install
 
-- Install client-side dependencies
+Install client-side dependencies
 * $cd ../Frontend
 * $ npm install
 
@@ -50,11 +50,11 @@ Ensure that you have MongoDB installed and running on your system. Update the da
 4. Start the development servers:
 In separate terminal windows, start the development servers for the client and server parts of the application.
 
-- Start the server development server
+Start the server development server
 * $ cd Backend
 * $ npm start
 
-- Start the client development server
+Start the client development server
 * $ cd ../Frontend
 * $ npm start
 
