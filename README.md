@@ -31,18 +31,18 @@ To get started with the Internship Management Application, follow the steps belo
 
 1. Clone the repository:
 
-$ git clone https://github.com/Lamia1406/Internships_Application.git
-$ cd Internship_Application
+* $ git clone https://github.com/Lamia1406/Internships_Application.git
+* $ cd Internship_Application
 
 2. Install dependencies:
 The application has separate client-side (React) and server-side (Node.js) dependencies. Install the dependencies for both parts of the application.
 - Install server-side dependencies
-$ cd Backend
-$ npm install
+* $ cd Backend
+* $ npm install
 
 - Install client-side dependencies
-$ cd ../Frontend
-$ npm install
+* $cd ../Frontend
+* $ npm install
 
 3. Set up the MongoDB database:
 Ensure that you have MongoDB installed and running on your system. Update the database connection configuration in the index.js file of the Backend folder
@@ -51,12 +51,12 @@ Ensure that you have MongoDB installed and running on your system. Update the da
 In separate terminal windows, start the development servers for the client and server parts of the application.
 
 - Start the server development server
-$ cd Backend
-$ npm start
+* $ cd Backend
+* $ npm start
 
 - Start the client development server
-$ cd ../Frontend
-$ npm start
+* $ cd ../Frontend
+* $ npm start
 
 5. Access the application:
 Open a web browser and visit http://localhost:3000 to access the Internship Management Application.
