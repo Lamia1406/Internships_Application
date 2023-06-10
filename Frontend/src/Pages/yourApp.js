@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from '../Styles/main/yourApp.module.css';
 import Button from '../partials/button';
-import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';

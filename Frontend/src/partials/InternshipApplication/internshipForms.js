@@ -264,7 +264,7 @@ const [endingDate, setEndingDate] = useState(props.endingDate)
                     <button type="button" className={`btn btn-primary} ${internshipClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target={`#startingModal2${props.internshipId}`}>
                       <img src={calendarPic} alt='calendar icon' />
                     </button>
-                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate} id= {`startingModal2${props.internshipId}`}/>
+                    <CalendarDiv onChange={(e) => setStartingDate(e)} minDate={new Date()} value={startingDate}  id= {`startingModal2${props.internshipId}`}/>
         </div>
         </div>
         <div className={`row ${internshipClass.modifyForm}`}>

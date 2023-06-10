@@ -204,7 +204,7 @@ router.delete("/deleteInternship/:idInternship",async(req,res,next)=> {
     });
   }
   console.log(internship)
-    if((internship.approvedByResponsible == "accepted" && internship.approvedBySupervisor== "rejected") ||( internship.approvedByResponsible == "rejected" && internship.approvedBySupervisor== "pending")){
+    if(internship.approvedByResponsible == "pending" || internship.approvedByResponsible== "rejected" || internship.approvedBySupervisor == "pending" || internship.approvedBySupervisor== "rejected"){
       if(internship == isExisting){
         await Internship.deleteOne({ _id: req.params.idInternship }); 
       }
@@ -265,19 +265,19 @@ router.post("/evaluateStudent/:studentId/:internshipId",async(req,res,next)=>{
   const studentId = req.params.studentId
   try{
     if(req.body.innovation < 0 || req.body.innovation > 4 || typeof req.body.innovation == "number"){
-        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+        return next(new ErrorResponse("Inputs should be between 0 and 4 and of numerical type"))
     }
     if(req.body.knowledge < 0 || req.body.knowledge > 4 || typeof req.body.knowledge == "number"){
-        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+        return next(new ErrorResponse("Inputs should be between 0 and 4 and of numerical type"))
     }
     if(req.body.discipline < 0 || req.body.discipline > 4 || typeof req.body.discipline == "number"){
-        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+        return next(new ErrorResponse("Inputs should be between 0 and 4 and of numerical type"))
     }
     if(req.body.skills < 0 || req.body.skills > 4 || typeof req.body.skills == "number"){
-        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+        return next(new ErrorResponse("Inputs should be between 0 and 4 and of numerical type"))
     }
     if(req.body.initiative < 0 || req.body.initiative > 4 || typeof req.body.initiative == "number"){
-        return next(new ErrorResponse("Inputs should be between 0 and 5 and of numerical type"))
+        return next(new ErrorResponse("Inputs should be between 0 and 4 and of numerical type"))
     }
     const full_mark = (Number(req.body.skills) + Number(req.body.initiative) +Number(req.body.discipline) + Number(req.body.innovation) + Number(req.body.knowledge)).toFixed(2)
     

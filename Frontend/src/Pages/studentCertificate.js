@@ -18,10 +18,9 @@ console.log(location.state.certificate)
                 <div className={certificateClass.title}> INTERNSHIP CERTIFICATE</div>
             </div>
             <div className={certificateClass.content}>
-            I, the undersigned <span className={certificateClass.data}> {user.full_name} </span>, internship supervisor at <span className={certificateClass.data}>{certificate.theme}</span>,
-certify that the student <span className={certificateClass.data}> {certificate.studentFullName}</span> enrolled at the <span className={certificateClass.data}>{certificate.company}</span> establishment,
-has completed a training internship
-During the period from <span className={certificateClass.data}>{changeDateFormat(certificate.startingDate)}</span> to <span className={certificateClass.data}>{changeDateFormat(certificate.endingDate)}</span>
+             I, the undersigned <span className={certificateClass.data}> {user.full_name} </span>, internship supervisor at <span className={certificateClass.data}>{certificate.theme}</span>,
+certify that the student <span className={certificateClass.data}> {certificate.studentFullName}</span> enrolled at the <span className={certificateClass.data}>{certificate.company}</span> establishment, 
+has completed a training internship <br/>During the period from <span className={certificateClass.data}>{changeDateFormat(certificate.startingDate)}</span> to <span className={certificateClass.data}>{changeDateFormat(certificate.endingDate)}</span>
             </div>
             
                 <div className={certificateClass.date}>

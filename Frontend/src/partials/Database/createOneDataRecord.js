@@ -381,7 +381,7 @@ return (
                 <div className={`row ${createUniClass.profilDetails}`}>
             <div className={`${createUniClass.title} col-lg-3`}>Day </div>
             <div className={`${createUniClass.description} col-lg-9`}>
-            <Input  disabled value={changeDateFormat(day)} />
+            <Input  disabled placeholder={day == null ? "" : changeDateFormat(day)} />
                              <button type="button" className={`btn btn-primary} ${createUniClass.calendarBtn}`} data-bs-toggle="modal" data-bs-target="#calendarforpresence">
                                    <img src={calendarPic} alt='calendar icon' />
                                  </button>

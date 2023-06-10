@@ -6,7 +6,7 @@ function CalendarDiv(props) {
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div className={`modal-content ${requestClass.calendarDiv}`}>
                     <div className={`modal-body `}>
-                        <Calendar onChange = {props.onChange} className={requestClass.calendar} calendarType='Arabic' minDate={props.minDate} maxDate = {props.endingDate} value={props.value} />
+                        <Calendar onChange = {props.onChange} className={requestClass.calendar} calendarType='Arabic' minDate={props.minDate} maxDate = {props.maxDate} value={props.value} />
                         <button className={requestClass.chosenDateBtn} data-bs-target = {props.footer ? `#${props.footer}` :null } data-bs-toggle = {props.footer ?  "modal"  :null } data-bs-dismiss = {!props.footer ?  "modal"  :null } > Submit</button>
 
                     </div>

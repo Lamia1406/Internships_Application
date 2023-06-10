@@ -29,3 +29,31 @@
 .controlDiv{
   margin: 0;
 }
+@media only screen  and (max-width: 990px){
+ 
+
+.title{
+  display: block;
+  margin: 0;
+} 
+.alert{
+  width: fit-content;
+}
+
+.controlDiv :first-child{
+  width: fit-content;
+  font-size: var(--BodyR);
+  padding: 8px;
+}
+
+
+.controlDiv :nth-child(2){
+   float: right;
+   width: fit-content;
+   padding: 8px;
+}
+.controlDiv :nth-child(3){
+   width: fit-content;
+   padding: 8px;
+}
+}

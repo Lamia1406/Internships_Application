@@ -115,15 +115,7 @@ function NavBar()
           </>
         )}
         
-       {
-        user.userType != "webmaster" && (
-          <li className={NavbarClass.navItem}>
-          <NavLink to = "/notifications" className={isCurrentPage}>
-              Notifications
-          </NavLink>
-          </li>
-        )
-       }
+       
             {user.userType=="student" && (
            <li className={NavbarClass.navItem}>
              <NavLink to ="/yourapp" className={isCurrentPage}>
@@ -132,6 +124,15 @@ function NavBar()
            </li>
            
             )}
+          {
+        user.userType != "webmaster" && (
+          <li className={NavbarClass.navItem}>
+          <NavLink to = "/notifications" className={isCurrentPage}>
+              Notifications
+          </NavLink>
+          </li>
+        )
+       }
             <li className={`${NavbarClass.navItem} ${NavbarClass.settings}`} >
                      <NavLink  to= "/userProfil"className={isCurrentPage}>
                        Profile
